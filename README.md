@@ -22,3 +22,7 @@
 
 `firebase deploy`
 
+## PREREQUISITES
+
+- `npm install`
+- follow instructions here: https://firebase.google.com/docs/cli/
