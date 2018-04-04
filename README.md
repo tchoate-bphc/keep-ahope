@@ -30,7 +30,7 @@
 
 ## RUNNING BEHIND A CORPORATE PROXY
 
-- Test with: echo $http_proxy"
+- Test with: `echo $http_proxy`
 - Unset proxies using a method below
 - Reset proxies by reloading .bashrc `source ~/.bashrc`, assuming default proxies are set there
 
