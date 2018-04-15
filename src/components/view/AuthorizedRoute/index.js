@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 import NotAuthorized from 'components/view/NotAuthorized';
 
@@ -24,9 +24,13 @@ class AuthorizedRoute extends Component {
             // height: userPermissions.admin ? 'calc(100% - 247px)' : 'calc(100% - 175px)',
         }
 
+        if (userPermissions && userPermissions.basic && location.pathname === '/') {
+            return <Redirect to="/intake"/>
+        }
+
         return (
             <Route {...rest} render={props => (
-                userPermissions.basic || userPermissions.admin || userPermissions.seller ? (
+                userPermissions.basic ? (
                         <div className='page-wrapper' style={pageWrapperStyles}>
                             <Component {...props}/>
                         </div>

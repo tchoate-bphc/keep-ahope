@@ -41,13 +41,14 @@ class App extends Component {
         /** Firebase Setup **/
         window._FIREBASE_ = firebase.initializeApp(config.firebase);
         window._FIREBASE_PROVIDER_ = new firebase.auth.GoogleAuthProvider();
+        window._FIREBASE_PROVIDER_.addScope('https://www.googleapis.com/auth/userinfo.email');
         window._FIREBASE_DB_ = firebase.database();
         window._FIREBASE_STORAGE_ = firebase.storage().ref();
         window._FIREBASE_.auth().onAuthStateChanged(
             (googleUser) => {
-                
-                window._UI_STORE_.dispatch(showLoginSpinner(false));
 
+                window._UI_STORE_.dispatch(showLoginSpinner(false));
+                
                 // user data from Google Auth
                 if (googleUser && googleUser.uid) {
                     const googleUserData = {
@@ -55,6 +56,7 @@ class App extends Component {
                         displayName: googleUser.displayName,
                         email: googleUser.email,
                     };
+
 
                     window._UI_STORE_.dispatch(fetchConfig());
 
@@ -112,9 +114,9 @@ class App extends Component {
                             <Navigation />
                             <Messages />
                             <Switch>
-                                <Route exact path="/" component={Intake} />
+                                <AuthorizedRoute exact path="/" component={Intake} />
                                 <AuthorizedRoute exact path="/intake" component={Intake} />
-                                <AuthorizedRoute exact path="/contacts" component={Contacts} />
+                                <AuthorizedRoute exact path="/contact" component={Contacts} />
                                 <AuthorizedRoute exact path="/reports" component={Reports} />
                             </Switch>
                             <Footer />

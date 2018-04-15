@@ -26,7 +26,7 @@ function user(state = defaultUserState, action) {
         case SHOW_LOGIN_SPINNER: 
             return {
                 ...state, 
-                ...showLoginSpinner,
+                showLoginSpinner,
             };
         
         case SET_CURRENT_USER: 
