@@ -4,7 +4,7 @@ import Contacts from 'components/view/Contacts';
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        contacts: state.contacts,
+        contact: state.contacts,
         events: state.events,
     };
 };

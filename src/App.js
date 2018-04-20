@@ -57,12 +57,10 @@ class App extends Component {
                         email: googleUser.email,
                     };
 
-
                     window._UI_STORE_.dispatch(fetchConfig());
-
                     window._UI_STORE_.dispatch(getUser(googleUserData));
                     
-                    window._UI_STORE_.dispatch(fetchContacts());
+                    // window._UI_STORE_.dispatch(fetchContacts());
                     // window._UI_STORE_.dispatch(fetchEvents());
 
                 }
