@@ -1,5 +1,15 @@
 # AHOPE 2018
 
+
+## SETUP
+
+- `npm install`
+- `firebase login` 
+    - Instructions for Firebase-cli setup and login: https://firebase.google.com/docs/cli/
+    - Ensure that you have been granted Firebase permissions to this project
+    - After first logging in with your Gmail (running locally or in production), ensure that your user has permissions granted in the Firebase database (`/users/<<Google UID>>/permissions/basic`)
+
+
 ## DEVELOPMENT
 
 [http://localhost:8080/](http://localhost:8080/)
@@ -22,7 +32,3 @@
 
 `firebase deploy`
 
-## PREREQUISITES
-
-- `npm install`
-- follow instructions here: https://firebase.google.com/docs/cli/
