@@ -3,11 +3,22 @@
 
 ## SETUP
 
-- `npm install`
-- `firebase login` 
-    - Instructions for Firebase-cli setup and login: https://firebase.google.com/docs/cli/
-    - Ensure that you have been granted Firebase permissions to this project
-    - After first logging in with your Gmail (running locally or in production), ensure that your user has permissions granted in the Firebase database (`/users/<<Google UID>>/permissions/basic`)
+```bash
+# install dependencies
+npm install
+
+# install firebase cli
+# more information: https://firebase.google.com/docs/cli/
+npm install -g firebase-tools
+
+# login to firebase 
+# requires that permissions are granted to this project for your user
+firebase login
+
+
+```
+
+- After first logging in with your Gmail (running locally or in production), ensure that your user has permissions granted in the Firebase database (`/users/<<Google UID>>/permissions/basic`)
 
 
 ## DEVELOPMENT
