@@ -1,16 +1,15 @@
 import { connect } from 'react-redux';
-import Contacts from 'components/view/Contacts';
+import ContactInfo from 'components/view/ContactInfo';
 
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        contacts: state.contacts,
         events: state.events,
     };
 };
 
-const ContactsController = connect(
+const ContactInfoController = connect(
     mapStateToProps,
-)(Contacts);
+)(ContactInfo);
 
-export default ContactsController;
+export default ContactInfoController;
