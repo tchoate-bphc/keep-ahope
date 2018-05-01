@@ -67,9 +67,9 @@ class CreateEvent extends Component {
                 >
                     {eventsOwned.map(event => {
                         return (
-                            <Tab 
-                                label={event.title.length < 17 ? event.title : event.title.substring(0,15) + '...'} 
-                                value={event.uid} 
+                            <Tab
+                                label={event.title.length < 17 ? event.title : event.title.substring(0,15) + '...'}
+                                value={event.uid}
                                 key={event.uid}
                                 >
                                 <div className="text-content">

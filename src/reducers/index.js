@@ -1,4 +1,5 @@
 import config from './config';
+import contact from './contact';
 import contacts from './contacts';
 import user from './user';
 
@@ -10,6 +11,7 @@ const reducers = {
     isLoggedIn,
     config,
     contacts,
+    contact,
     user,
 };
 

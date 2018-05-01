@@ -19,6 +19,9 @@ export const REFRESH_CONFIG = 'REFRESH_CONFIG';
 export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
 
+/** CONTACT */
+export const GET_CONTACT = 'GET_CONTACT';
+export const UPDATE_CURRENT_CONTACT = 'UPDATE_CURRENT_CONTACT';
 
 /** CONTACTS */
 export const FETCH_CONTACTS = 'FETCH_CONTACTS';
