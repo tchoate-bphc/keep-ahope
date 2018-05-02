@@ -70,9 +70,9 @@ class Navigation extends React.Component {
                 </IconButton>
                 {'Welcome, ' + user.displayName}
                 <Drawer docked={false} width={200} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
-                    <MenuItem onClick={this.getMenuItemHandler("contact")} primaryText="Contact" leftIcon={<PersonIcon/>}/>
-                    <MenuItem onClick={this.getMenuItemHandler("reports")} primaryText="Report" leftIcon={<EventNoteIcon/>}/>
-                    <MenuItem onClick={this.getMenuItemHandler("users")} primaryText="Add Users" leftIcon={<GroupAddIcon/>}/>
+                    <MenuItem onClick={this.getMenuItemHandler("/contact")} primaryText="Contact" leftIcon={<PersonIcon/>}/>
+                    <MenuItem onClick={this.getMenuItemHandler("/reports")} primaryText="Report" leftIcon={<EventNoteIcon/>}/>
+                    <MenuItem onClick={this.getMenuItemHandler("/users")} primaryText="Add Users" leftIcon={<GroupAddIcon/>}/>
                     <MenuItem onClick={this.handleLogout} primaryText="Logout" leftIcon={<ExitToAppIcon/>}/>
                 </Drawer>
             </div>
