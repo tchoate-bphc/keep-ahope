@@ -35,7 +35,9 @@ class Navigation extends React.Component {
         this.state = {open: false};
     }
 
-    handleToggle = () => this.setState({open: !this.state.open});
+    handleToggle = () => { 
+        this.setState({open: !this.state.open});
+    }
 
     navigateToRoute (someArg, evt, tabEl) {
         // close any open event item
@@ -44,36 +46,35 @@ class Navigation extends React.Component {
         this.props.history.push(tabEl.props['data-route']);
     };
 
-    getMenuItemHandler (routeName)
-    {
-        var that = this;
-        return function ()
-        { 
-            that.setState({open: false});
-            that.props.history.push(routeName);
-        };    
+    getMenuItemHandler (routeName) {
+        return function () {
+            this.setState({open: false});
+            this.props.history.push(routeName);
+        }.bind(this);
     }
 
-    handleLogout = () => {this.setState({open: false}); this.props.logout()}
+    handleLogout = () => {
+        this.setState({open: false}); 
+        this.props.logout();
+    }
 
     render () {
         const { user, logout } = this.props;
 
-        // TODO: restore this back in once google authentication issue is resolved for me.
         // if the user hasn't logged in, then render nothing.
-        // if (!user.uid || 0 === user.uid.length) return (<div/>);
+        if (!user.uid || 0 === user.uid.length) return (<div/>);
 
         return (
             <div>
-                <IconButton onClick={this.handleToggle} style={{width: 60, height: 60, padding: 0}}>
+                <IconButton onTouchTap={this.handleToggle} style={{width: 60, height: 60, padding: 0}}>
                     <Avatar size={60} icon={<PersonOutlineIcon/>}/>
                 </IconButton>
                 {'Welcome, ' + user.displayName}
                 <Drawer docked={false} width={200} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
-                    <MenuItem onClick={this.getMenuItemHandler("/contact")} primaryText="Contact" leftIcon={<PersonIcon/>}/>
-                    <MenuItem onClick={this.getMenuItemHandler("/reports")} primaryText="Report" leftIcon={<EventNoteIcon/>}/>
-                    <MenuItem onClick={this.getMenuItemHandler("/users")} primaryText="Add Users" leftIcon={<GroupAddIcon/>}/>
-                    <MenuItem onClick={this.handleLogout} primaryText="Logout" leftIcon={<ExitToAppIcon/>}/>
+                    <MenuItem onTouchTap={this.getMenuItemHandler('/contact')} primaryText='Contact' leftIcon={<PersonIcon/>}/>
+                    <MenuItem onTouchTap={this.getMenuItemHandler('/reports')} primaryText='Report' leftIcon={<EventNoteIcon/>}/>
+                    <MenuItem onTouchTap={this.getMenuItemHandler('/users')} primaryText='Add Users' leftIcon={<GroupAddIcon/>}/>
+                    <MenuItem onTouchTap={this.handleLogout} primaryText='Logout' leftIcon={<ExitToAppIcon/>}/>
                 </Drawer>
             </div>
         );  
