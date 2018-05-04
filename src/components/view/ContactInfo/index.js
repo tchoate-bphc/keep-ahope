@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 import { getImageForEnv } from 'static/images/index';
-import ContactProfileCard from 'components/view/Contact/ContactProfileCard';
-import ContactNotesCard from 'components/view/Contact/ContactNotesCard';
+import ContactProfileCard from './contactInfoProfileCard';
+import ContactNotesCard from './contactInfoNotesCard';
 // import EventsCard from '';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
@@ -10,8 +10,7 @@ class ContactInfo extends Component {
 
     render() {
 
-        const { user, uid, contact } = this.props;
-        const themePalette = this.props.muiTheme.palette;
+        const { user, uid, contact, muiTheme: {palette} } = this.props;
 
         return (
             <div>
@@ -21,8 +20,8 @@ class ContactInfo extends Component {
                 <pre>UID from URL: <span style={{color:'red'}}>{uid}</span></pre>
 
                 <div>
-                    <ContactProfileCard titleColor={themePalette.primary1Color} contact={contact} />
-                    <ContactNotesCard titleColor={themePalette.primary1Color} />
+                    <ContactProfileCard titleColor={palette.primary1Color} contact={contact} />
+                    <ContactNotesCard titleColor={palette.primary1Color} />
                 </div>
 
             </div>

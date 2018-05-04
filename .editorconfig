@@ -1,4 +1,5 @@
 # based on the airbnb styleguide https://github.com/airbnb/javascript/blob/master/.editorconfig
+# https://github.com/editorconfig/editorconfig-vscode
 root = true
 
 [*]

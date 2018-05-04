@@ -4,9 +4,6 @@ import React, { Component } from 'react';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 
 class ContactProfileCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const {userInfo} = this.props;
