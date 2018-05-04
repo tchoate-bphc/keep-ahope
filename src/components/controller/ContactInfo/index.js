@@ -5,6 +5,7 @@ const mapStateToProps = (state) => {
     return {
         user: state.user,
         events: state.events,
+        contact: state.contact,
     };
 };
 

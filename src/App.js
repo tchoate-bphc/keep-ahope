@@ -26,7 +26,7 @@ import Messages from 'components/controller/Messages';
 
 import Navigation from 'components/controller/Navigation';
 import Footer from 'components/view/common/Footer';
-import { getUser, fetchEvents, fetchConfig, showLoginSpinner, fetchContacts } from './actions';
+import { getUser, fetchEvents, fetchConfig, showLoginSpinner, fetchContacts, getContact } from './actions';
 
 import './app.css';
 
@@ -47,7 +47,7 @@ class App extends Component {
             (googleUser) => {
 
                 window._UI_STORE_.dispatch(showLoginSpinner(false));
-                
+
                 // user data from Google Auth
                 if (googleUser && googleUser.uid) {
                     const googleUserData = {
@@ -60,9 +60,12 @@ class App extends Component {
                     window._UI_STORE_.dispatch(fetchConfig());
 
                     window._UI_STORE_.dispatch(getUser(googleUserData));
-                    
+
                     window._UI_STORE_.dispatch(fetchContacts());
                     // window._UI_STORE_.dispatch(fetchEvents());
+
+                    // TODO: put this where it belongs and pull from route param
+                    window._UI_STORE_.dispatch(getContact('jnde123199abc'));
 
                 }
             }

@@ -12,6 +12,10 @@ import {
     // MODALS
     OPEN_MODAL,
 
+    // CONTACT
+    GET_CONTACT,
+    UPDATE_CURRENT_CONTACT,
+
     // CONTACTS
     FETCH_CONTACTS,
     REFRESH_CONTACTS,
@@ -93,9 +97,22 @@ export function refreshConfig(config) {
     }
 }
 
+/** CONTACT */
+export function getContact(uid) {
+    return {
+        type: GET_CONTACT,
+        uid,
+    }
+}
+
+export function updateCurrentContact(contact) {
+    return {
+        type: UPDATE_CURRENT_CONTACT,
+        contact,
+    }
+}
+
 /** CONTACTS */
-
-
 export function fetchContacts() {
     return {
         type: FETCH_CONTACTS,
@@ -132,7 +149,7 @@ export function refreshEvents(eventCollection) {
 }
 
 export function createEvent(userInputData, user) {
-    
+
     const eventData = {
         ...userInputData
     };
