@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import ContactInfo from 'components/controller/ContactInfo';
-import ContactIntake from 'components/controller/ContactIntake';
+import Intake from 'components/controller/Intake';
 import ContactNavigation from 'components/controller/ContactNavigation';
 import ContactSearchResults from 'components/controller/ContactSearchResults';
 
