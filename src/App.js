@@ -23,6 +23,7 @@ import AuthorizedRoute from 'components/controller/AuthorizedRoute';
 import Contact from 'components/controller/Contact';
 import Reports from 'components/controller/Reports';
 import Messages from 'components/controller/Messages';
+import Intake from 'components/controller/Intake';
 
 import Navigation from 'components/controller/Navigation';
 import Footer from 'components/view/common/Footer';
@@ -119,6 +120,7 @@ class App extends Component {
                                 <AuthorizedRoute exact path="/contact/" component={Contact} />
                                 <AuthorizedRoute path="/contact/:uid/:action" component={Contact} />
                                 <AuthorizedRoute exact path="/reports" component={Reports} />
+                                <AuthorizedRoute exact path="/intake" component={Intake} />
                                 <AuthorizedRoute path="/" component={Contact} />
                             </Switch>
                             <Footer />
@@ -131,4 +133,3 @@ class App extends Component {
 }
 
 export default App;
-

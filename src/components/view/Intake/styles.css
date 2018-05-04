@@ -1,0 +1,11 @@
+.checkbox {
+  display: flex;
+}
+
+.checkbox div {
+  flex: 1 1 auto;
+}
+
+.card {
+  padding: 1rem;
+}

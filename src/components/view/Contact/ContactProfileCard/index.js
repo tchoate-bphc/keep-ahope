@@ -10,7 +10,7 @@ class ContactProfileCard extends React.Component {
 
     const infoKeyStyle = {
       color: '#90A4AE',
-      'padding-right': '.5rem'
+      paddingRight: '.5rem'
     }
 
     return (
