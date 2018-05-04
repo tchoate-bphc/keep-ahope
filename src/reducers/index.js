@@ -8,10 +8,10 @@ function isLoggedIn(state = false, action) {
 }
 
 const reducers = {
-    isLoggedIn,
     config,
-    contacts,
     contact,
+    contacts,
+    isLoggedIn,
     user,
 };
 
