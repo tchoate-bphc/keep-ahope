@@ -37,7 +37,7 @@ class ContactNavigation extends React.Component {
         this.navigateToRoute = this.navigateToRoute.bind(this);
         this.themePalette = this.props.muiTheme.palette;
     }
-    
+
     buildIconMenu (actions) {
         const { logout } = actions;
         return (
@@ -113,7 +113,7 @@ class ContactNavigation extends React.Component {
                 return this.buildTab(tabObj);
             });
 
-        const initialSelectedIndex = tabObjs.findIndex(tab => tab.link === urlPathAction) 
+        const initialSelectedIndex = tabObjs.findIndex(tab => tab.link === urlPathAction)
 
         return (
             <Tabs
@@ -130,11 +130,10 @@ class ContactNavigation extends React.Component {
     render () {
         const { user, logout, match } = this.props;
 
-        const urlPathUid = match && match.params && match.params.uid && match.params.uid.toLowerCase();
         const urlPathAction = match && match.params && match.params.action && match.params.action.toLowerCase();
-        
+
         const iconMenu = this.buildIconMenu({ logout });
-        
+
         const navigationTabs = this.buildNavigationTabs(urlPathAction);
 
         return (
@@ -143,7 +142,7 @@ class ContactNavigation extends React.Component {
                 {!!urlPathAction && navigationTabs}
 
             </div>
-        );  
+        );
     }
 }
 

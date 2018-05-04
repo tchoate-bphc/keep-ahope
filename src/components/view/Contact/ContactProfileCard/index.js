@@ -26,11 +26,13 @@ class ContactProfileCard extends React.Component {
             <div className="row">
               <div className="col-xs-6">
                 <span style={infoKeyStyle}>DOB</span>
-                Not stored in firebase
+                {/* TODO: add this to the DB */}
+                {contact.dateOfBirth}
               </div>
               <div className="col-xs-6">
                 <span style={infoKeyStyle}>Race</span>
-                Not stored in firebase
+                {/* TODO: add this to the DB */}
+                {contact.race}
               </div>
             </div>
             <div className="row">

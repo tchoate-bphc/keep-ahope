@@ -4,13 +4,14 @@ import { getImageForEnv } from 'static/images/index';
 import ContactProfileCard from 'components/view/Contact/ContactProfileCard';
 import ContactNotesCard from 'components/view/Contact/ContactNotesCard';
 // import EventsCard from '';
-import { cyan600 } from 'material-ui/styles/colors'
+import muiThemeable from 'material-ui/styles/muiThemeable';
 
 class ContactInfo extends Component {
 
     render() {
 
         const { user, uid, contact } = this.props;
+        const themePalette = this.props.muiTheme.palette;
 
         return (
             <div>
@@ -20,9 +21,8 @@ class ContactInfo extends Component {
                 <pre>UID from URL: <span style={{color:'red'}}>{uid}</span></pre>
 
                 <div>
-                    <ContactProfileCard titleColor={cyan600} contact={contact} />
-                    {/* <CamdenEventCard titleColor={cyan600} events={contact.events} /> */}
-                    <ContactNotesCard titleColor={cyan600} />
+                    <ContactProfileCard titleColor={themePalette.primary1Color} contact={contact} />
+                    <ContactNotesCard titleColor={themePalette.primary1Color} />
                 </div>
 
             </div>
@@ -30,4 +30,4 @@ class ContactInfo extends Component {
     }
 }
 
-export default ContactInfo;
+export default muiThemeable()(ContactInfo);
