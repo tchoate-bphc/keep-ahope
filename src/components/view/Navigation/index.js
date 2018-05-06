@@ -52,7 +52,7 @@ class Navigation extends React.Component {
     }
 
     handleLogout () {
-        this.setState({drawerOpen: false}); 
+        this.setState({drawerOpen: false});
         this.props.logout();
     }
 
@@ -66,19 +66,19 @@ class Navigation extends React.Component {
                 <AppBar onLeftIconButtonTouchTap={this.handleToggle} title={'Welcome, ' + user.displayName}>
                 </AppBar>
                 <Drawer docked={false} width={drawerWidth} open={this.state.drawerOpen} onRequestChange={() => this.setState({drawerOpen : false})}>
-                    <div style={{'background-color': this.props.muiTheme.appBar.color, 'padding': paddingSize }}>
+                    <div style={{backgroundColor: this.props.muiTheme.appBar.color, padding: paddingSize }}>
                         <Avatar size={avatarSize} icon={<PersonOutlineIcon/>}/>
-                        <div style={{ color: this.props.muiTheme.appBar.textColor, 'padding-top': paddingSize, 'padding-bottom': paddingSize }}>
+                        <div style={{ color: this.props.muiTheme.appBar.textColor, paddingTop: paddingSize, paddingBottom: paddingSize }}>
                             {'Welcome, ' + user.displayName}
                         </div>
                     </div>
                     <MenuItem onTouchTap={this.getMenuItemHandler('/contact')} primaryText='Contact' leftIcon={<PersonIcon/>}/>
                     <MenuItem onTouchTap={this.getMenuItemHandler('/reports')} primaryText='Report' leftIcon={<EventNoteIcon/>}/>
                     <MenuItem onTouchTap={this.getMenuItemHandler('/users')} primaryText='Add Users' leftIcon={<GroupAddIcon/>}/>
-                    <MenuItem onTouchTap={this.handleLogout} primaryText='Logout' leftIcon={<ExitToAppIcon/>}/>                    
+                    <MenuItem onTouchTap={this.handleLogout} primaryText='Logout' leftIcon={<ExitToAppIcon/>}/>
                 </Drawer>
             </div>
-        );  
+        );
     }
 }
 
