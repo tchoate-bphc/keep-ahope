@@ -2,6 +2,8 @@ import React from 'react';
 
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
+import AppBar from 'material-ui/AppBar'
+import Avatar from 'material-ui/Avatar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import {Tabs, Tab} from 'material-ui/Tabs';
@@ -20,8 +22,6 @@ import PersonAddIcon from 'material-ui/svg-icons/social/person-add';
 import EventNoteIcon from 'material-ui/svg-icons/notification/event-note';
 import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app';
 
-import Avatar from 'material-ui/Avatar';
-
 import { getImageForEnv } from 'static/images/index'
 
 import './styles.css';
@@ -30,51 +30,52 @@ class Navigation extends React.Component {
 
     constructor(props) {
         super(props);
-        this.navigateToRoute = this.navigateToRoute.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
+        this.handleToggle = this.handleToggle.bind(this);
         this.themePalette = this.props.muiTheme.palette;
-        this.state = {open: false};
+        this.state = { drawerOpen: false };
     }
 
-    handleToggle = () => { 
-        this.setState({open: !this.state.open});
+    handleToggle () {
+        // doesn't show nevigation unless logged in.
+        const { user } = this.props;
+        if (user.uid && user.uid.length > 0) {
+            this.setState({drawerOpen: !this.state.drawerOpen});
+        }
     }
-
-    navigateToRoute (someArg, evt, tabEl) {
-        // close any open event item
-        // this.toggleEventDetail();
-        // navigate
-        this.props.history.push(tabEl.props['data-route']);
-    };
 
     getMenuItemHandler (routeName) {
         return function () {
-            this.setState({open: false});
+            this.setState({drawerOpen: false});
             this.props.history.push(routeName);
         }.bind(this);
     }
 
-    handleLogout = () => {
-        this.setState({open: false}); 
+    handleLogout () {
+        this.setState({drawerOpen: false}); 
         this.props.logout();
     }
 
     render () {
-        const { user, logout } = this.props;
+        const { user } = this.props;
 
-        // if the user hasn't logged in, then render nothing.
-        if (!user.uid || 0 === user.uid.length) return (<div/>);
+        const avatarSize = 60, paddingSize = 15, drawerWidth = 320;
 
         return (
             <div>
-                <IconButton onTouchTap={this.handleToggle} style={{width: 60, height: 60, padding: 0}}>
-                    <Avatar size={60} icon={<PersonOutlineIcon/>}/>
-                </IconButton>
-                {'Welcome, ' + user.displayName}
-                <Drawer docked={false} width={200} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
+                <AppBar onLeftIconButtonTouchTap={this.handleToggle} title={'Welcome, ' + user.displayName}>
+                </AppBar>
+                <Drawer docked={false} width={drawerWidth} open={this.state.drawerOpen} onRequestChange={() => this.setState({drawerOpen : false})}>
+                    <div style={{'background-color': this.props.muiTheme.appBar.color, 'padding': paddingSize }}>
+                        <Avatar size={avatarSize} icon={<PersonOutlineIcon/>}/>
+                        <div style={{ color: this.props.muiTheme.appBar.textColor, 'padding-top': paddingSize, 'padding-bottom': paddingSize }}>
+                            {'Welcome, ' + user.displayName}
+                        </div>
+                    </div>
                     <MenuItem onTouchTap={this.getMenuItemHandler('/contact')} primaryText='Contact' leftIcon={<PersonIcon/>}/>
                     <MenuItem onTouchTap={this.getMenuItemHandler('/reports')} primaryText='Report' leftIcon={<EventNoteIcon/>}/>
                     <MenuItem onTouchTap={this.getMenuItemHandler('/users')} primaryText='Add Users' leftIcon={<GroupAddIcon/>}/>
-                    <MenuItem onTouchTap={this.handleLogout} primaryText='Logout' leftIcon={<ExitToAppIcon/>}/>
+                    <MenuItem onTouchTap={this.handleLogout} primaryText='Logout' leftIcon={<ExitToAppIcon/>}/>                    
                 </Drawer>
             </div>
         );  
