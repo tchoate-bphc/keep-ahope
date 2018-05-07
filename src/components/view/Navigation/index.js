@@ -59,7 +59,9 @@ class Navigation extends React.Component {
     render () {
         const { user } = this.props;
 
-        const avatarSize = 60, paddingSize = 15, drawerWidth = 320;
+        const avatarSize = 60,
+            paddingSize = 15,
+            drawerWidth = Math.min(450, window.outerWidth * .8);
 
         return (
             <div>
