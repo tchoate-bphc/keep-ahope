@@ -10,17 +10,22 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import IconButton from 'material-ui/IconButton';
 import { blueGrey600, cyan600 } from 'material-ui/styles/colors'
 
-import ExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
-import AssignmentInd from 'material-ui/svg-icons/action/assignment-ind';
-import ChromeReaderModeIcon from 'material-ui/svg-icons/action/chrome-reader-mode';
-import PeopleIcon from 'material-ui/svg-icons/social/people';
 import PersonIcon from 'material-ui/svg-icons/social/person';
 import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
-import GroupIcon from 'material-ui/svg-icons/social/group';
 import GroupAddIcon from 'material-ui/svg-icons/social/group-add';
-import PersonAddIcon from 'material-ui/svg-icons/social/person-add';
 import EventNoteIcon from 'material-ui/svg-icons/notification/event-note';
 import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app';
+
+// Unused icons; some are good candidates if we need more.
+//
+// import ExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
+// import AssignmentInd from 'material-ui/svg-icons/action/assignment-ind';
+// import ChromeReaderModeIcon from 'material-ui/svg-icons/action/chrome-reader-mode';
+//
+// import PeopleIcon from 'material-ui/svg-icons/social/people';
+// import GroupIcon from 'material-ui/svg-icons/social/group';
+// import PersonAddIcon from 'material-ui/svg-icons/social/person-add';
+
 
 import { getImageForEnv } from 'static/images/index'
 
