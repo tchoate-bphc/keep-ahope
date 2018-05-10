@@ -2,29 +2,29 @@ import React from 'react';
 
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
-import AppBar from 'material-ui/AppBar';
-import IconMenu from 'material-ui/IconMenu';
+import AppBar from 'material-ui/AppBar'
+import Avatar from 'material-ui/Avatar';
+import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import IconButton from 'material-ui/IconButton';
 import { blueGrey600, cyan600 } from 'material-ui/styles/colors'
 
-import ExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
-import AssignmentInd from 'material-ui/svg-icons/action/assignment-ind';
-import ChromeReaderModeIcon from 'material-ui/svg-icons/action/chrome-reader-mode';
-import CreditCardIcon from 'material-ui/svg-icons/action/credit-card';
-import RedeemIcon from 'material-ui/svg-icons/action/redeem';
-// import TimelineIcon from 'material-ui/svg-icons/action/timeline';
-import LocalPlayIcon from 'material-ui/svg-icons/maps/local-play';
-// import LocalOfferIcon from 'material-ui/svg-icons/maps/local-offer';
-// import MoodIcon from 'material-ui/svg-icons/social/mood';
-import PollIcon from 'material-ui/svg-icons/social/poll';
-// import PeopleIcon from 'material-ui/svg-icons/social/people';
 import PersonIcon from 'material-ui/svg-icons/social/person';
-// import WhatsHotIcon from 'material-ui/svg-icons/social/whatshot';
-// import StarIcon from 'material-ui/svg-icons/toggle/star';
-// import AddCircleIcon from 'material-ui/svg-icons/content/add-circle';
-import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
+import EventNoteIcon from 'material-ui/svg-icons/notification/event-note';
+import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app';
+
+// Unused icons; some are good candidates if we need more.
+//
+// import AssignmentInd from 'material-ui/svg-icons/action/assignment-ind';
+// import ChromeReaderModeIcon from 'material-ui/svg-icons/action/chrome-reader-mode';
+// import ExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
+// import GroupAddIcon from 'material-ui/svg-icons/social/group-add';
+// import GroupIcon from 'material-ui/svg-icons/social/group';
+// import PeopleIcon from 'material-ui/svg-icons/social/people';
+// import PersonAddIcon from 'material-ui/svg-icons/social/person-add';
+
 
 import { getImageForEnv } from 'static/images/index'
 
@@ -34,46 +34,56 @@ class Navigation extends React.Component {
 
     constructor(props) {
         super(props);
-        this.navigateToRoute = this.navigateToRoute.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
+        this.handleToggle = this.handleToggle.bind(this);
         this.themePalette = this.props.muiTheme.palette;
+        this.state = { drawerOpen: false };
     }
-    
-    buildIconMenu (actions) {
-        const { logout } = actions;
-        return (
-            <IconMenu
-                iconButtonElement={<IconButton><ExpandMoreIcon /></IconButton>}
-                anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-                targetOrigin={{ horizontal: 'left', vertical: 'top' }}
-            >
-                <MenuItem onTouchTap={logout} primaryText="Logout" />
-            </IconMenu>
-        );
-    };
 
-    navigateToRoute (someArg, evt, tabEl) {
-        // close any open event item
-        // this.toggleEventDetail();
-        // navigate
-        this.props.history.push(tabEl.props['data-route']);
-    };
+    handleToggle () {
+        // doesn't show nevigation unless logged in.
+        const { user } = this.props;
+        if (user.uid && user.uid.length > 0) {
+            this.setState({drawerOpen: !this.state.drawerOpen});
+        }
+    }
+
+    getMenuItemHandler (routeName) {
+        return function () {
+            this.setState({drawerOpen: false});
+            this.props.history.push(routeName);
+        }.bind(this);
+    }
+
+    handleLogout () {
+        this.setState({drawerOpen: false});
+        this.props.logout();
+    }
 
     render () {
-        const { user, logout } = this.props;
-        
-        const iconMenu = this.buildIconMenu({ logout });
+        const { user } = this.props;
+
+        const avatarSize = 60,
+            paddingSize = 15,
+            drawerWidth = Math.min(450, window.outerWidth * .8);
 
         return (
             <div>
-                
-                {<AppBar
-                    title={'Welcome, ' + user.displayName}
-                    iconElementRight={iconMenu}
-                >
-                </AppBar>}
-
+                <AppBar onLeftIconButtonTouchTap={this.handleToggle} title={'Welcome, ' + user.displayName}>
+                </AppBar>
+                <Drawer docked={false} width={drawerWidth} open={this.state.drawerOpen} onRequestChange={() => this.setState({drawerOpen : false})}>
+                    <div style={{backgroundColor: this.props.muiTheme.appBar.color, padding: paddingSize }}>
+                        <Avatar size={avatarSize} icon={<PersonOutlineIcon/>}/>
+                        <div style={{ color: this.props.muiTheme.appBar.textColor, paddingTop: paddingSize, paddingBottom: paddingSize }}>
+                            {'Welcome, ' + user.displayName}
+                        </div>
+                    </div>
+                    <MenuItem onTouchTap={this.getMenuItemHandler('/contact')} primaryText='Contact' leftIcon={<PersonIcon/>}/>
+                    <MenuItem onTouchTap={this.getMenuItemHandler('/reports')} primaryText='Report' leftIcon={<EventNoteIcon/>}/>
+                    <MenuItem onTouchTap={this.handleLogout} primaryText='Logout' leftIcon={<ExitToAppIcon/>}/>
+                </Drawer>
             </div>
-        );  
+        );
     }
 }
 
