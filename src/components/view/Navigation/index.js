@@ -12,18 +12,17 @@ import { blueGrey600, cyan600 } from 'material-ui/styles/colors'
 
 import PersonIcon from 'material-ui/svg-icons/social/person';
 import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
-import GroupAddIcon from 'material-ui/svg-icons/social/group-add';
 import EventNoteIcon from 'material-ui/svg-icons/notification/event-note';
 import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app';
 
 // Unused icons; some are good candidates if we need more.
 //
-// import ExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 // import AssignmentInd from 'material-ui/svg-icons/action/assignment-ind';
 // import ChromeReaderModeIcon from 'material-ui/svg-icons/action/chrome-reader-mode';
-//
-// import PeopleIcon from 'material-ui/svg-icons/social/people';
+// import ExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
+// import GroupAddIcon from 'material-ui/svg-icons/social/group-add';
 // import GroupIcon from 'material-ui/svg-icons/social/group';
+// import PeopleIcon from 'material-ui/svg-icons/social/people';
 // import PersonAddIcon from 'material-ui/svg-icons/social/person-add';
 
 
@@ -81,7 +80,6 @@ class Navigation extends React.Component {
                     </div>
                     <MenuItem onTouchTap={this.getMenuItemHandler('/contact')} primaryText='Contact' leftIcon={<PersonIcon/>}/>
                     <MenuItem onTouchTap={this.getMenuItemHandler('/reports')} primaryText='Report' leftIcon={<EventNoteIcon/>}/>
-                    <MenuItem onTouchTap={this.getMenuItemHandler('/users')} primaryText='Add Users' leftIcon={<GroupAddIcon/>}/>
                     <MenuItem onTouchTap={this.handleLogout} primaryText='Logout' leftIcon={<ExitToAppIcon/>}/>
                 </Drawer>
             </div>
