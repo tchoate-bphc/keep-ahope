@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 /** MATERIAL UI **/
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {cyan50,blueGrey200,cyan500,cyan900,limeA200,yellow800,pink800,green400} from 'material-ui/styles/colors';
+import {cyan50,blueGrey200,cyan500,cyan900,limeA200,yellow800,pink800,green400,grey500} from 'material-ui/styles/colors';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 /** ROUTER **/
 import { Route } from 'react-router-dom';
@@ -73,7 +73,7 @@ class App extends Component {
                 primary1Color: '#1DAFEC',
                 accent1Color: '#8EC449',
                 highlight1Color: '#E8448B',
-                ternaryTextColor: '#8DC3DB', // TODO: rename
+                tertiaryTextColor: '#8DC3DB',
                 fadedPrimary1Color: '#4FDFFF',
                 primaryLinkColor: '#1DAFEC',
                 secondaryLinkColor: '#8AC9EC',
@@ -84,7 +84,7 @@ class App extends Component {
                 // DEFAULTS
                 // primary1Color: cyan500,
                 // primary2Color: cyan700,
-                // primary3Color: grey400,
+                primary3Color: grey500,
                 // accent1Color: pinkA200,
                 // accent2Color: grey100,
                 // accent3Color: grey500,
@@ -115,7 +115,6 @@ class App extends Component {
                                 <AuthorizedRoute exact path="/intake" component={Intake} />
                                 <AuthorizedRoute path="/" component={Contact} />
                             </Switch>
-                            <Footer />
                         </div>
                     </ConnectedRouter>
                 </Provider>
