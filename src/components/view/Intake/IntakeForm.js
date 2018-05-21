@@ -34,7 +34,6 @@ class IntakeForm extends Component {
 
     this.submitForm = this.submitForm.bind(this)
     this.clearForm = this.clearForm.bind(this)
-    this.toggleRefill = this.toggleRefill.bind(this)
     this.checkNarcanOffered = this.checkNarcanOffered.bind(this)
     this.checkNarcanGiven = this.checkNarcanGiven.bind(this)
     this.selectReferrals = this.selectReferrals.bind(this)
@@ -43,6 +42,7 @@ class IntakeForm extends Component {
     this.setDateOfBirth = this.setDateOfBirth.bind(this)
     this.updateCheckNewContact = this.updateCheckNewContact.bind(this)
     this.updateCheckOutreach = this.updateCheckOutreach.bind(this)
+    this.updateEnrollmentRefill = this.updateEnrollmentRefill.bind(this)
     this.updateGender = this.updateGender.bind(this)
     this.updateCountryOfBirth = this.updateCountryOfBirth.bind(this)
     this.updateSyringesGiven = this.updateSyringesGiven.bind(this)
@@ -64,14 +64,13 @@ class IntakeForm extends Component {
       newContact: false,
       outreach: false,
 
-      toggleRefillLabel: "No Refill",
       narcanOfferedLabel: "No",
       narcanGivenLabel: "No",
 
       eventData: {
         uid: this.props.user.uid,
         eventDate: todayDate,
-        refill: "no",
+        enrollmentRefill: "enrollment",
         syringesGiven: "N/A",
         syringesTaken: "N/A",
         referrals: "No Referrals",
@@ -82,25 +81,18 @@ class IntakeForm extends Component {
       },
 
       contactData: {
-        uid: "jnde123199abc",
+        uid: this.props.user.uid,
         dateOfBirth: initDateOfBirth,
-        countryOfBirth: "United States",
-        profileNotes: "",
-        race: "White",
         gender: "Male",
+        race: "White",
+        hispanic: false,
+        countryOfBirth: "United States",
         ageOfFirstInjection: 0,
+        profileNotes: "",
       }
     }
     this.initialState = this.state;
     this.submittedState = this.state;
-  }
-
-  toggleRefill() {
-    if (this.state.toggleRefillLabel == "Refill") {
-      this.setState({toggleRefillLabel: "No Refill"})
-    } else {
-      this.setState({toggleRefillLabel: "Refill"})
-    }
   }
 
   checkNarcanOffered() {
@@ -165,6 +157,12 @@ class IntakeForm extends Component {
     var contactData = {...this.state.contactData}
     contactData.gender = newValue
     this.setState({contactData})
+  }
+
+  updateEnrollmentRefill(event, newValue) {
+    var eventData = {...this.state.eventData}
+    eventData.enrollmentRefill = newValue
+    this.setState({eventData})
   }
 
   updateCountryOfBirth(event, newValue) {
@@ -253,16 +251,21 @@ class IntakeForm extends Component {
     }
 
     const titleColorStyle = {
-      'color': '#999'
+      color: this.themePalette.primary1Color
     }
 
     const labelStyle = {
-      'color': this.themePalette.primary3Color,
-      'padding': '1rem 0 .5rem'
+      color: this.themePalette.primary3Color,
+      margin: '2rem 0 0'
+    }
+
+    const toggleStyles = {
+      margin: '2rem 0 1rem'
     }
 
     const newContact = this.state.newContact ? (
       <Card className="card">
+        <CardTitle style={titleColorStyle}>First Contact</CardTitle>
         <div className="fields">
 
           <DatePicker
@@ -276,7 +279,7 @@ class IntakeForm extends Component {
 
           <div>
             <div style={labelStyle}>
-              Gender
+              Gender Identity
             </div>
             <RadioButtonGroup
               name="gender"
@@ -306,11 +309,6 @@ class IntakeForm extends Component {
             </RadioButtonGroup>
           </div>
 
-          <div id="ageOfFirstInjection">
-            <div style={labelStyle}>Age of First Injection</div>
-            <Slider name="ageOfFirstInjection" defaultValue={0} min={0} max={80} />
-          </div>
-
           <div>
             <div style={labelStyle}>Race/Ethnicity</div>
             <SelectField
@@ -329,7 +327,12 @@ class IntakeForm extends Component {
             </SelectField>
           </div>
 
-          <Toggle label="Hispanic" defaultToggled={false} labelPosition="right" />
+          <Toggle
+            label="Hispanic"
+            defaultToggled={false}
+            labelPosition="right"
+            style={toggleStyles}
+          />
 
           <div>
             <div style={labelStyle}>
@@ -355,6 +358,12 @@ class IntakeForm extends Component {
               />
             </RadioButtonGroup>
           </div>
+
+          <div id="ageOfFirstInjection">
+            <div style={labelStyle}>Age of First Injection</div>
+            <Slider name="ageOfFirstInjection" defaultValue={0} min={0} max={80} />
+          </div>
+
         </div>
       </Card>
     ) : (
@@ -363,7 +372,9 @@ class IntakeForm extends Component {
 
     const outreach = this.state.outreach ? (
       <Card className="card">
+        <CardTitle style={titleColorStyle}>Outreach</CardTitle>
         <div className="fields">
+
           <div id="syringesGiven">
             <div style={labelStyle}>Syringes Given</div>
             <Slider
@@ -381,11 +392,61 @@ class IntakeForm extends Component {
             <Slider
               name="SyringesTaken"
               defaultValue={0}
+              step={1}
               min={0}
               max={10}
               onChange={(e, value) => this.updateSyringesTaken(e, value)}
             />
           </div>
+
+          <div className="checkbox narcanOfferedGiven">
+            <div className="narcanOffered">
+              <div style={labelStyle}>Narcan Offered</div>
+              <Checkbox
+                label={this.state.narcanOfferedLabel}
+                defaultChecked={false}
+                onClick={() => this.checkNarcanOffered()}
+              />
+            </div>
+
+            <div className="narcanGiven">
+              <div style={labelStyle}>Narcan Given</div>
+              <Checkbox
+                label={this.state.narcanGivenLabel}
+                defaultChecked={false}
+                onClick={() => this.checkNarcanGiven()}
+              />
+            </div>
+          </div>
+
+          <div style={labelStyle}>Enrollment or Refill</div>
+          <RadioButtonGroup
+            name="enrollmentRefill"
+            className="radio"
+            defaultSelected="Enrollment"
+            onChange={(e, value) => this.updateEnrollmentRefill(e, value)}
+          >
+            <RadioButton
+              label="Enrollment"
+              value="Enrollment"
+            />
+            <RadioButton
+              label="Refill"
+              value="Refill"
+            />
+          </RadioButtonGroup>
+
+          <div style={labelStyle}>Number of People</div>
+          <Slider
+            name="NumPeople"
+            defaultValue={0}
+            step={1}
+            min={0}
+            max={10}
+            id="numPeople"
+            onChange={(e, value) => this.updateNumPeople(e, value)}
+          />
+
         </div>
       </Card>
     ) : (
@@ -409,9 +470,6 @@ class IntakeForm extends Component {
           </Card>
 
           <Card className="card">
-            <CardTitle style={titleColorStyle}>
-              Form Questions
-            </CardTitle>
             <div className="checkbox">
               <Checkbox
                 label="Standard Questions"
@@ -423,26 +481,15 @@ class IntakeForm extends Component {
                 onCheck={this.updateCheckNewContact.bind(this)}
               />
               <Checkbox
-                label="Return Visit"
+                label="Outreach"
                 onCheck={this.updateCheckOutreach.bind(this)}
               />
             </div>
           </Card>
 
-          {newContact}
-
-          {outreach}
-
           <Card className="card">
+            <CardTitle style={titleColorStyle}>Standard Questions</CardTitle>
             <div className="fields">
-
-              <Toggle
-                label={this.state.toggleRefillLabel}
-                defaultToggled={false}
-                labelPosition="right"
-                className="toggle"
-                onClick={(e) => this.toggleRefill(e)}
-              />
 
               <SelectField
                 value={this.state.eventData.referrals}
@@ -455,64 +502,34 @@ class IntakeForm extends Component {
                 <MenuItem value="Referrals" primaryText="Referrals" />
               </SelectField>
 
-              <div className="checkbox narcanOfferedGiven">
-                <div className="narcanOffered">
-                  <div style={labelStyle}>Narcan Offered</div>
-                  <Checkbox
-                    label={this.state.narcanOfferedLabel}
-                    defaultChecked={false}
-                    onClick={() => this.checkNarcanOffered()}
-                  />
-                </div>
-
-                <div className="narcanGiven">
-                  <div style={labelStyle}>Narcan Given</div>
-                  <Checkbox
-                    label={this.state.narcanGivenLabel}
-                    defaultChecked={false}
-                    onClick={() => this.checkNarcanGiven()}
-                  />
-                </div>
-              </div>
-
-              <p>Number of People</p>
-              <Slider
-                name="NumPeople"
-                defaultValue={0}
-                step={1}
-                min={0}
-                max={10}
-                id="numPeople"
-                onChange={(e, value) => this.updateNumPeople(e, value)}
-              />
             </div>
           </Card>
 
+          {newContact}
+
+          {outreach}
+
           <Card className="card">
-            <CardTitle style={titleColorStyle}>
-              Event Notes
-            </CardTitle>
             <div className="textAreaContainer">
               <TextField
                 multiLine={true}
                 rows={5}
                 style={textareaStyles}
                 id="eventNotes"
+                floatingLabelText="Event Notes"
                 onChange={(e, value) => this.updateEventNotes(e, value)}
               />
             </div>
           </Card>
 
           <Card className="card">
-            <CardTitle style={titleColorStyle}>
-              Profile Notes
-            </CardTitle>
             <div className="textAreaContainer">
               <TextField
                 multiLine={true}
                 rows={5}
                 style={textareaStyles}
                 id="profileNotes"
+                floatingLabelText="Profile Notes"
                 onChange={(e, value) => this.updateProfileNotes(e, value)}
               />
             </div>

@@ -78,13 +78,14 @@ class App extends Component {
                 primaryLinkColor: '#1DAFEC',
                 secondaryLinkColor: '#8AC9EC',
                 primary2Color: '#47B4E0',
+                primary3Color: grey500,
                 errorColor: '#E8448B',
                 warningColor: '#FF953F',
                 successColor: '#8EC449',
                 // DEFAULTS
                 // primary1Color: cyan500,
                 // primary2Color: cyan700,
-                primary3Color: grey500,
+                // prinary3Color: grey400,
                 // accent1Color: pinkA200,
                 // accent2Color: grey100,
                 // accent3Color: grey500,
@@ -112,7 +113,7 @@ class App extends Component {
                                 <AuthorizedRoute exact path="/contact/" component={Contact} />
                                 <AuthorizedRoute path="/contact/:uid/:action" component={Contact} />
                                 <AuthorizedRoute exact path="/reports" component={Reports} />
-                                <AuthorizedRoute exact path="/intake" component={Intake} />
+                                <AuthorizedRoute exact path="/contact/:uid/intake" component={Intake} />
                                 <AuthorizedRoute path="/" component={Contact} />
                             </Switch>
                         </div>

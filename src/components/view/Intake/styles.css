@@ -44,3 +44,10 @@
 #syringesGiven, #syringesTaken, #numPeople, #ageOfFirstInjection {
   /* width: 20rem; */
 }
+
+@media screen and (max-width: 760px) {
+    .form {
+        max-width: 100%;
+        width: 100%;
+    }
+}
