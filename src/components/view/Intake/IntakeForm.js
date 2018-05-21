@@ -33,6 +33,7 @@ class IntakeForm extends Component {
     super(props);
 
     this.submitForm = this.submitForm.bind(this)
+    this.clearForm = this.clearForm.bind(this)
     this.toggleRefill = this.toggleRefill.bind(this)
     this.checkNarcanOffered = this.checkNarcanOffered.bind(this)
     this.checkNarcanGiven = this.checkNarcanGiven.bind(this)
@@ -42,6 +43,13 @@ class IntakeForm extends Component {
     this.setDateOfBirth = this.setDateOfBirth.bind(this)
     this.updateCheckNewContact = this.updateCheckNewContact.bind(this)
     this.updateCheckOutreach = this.updateCheckOutreach.bind(this)
+    this.updateGender = this.updateGender.bind(this)
+    this.updateCountryOfBirth = this.updateCountryOfBirth.bind(this)
+    this.updateSyringesGiven = this.updateSyringesGiven.bind(this)
+    this.updateSyringesTaken = this.updateSyringesTaken.bind(this)
+    this.updateNumPeople = this.updateNumPeople.bind(this)
+    this.updateEventNotes = this.updateEventNotes.bind(this)
+    this.updateProfileNotes = this.updateProfileNotes.bind(this)
 
     this.themePalette = this.props.muiTheme.palette
 
@@ -51,23 +59,28 @@ class IntakeForm extends Component {
 
     const initDateOfBirth = new Date(1980, 0, 1)
 
+    // TODO: prepopulate with personal info
     this.state = {
       newContact: false,
       outreach: false,
+
       toggleRefillLabel: "No Refill",
       narcanOfferedLabel: "No",
       narcanGivenLabel: "No",
+
       eventData: {
+        uid: this.props.user.uid,
         eventDate: todayDate,
         refill: "no",
         syringesGiven: "N/A",
         syringesTaken: "N/A",
         referrals: "No Referrals",
-        narcanOffered: "no",
-        narcanGiven: "no",
-        numPeople: "N/A",
+        narcanOffered: false,
+        narcanGiven: false,
+        numPeople: 0,
         eventNotes: ""
       },
+
       contactData: {
         uid: "jnde123199abc",
         dateOfBirth: initDateOfBirth,
@@ -78,6 +91,8 @@ class IntakeForm extends Component {
         ageOfFirstInjection: 0,
       }
     }
+    this.initialState = this.state;
+    this.submittedState = this.state;
   }
 
   toggleRefill() {
@@ -90,26 +105,26 @@ class IntakeForm extends Component {
 
   checkNarcanOffered() {
     var eventData = {...this.state.eventData}
-    if (this.state.eventData.narcanOffered == "no") {
+    if (this.state.eventData.narcanOffered == false) {
       this.setState({narcanOfferedLabel: "Yes"})
-      eventData.narcanOffered = "yes";
+      eventData.narcanOffered = true;
       this.setState({eventData})
     } else {
       this.setState({narcanOfferedLabel: "No"})
-      eventData.narcanOffered = "no";
+      eventData.narcanOffered = false;
       this.setState({eventData})
     }
   }
 
   checkNarcanGiven() {
     var eventData = {...this.state.eventData}
-    if (this.state.eventData.narcanGiven == "no") {
-      this.setState({givenLabel: "Yes"})
-      eventData.narcanGiven = "yes";
+    if (this.state.eventData.narcanGiven == false) {
+      this.setState({narcanGivenLabel: "Yes"})
+      eventData.narcanGiven = true;
       this.setState({eventData})
     } else {
-      this.setState({givenLabel: "No"})
-      eventData.narcanGiven = "no";
+      this.setState({narcanGivenLabel: "No"})
+      eventData.narcanGiven = false;
       this.setState({eventData})
     }
   }
@@ -138,26 +153,89 @@ class IntakeForm extends Component {
     this.setState({contactData})
   }
 
-  submitForm() {
-    const { dispatch } = this.props;
-    this.createEvent(dispatch)
-    this.updateContact(dispatch)
-  }
-
-  createEvent(dispatch) {
-    dispatch(createEvent(this.state.eventData))
-  }
-
-  updateContact(dispatch) {
-    // dispatch(getContact(contactData))
-  }
-
   updateCheckNewContact() {
     this.setState({newContact: !this.state.newContact})
   }
 
   updateCheckOutreach() {
     this.setState({outreach: !this.state.outreach})
+  }
+
+  updateGender(event, newValue) {
+    var contactData = {...this.state.contactData}
+    contactData.gender = newValue
+    this.setState({contactData})
+  }
+
+  updateCountryOfBirth(event, newValue) {
+    var contactData = {...this.state.contactData}
+    contactData.countryOfBirth = newValue
+    this.setState({contactData})
+  }
+
+  updateSyringesGiven(event, newValue) {
+    var eventData = {...this.state.eventData}
+    eventData.syringesGiven = newValue
+    this.setState({eventData})
+  }
+
+  updateSyringesTaken(event, newValue) {
+    var eventData = {...this.state.eventData}
+    eventData.syringesTaken = newValue
+    this.setState({eventData})
+  }
+
+  updateNumPeople(event, newValue) {
+    var eventData = {...this.state.eventData}
+    eventData.numPeople = newValue
+    this.setState({eventData})
+  }
+
+  updateProfileNotes(event, newValue) {
+    var contactData = {...this.state.contactData}
+    contactData.profileNotes = newValue
+    this.setState({contactData})
+  }
+
+  updateEventNotes(event, newValue) {
+    var eventData = {...this.state.eventData}
+    eventData.eventNotes = newValue
+    this.setState({eventData})
+  }
+
+  submitForm() {
+    // Ultimately should change these cases to prompts, not alert; but React errors for now
+    if (this.initialState == this.state) {
+      alert("Cannot post empty form")
+    } else if (this.submittedState == this.state) {
+      alert("Cannot post duplicate")
+    } else {
+      const { dispatch } = this.props;
+      this.createEvent(dispatch)
+      this.updateContact(dispatch)
+      this.submittedState = this.state;
+    }
+  }
+
+  clearForm() {
+    // Ultimately should change this to a prompt, not alert; but React errors for now
+    // TODO: update checkboxes
+    alert("Are you sure you want to clear the form?")
+    this.setState(this.initialState)
+    this.setState({toggleRefillLabel: "No Refill"})
+    this.setState({narcanOfferedLabel: "No"})
+    this.setState({narcanGivenLabel: "No"})
+    this.setState({narcanOffered: false})
+    this.setState({narcanGiven: false})
+  }
+
+  // TODO: dispatch updated contact profile
+  createEvent(dispatch) {
+    dispatch(createEvent(this.state.eventData))
+  }
+
+  updateContact(dispatch) {
+    // dispatch(getContact(contactData))
   }
 
   render() {
@@ -203,6 +281,7 @@ class IntakeForm extends Component {
             <RadioButtonGroup
               name="gender"
               className="radio"
+              onChange={(e, value) => this.updateGender(e, value)}
             >
               <RadioButton
                 label="Male"
@@ -260,6 +339,7 @@ class IntakeForm extends Component {
               name="countryOfBirth"
               className="radio"
               defaultSelected="US"
+              onChange={(e, value) => this.updateCountryOfBirth(e, value)}
             >
               <RadioButton
                 label="US"
@@ -292,6 +372,7 @@ class IntakeForm extends Component {
               step={1}
               min={0}
               max={10}
+              onChange={(e, value) => this.updateSyringesGiven(e, value)}
             />
           </div>
 
@@ -302,6 +383,7 @@ class IntakeForm extends Component {
               defaultValue={0}
               min={0}
               max={10}
+              onChange={(e, value) => this.updateSyringesTaken(e, value)}
             />
           </div>
         </div>
@@ -397,9 +479,11 @@ class IntakeForm extends Component {
               <Slider
                 name="NumPeople"
                 defaultValue={0}
+                step={1}
                 min={0}
                 max={10}
                 id="numPeople"
+                onChange={(e, value) => this.updateNumPeople(e, value)}
               />
             </div>
           </Card>
@@ -414,6 +498,7 @@ class IntakeForm extends Component {
                 rows={5}
                 style={textareaStyles}
                 id="eventNotes"
+                onChange={(e, value) => this.updateEventNotes(e, value)}
               />
             </div>
           </Card>
@@ -428,13 +513,14 @@ class IntakeForm extends Component {
                 rows={5}
                 style={textareaStyles}
                 id="profileNotes"
+                onChange={(e, value) => this.updateProfileNotes(e, value)}
               />
             </div>
           </Card>
 
           <Card className="card">
             <div className="submitButtons">
-              <FlatButton label="Clear Form" labelStyle={clearLabelStyle} />
+              <FlatButton label="Clear Form" labelStyle={clearLabelStyle} onClick={this.clearForm} />
               <FlatButton label="Save" primary={true} onClick={this.submitForm} />
             </div>
           </Card>
