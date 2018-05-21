@@ -1,20 +1,24 @@
+.checkbox, .radio {
+  display: flex;
+  padding: 1rem;
+}
+
+.checkbox.narcanOfferedGiven {
+  padding: 0 0 1rem;
+}
+
+.fields {
+  padding: 2rem;
+}
+
 .form {
   max-width: 80%;
   margin: auto;
   display: block;
 }
 
-.checkbox, .radio {
-  display: flex;
-  padding: 1rem;
-}
-
-.checkbox.usedGiven {
-  padding: 0 0 1rem;
-}
-
-.fields {
-  padding: 2rem;
+.submitButtons {
+  padding: 1rem 0;
 }
 
 .textAreaContainer {
@@ -24,8 +28,12 @@
   box-sizing: border-box;
 }
 
-.submitButtons {
-  padding: 1rem 0;
+.toggle {
+  margin: 1rem 0;
+}
+
+.narcanOffered, .narcanGiven {
+  min-width: 10rem;
 }
 
 #syringesGiven, #syringesTaken, #numPeople, #ageOfFirstInjection {
