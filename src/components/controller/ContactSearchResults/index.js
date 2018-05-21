@@ -1,10 +1,22 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import { getContact, setCurrentSearchQuery } from 'actions';
 import ContactSearchResults from 'components/view/ContactSearchResults';
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        searchResults: state.contacts.searchResults,
+        contactSearchQuery: state.contacts.searchQuery,
+        currentContactUid: state.contact.uid,
+    };
 };
-  
-export default connect(
-    mapStateToProps
-)(ContactSearchResults);
+
+const mapDispatchToProps = {
+    getContact,
+    setCurrentSearchQuery,
+}
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(ContactSearchResults));

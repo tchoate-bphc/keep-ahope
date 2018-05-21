@@ -8,7 +8,7 @@ const mapStateToProps = (state) => {
         eventsOwned: state.events.eventsOwned,
     }
 };
-  
+
 export default connect(
     mapStateToProps
 )(CreateEvent);

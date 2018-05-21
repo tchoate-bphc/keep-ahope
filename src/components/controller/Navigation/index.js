@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { logoutUserRequest, toggleEventDetail } from 'actions';
+import { logoutUserRequest } from 'actions';
 import NavigationView from 'components/view/Navigation';
 
 const mapStateToProps = (state) => {
@@ -17,11 +17,9 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-const NavigationViewWithRouter = withRouter(NavigationView);
-
-const NavigationController = connect(
+const NavigationController = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps,
-)(NavigationViewWithRouter);
+)(NavigationView));
 
 export default NavigationController;

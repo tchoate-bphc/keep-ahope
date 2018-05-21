@@ -17,8 +17,9 @@ import {
     UPDATE_CURRENT_CONTACT,
 
     // CONTACTS
-    FETCH_CONTACTS,
-    REFRESH_CONTACTS,
+    SET_CONTACT_SEARCH_RESULTS,
+    SET_CURRENT_SEARCH_QUERY,
+    SEARCH_CONTACTS,
 
     // CONFIG
     FETCH_CONFIG,
@@ -113,17 +114,24 @@ export function updateCurrentContact(contact) {
 }
 
 /** CONTACTS */
-export function fetchContacts() {
+export function searchContacts(searchStringUid) {
     return {
-        type: FETCH_CONTACTS,
+        type: SEARCH_CONTACTS,
+        searchStringUid,
     }
 }
 
-
-export function refreshContacts(contacts) {
+export function setContactSearchResults(searchResultArray) {
     return {
-        type: REFRESH_CONTACTS,
-        contacts,
+        type: SET_CONTACT_SEARCH_RESULTS,
+        searchResultArray,
+    }
+}
+
+export function setCurrentSearchQuery(searchQuery) {
+    return {
+        type: SET_CURRENT_SEARCH_QUERY,
+        searchQuery,
     }
 }
 

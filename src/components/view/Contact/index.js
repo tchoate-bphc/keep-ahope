@@ -9,34 +9,37 @@ class Contact extends Component {
 
     render() {
 
-        const { user, match, contact } = this.props;
+        const { match, contact } = this.props;
 
         const urlPathUid = match && match.params && match.params.uid && match.params.uid.toLowerCase();
         const urlPathAction = match && match.params && match.params.action && match.params.action.toLowerCase();
 
         return (
             <div>
-                <ContactNavigation
-                    >
-                </ContactNavigation>
-                <div className='page'>
+                <div>
                     {!urlPathAction && (
                         <ContactSearchResults
                             contactUidEntry='hardcoded123'>
                         </ContactSearchResults>
                     )}
                     {urlPathAction === 'intake' && (
-                        <ContactIntake
-                            uid={urlPathUid}
-                            >
-                        </ContactIntake>
+                        <div>
+                            <ContactNavigation/>
+                            <ContactIntake
+                                uid={urlPathUid}
+                                >
+                            </ContactIntake>
+                        </div>
                     )}
                     {urlPathAction === 'info' && (
-                        <ContactInfo
-                            uid={urlPathUid}
-                            contact={contact}
-                            >
-                        </ContactInfo>
+                        <div>
+                            <ContactNavigation/>
+                            <ContactInfo
+                                uid={urlPathUid}
+                                contact={contact}
+                                >
+                            </ContactInfo>
+                        </div>
                     )}
                 </div>
             </div>
