@@ -1,13 +1,9 @@
 import React, {Component} from 'react'
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import NotAuthorizedRoute from 'components/controller/NotAuthorizedRoute';
 
 class AuthorizedRoute extends Component {
-
-	constructor(props) {
-		super(props);
-    }
 
     render() {
 
@@ -20,9 +16,7 @@ class AuthorizedRoute extends Component {
         return (
             <Route {...rest} render={props => (
                 userPermissions.basic ? (
-                        <div className='page-wrapper'>
-                            <Component {...props}/>
-                        </div>
+                        <Component {...props}/>
                     ) : (
                         <NotAuthorizedRoute {...notAuthProps} />
                     )

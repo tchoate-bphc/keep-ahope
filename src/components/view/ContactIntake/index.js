@@ -2,25 +2,18 @@ import React, { Component } from 'react'
 
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
-import Paper from 'material-ui/Paper';
-
-import { Field, reduxForm } from 'redux-form'
-
 import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
-import RaisedButton from 'material-ui/RaisedButton'
-import { Tabs, Tab } from 'material-ui/Tabs';
 import Checkbox from 'material-ui/Checkbox';
 import Toggle from 'material-ui/Toggle';
 import Slider from 'material-ui/Slider';
-import { Card, CardHeader, CardTitle, CardText } from 'material-ui/Card';
-import { List, ListItem } from 'material-ui/List';
+import { Card, CardTitle } from 'material-ui/Card';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import { RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import DatePicker from 'material-ui/DatePicker';
 
-import { createEvent, getContact } from 'actions';
+import { createEvent } from 'actions';
 
 import * as moment from 'moment';
 
@@ -57,13 +50,12 @@ class IntakeForm extends Component {
     todayDate.setFullYear(todayDate.getFullYear());
     todayDate.setHours(0, 0, 0, 0);
 
-    const initDateOfBirth = new Date(1980, 0, 1)
+    this.initDateOfBirth = new Date(1980, 0, 1)
 
     // TODO: prepopulate with personal info
     this.state = {
       newContact: false,
       outreach: false,
-
       narcanOfferedLabel: "No",
       narcanGivenLabel: "No",
 
@@ -80,69 +72,106 @@ class IntakeForm extends Component {
         eventNotes: ""
       },
 
+      // TODO: is this good enough for handling defaults?
       contactData: {
-        uid: this.props.user.uid,
-        dateOfBirth: initDateOfBirth,
-        gender: "Male",
-        race: "White",
-        hispanic: false,
-        countryOfBirth: "United States",
-        ageOfFirstInjection: 0,
+        uid: this.props.contact.uid,
+        dateOfBirth: this.initDateOfBirth,
+        gender: this.props.contact.genderIdentity || "Male",
+        race: this.props.contact.ethnicity || "White",
+        hispanic: this.props.contact.hispanic || false,
+        countryOfBirth: this.props.contact.birthCountry || "US",
+        ageOfFirstInjection: this.props.contact.firstInjectionAge || 18,
         profileNotes: "",
       }
     }
+
     this.initialState = this.state;
     this.submittedState = this.state;
+  }
+
+  // see https://reactjs.org/docs/react-component.html#constructor
+  // the constructor is only ever called during mount so if the contact changes, like if we allow
+  // firebase to update us whenever it changes, then we want to make sure that it's reflected in the
+  // form, or else it may override contact data that was just set elsewhere
+  getDerivedStateFromProps(newProps) {
+      return {
+          contactData: {
+                uid: this.newProps.contact.uid,
+                dateOfBirth: this.initDateOfBirth,
+                gender: this.newProps.contact.genderIdentity || "Male",
+                race: this.newProps.contact.ethnicity || "White",
+                hispanic: this.newProps.contact.hispanic || false,
+                countryOfBirth: this.newProps.contact.birthCountry || "US",
+                ageOfFirstInjection: this.newProps.contact.firstInjectionAge || 18,
+                profileNotes: "",
+            }
+        };
   }
 
   checkNarcanOffered() {
     var eventData = {...this.state.eventData}
     if (this.state.eventData.narcanOffered == false) {
-      this.setState({narcanOfferedLabel: "Yes"})
-      eventData.narcanOffered = true;
-      this.setState({eventData})
+      this.setState({eventData: {narcanOffered: true}, narcanOfferedLabel: "Yes"});
     } else {
-      this.setState({narcanOfferedLabel: "No"})
-      eventData.narcanOffered = false;
-      this.setState({eventData})
+      this.setState({eventData: {narcanOffered: false}, {narcanOfferedLabel: "No"});
     }
   }
 
   checkNarcanGiven() {
     var eventData = {...this.state.eventData}
     if (this.state.eventData.narcanGiven == false) {
-      this.setState({narcanGivenLabel: "Yes"})
-      eventData.narcanGiven = true;
-      this.setState({eventData})
+      this.setState({eventData: {narcanGiven: true}, narcanGivenLabel: "Yes"});
     } else {
-      this.setState({narcanGivenLabel: "No"})
-      eventData.narcanGiven = false;
-      this.setState({eventData})
+      this.setState({eventData: {narcanGiven: false}, narcanGivenLabel: "False"});
     }
   }
 
-  selectReferrals(event, index, value) {
-    var eventData = {...this.state.eventData}
-    eventData.referrals = value
-    this.setState({eventData})
+  selectReferrals(event, index, referrals) {
+    this.setState({eventData: {referrals}});
   }
 
-  selectRace(event, index, value) {
-    var contactData = {...this.state.contactData}
-    contactData.race = value
-    this.setState({contactData})
+  selectRace(event, index, race) {
+    this.setState({contactData: {race}})
   }
 
-  setEventDate(event, value) {
-    var eventData = {...this.state.eventData}
-    eventData.eventDate = value
-    this.setState({eventData})
+  setEventDate(event, eventDate) {
+    this.setState({eventData: {eventDate}})
   }
 
-  setDateOfBirth(event, value) {
-    var contactData = {...this.state.contactData}
-    contactData.dateOfBirth = value
-    this.setState({contactData})
+  setDateOfBirth(event, dateOfBirth) {
+    this.setState({contactData: {dateOfBirth}});
+  }
+
+  updateGender(event, gender) {
+    this.setState({contactData: {gender}});
+  }
+
+  updateEnrollmentRefill(event, enrollmentRefill) {
+    this.setState({eventData: {enrollmentRefill}})
+  }
+
+  updateCountryOfBirth(event, countryOfBirth) {
+    this.setState({contactData: {countryOfBirth}})
+  }
+
+  updateSyringesGiven(event, syringesGiven) {
+    this.setState({eventData: {syringesGiven}})
+  }
+
+  updateSyringesTaken(event, syringesTaken) {
+    this.setState({eventData: {syringesTaken}})
+  }
+
+  updateNumPeople(event, numPeople) {
+    this.setState({eventData: {numPeople}})
+  }
+
+  updateProfileNotes(event, contactData) {
+    this.setState({contactData: {contactData}})
+  }
+
+  updateEventNotes(event, eventNotes) {
+    this.setState({eventData: {eventNotes}})
   }
 
   updateCheckNewContact() {
@@ -151,54 +180,6 @@ class IntakeForm extends Component {
 
   updateCheckOutreach() {
     this.setState({outreach: !this.state.outreach})
-  }
-
-  updateGender(event, newValue) {
-    var contactData = {...this.state.contactData}
-    contactData.gender = newValue
-    this.setState({contactData})
-  }
-
-  updateEnrollmentRefill(event, newValue) {
-    var eventData = {...this.state.eventData}
-    eventData.enrollmentRefill = newValue
-    this.setState({eventData})
-  }
-
-  updateCountryOfBirth(event, newValue) {
-    var contactData = {...this.state.contactData}
-    contactData.countryOfBirth = newValue
-    this.setState({contactData})
-  }
-
-  updateSyringesGiven(event, newValue) {
-    var eventData = {...this.state.eventData}
-    eventData.syringesGiven = newValue
-    this.setState({eventData})
-  }
-
-  updateSyringesTaken(event, newValue) {
-    var eventData = {...this.state.eventData}
-    eventData.syringesTaken = newValue
-    this.setState({eventData})
-  }
-
-  updateNumPeople(event, newValue) {
-    var eventData = {...this.state.eventData}
-    eventData.numPeople = newValue
-    this.setState({eventData})
-  }
-
-  updateProfileNotes(event, newValue) {
-    var contactData = {...this.state.contactData}
-    contactData.profileNotes = newValue
-    this.setState({contactData})
-  }
-
-  updateEventNotes(event, newValue) {
-    var eventData = {...this.state.eventData}
-    eventData.eventNotes = newValue
-    this.setState({eventData})
   }
 
   submitForm() {
@@ -279,7 +260,7 @@ class IntakeForm extends Component {
 
           <div>
             <div style={labelStyle}>
-              Gender Identity
+              Gender Identit
             </div>
             <RadioButtonGroup
               name="gender"
