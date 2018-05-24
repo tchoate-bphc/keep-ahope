@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 /** MATERIAL UI **/
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {cyan50,blueGrey200,cyan500,cyan900,limeA200,yellow800,pink800,green400,grey500} from 'material-ui/styles/colors';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 /** ROUTER **/
 import { Route } from 'react-router-dom';
@@ -23,10 +22,8 @@ import AuthorizedRoute from 'components/controller/AuthorizedRoute';
 import Contact from 'components/controller/Contact';
 import Reports from 'components/controller/Reports';
 import Messages from 'components/controller/Messages';
-import Intake from 'components/controller/Intake';
 
 import Navigation from 'components/controller/Navigation';
-import Footer from 'components/view/common/Footer';
 import { getUser, fetchConfig, showLoginSpinner } from './actions';
 
 import './app.css';
@@ -70,33 +67,17 @@ class App extends Component {
 
         const muiTheme = getMuiTheme({
             palette: {
-                primary1Color: '#1DAFEC',
-                accent1Color: '#8EC449',
-                highlight1Color: '#E8448B',
-                tertiaryTextColor: '#8DC3DB',
-                fadedPrimary1Color: '#4FDFFF',
-                primaryLinkColor: '#1DAFEC',
-                secondaryLinkColor: '#8AC9EC',
-                primary2Color: '#47B4E0',
-                primary3Color: grey500,
-                errorColor: '#E8448B',
-                warningColor: '#FF953F',
-                successColor: '#8EC449',
-                // DEFAULTS
-                // primary1Color: cyan500,
-                // primary2Color: cyan700,
-                // prinary3Color: grey400,
-                // accent1Color: pinkA200,
-                // accent2Color: grey100,
-                // accent3Color: grey500,
-                // textColor: darkBlack,
-                // alternateTextColor: white,
-                // canvasColor: white,
-                // borderColor: grey300,
-                // disabledColor: fade(darkBlack, 0.3),
-                // pickerHeaderColor: cyan500,
-                // clockCircleColor: fade(darkBlack, 0.07),
-                // shadowColor: fullBlack,
+                primary1Color: '#1DAFEC', // override
+                fadedPrimary1Color: '#4FDFFF', // additional
+                primary2Color: '#47B4E0', // overrides the default
+                tertiaryTextColor: '#8DC3DB', // additional
+                accent1Color: '#8EC449', // override
+                primaryLinkColor: '#1DAFEC', // additional
+                secondaryLinkColor: '#8AC9EC', // additional
+                highlight1Color: '#E8448B', // additional
+                errorColor: '#E8448B', // additional
+                warningColor: '#FF953F', // additional
+                successColor: '#8EC449', // additional
             },
         });
 
@@ -113,7 +94,6 @@ class App extends Component {
                                 <AuthorizedRoute exact path="/contact/" component={Contact} />
                                 <AuthorizedRoute path="/contact/:uid/:action" component={Contact} />
                                 <AuthorizedRoute exact path="/reports" component={Reports} />
-                                <AuthorizedRoute exact path="/contact/:uid/intake" component={Intake} />
                                 <AuthorizedRoute path="/" component={Contact} />
                             </Switch>
                         </div>
