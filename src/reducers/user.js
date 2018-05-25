@@ -20,6 +20,8 @@ function user(state = defaultUserState, action) {
         ...rest
     } = action;
 
+    let cleanRest = { ...rest };
+    delete cleanRest.type;
 
     switch (action.type) {
 
@@ -33,7 +35,7 @@ function user(state = defaultUserState, action) {
 
             return {
                 ...state,
-                ...rest,
+                ...cleanRest,
             };
 
         default:
