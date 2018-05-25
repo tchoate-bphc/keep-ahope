@@ -7,7 +7,7 @@ import FlatButton from 'material-ui/FlatButton'
 import Checkbox from 'material-ui/Checkbox';
 import Toggle from 'material-ui/Toggle';
 import Slider from 'material-ui/Slider';
-import { Card, CardTitle } from 'material-ui/Card';
+import { Card, CardHeader, CardTitle, CardText } from 'material-ui/Card';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import { RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
@@ -50,12 +50,13 @@ class IntakeForm extends Component {
     todayDate.setFullYear(todayDate.getFullYear());
     todayDate.setHours(0, 0, 0, 0);
 
-    this.initDateOfBirth = new Date(1980, 0, 1)
+    const initDateOfBirth = new Date(1980, 0, 1)
 
     // TODO: prepopulate with personal info
     this.state = {
       newContact: false,
       outreach: false,
+
       narcanOfferedLabel: "No",
       narcanGivenLabel: "No",
 
@@ -72,106 +73,69 @@ class IntakeForm extends Component {
         eventNotes: ""
       },
 
-      // TODO: is this good enough for handling defaults?
       contactData: {
-        uid: this.props.contact.uid,
-        dateOfBirth: this.initDateOfBirth,
-        gender: this.props.contact.genderIdentity || "Male",
-        race: this.props.contact.ethnicity || "White",
-        hispanic: this.props.contact.hispanic || false,
-        countryOfBirth: this.props.contact.birthCountry || "US",
-        ageOfFirstInjection: this.props.contact.firstInjectionAge || 18,
+        uid: this.props.user.uid,
+        dateOfBirth: initDateOfBirth,
+        gender: "Male",
+        race: "White",
+        hispanic: false,
+        countryOfBirth: "United States",
+        ageOfFirstInjection: 0,
         profileNotes: "",
       }
     }
-
     this.initialState = this.state;
     this.submittedState = this.state;
-  }
-
-  // see https://reactjs.org/docs/react-component.html#constructor
-  // the constructor is only ever called during mount so if the contact changes, like if we allow
-  // firebase to update us whenever it changes, then we want to make sure that it's reflected in the
-  // form, or else it may override contact data that was just set elsewhere
-  getDerivedStateFromProps(newProps) {
-      return {
-          contactData: {
-                uid: this.newProps.contact.uid,
-                dateOfBirth: this.initDateOfBirth,
-                gender: this.newProps.contact.genderIdentity || "Male",
-                race: this.newProps.contact.ethnicity || "White",
-                hispanic: this.newProps.contact.hispanic || false,
-                countryOfBirth: this.newProps.contact.birthCountry || "US",
-                ageOfFirstInjection: this.newProps.contact.firstInjectionAge || 18,
-                profileNotes: "",
-            }
-        };
   }
 
   checkNarcanOffered() {
     var eventData = {...this.state.eventData}
     if (this.state.eventData.narcanOffered == false) {
-      this.setState({eventData: {narcanOffered: true}, narcanOfferedLabel: "Yes"});
+      this.setState({narcanOfferedLabel: "Yes"})
+      eventData.narcanOffered = true;
+      this.setState({eventData})
     } else {
-      this.setState({eventData: {narcanOffered: false}, {narcanOfferedLabel: "No"});
+      this.setState({narcanOfferedLabel: "No"})
+      eventData.narcanOffered = false;
+      this.setState({eventData})
     }
   }
 
   checkNarcanGiven() {
     var eventData = {...this.state.eventData}
     if (this.state.eventData.narcanGiven == false) {
-      this.setState({eventData: {narcanGiven: true}, narcanGivenLabel: "Yes"});
+      this.setState({narcanGivenLabel: "Yes"})
+      eventData.narcanGiven = true;
+      this.setState({eventData})
     } else {
-      this.setState({eventData: {narcanGiven: false}, narcanGivenLabel: "False"});
+      this.setState({narcanGivenLabel: "No"})
+      eventData.narcanGiven = false;
+      this.setState({eventData})
     }
   }
 
-  selectReferrals(event, index, referrals) {
-    this.setState({eventData: {referrals}});
+  selectReferrals(event, index, value) {
+    var eventData = {...this.state.eventData}
+    eventData.referrals = value
+    this.setState({eventData})
   }
 
-  selectRace(event, index, race) {
-    this.setState({contactData: {race}})
+  selectRace(event, index, value) {
+    var contactData = {...this.state.contactData}
+    contactData.race = value
+    this.setState({contactData})
   }
 
-  setEventDate(event, eventDate) {
-    this.setState({eventData: {eventDate}})
+  setEventDate(event, value) {
+    var eventData = {...this.state.eventData}
+    eventData.eventDate = value
+    this.setState({eventData})
   }
 
-  setDateOfBirth(event, dateOfBirth) {
-    this.setState({contactData: {dateOfBirth}});
-  }
-
-  updateGender(event, gender) {
-    this.setState({contactData: {gender}});
-  }
-
-  updateEnrollmentRefill(event, enrollmentRefill) {
-    this.setState({eventData: {enrollmentRefill}})
-  }
-
-  updateCountryOfBirth(event, countryOfBirth) {
-    this.setState({contactData: {countryOfBirth}})
-  }
-
-  updateSyringesGiven(event, syringesGiven) {
-    this.setState({eventData: {syringesGiven}})
-  }
-
-  updateSyringesTaken(event, syringesTaken) {
-    this.setState({eventData: {syringesTaken}})
-  }
-
-  updateNumPeople(event, numPeople) {
-    this.setState({eventData: {numPeople}})
-  }
-
-  updateProfileNotes(event, contactData) {
-    this.setState({contactData: {contactData}})
-  }
-
-  updateEventNotes(event, eventNotes) {
-    this.setState({eventData: {eventNotes}})
+  setDateOfBirth(event, value) {
+    var contactData = {...this.state.contactData}
+    contactData.dateOfBirth = value
+    this.setState({contactData})
   }
 
   updateCheckNewContact() {
@@ -180,6 +144,54 @@ class IntakeForm extends Component {
 
   updateCheckOutreach() {
     this.setState({outreach: !this.state.outreach})
+  }
+
+  updateGender(event, newValue) {
+    var contactData = {...this.state.contactData}
+    contactData.gender = newValue
+    this.setState({contactData})
+  }
+
+  updateEnrollmentRefill(event, newValue) {
+    var eventData = {...this.state.eventData}
+    eventData.enrollmentRefill = newValue
+    this.setState({eventData})
+  }
+
+  updateCountryOfBirth(event, newValue) {
+    var contactData = {...this.state.contactData}
+    contactData.countryOfBirth = newValue
+    this.setState({contactData})
+  }
+
+  updateSyringesGiven(event, newValue) {
+    var eventData = {...this.state.eventData}
+    eventData.syringesGiven = newValue
+    this.setState({eventData})
+  }
+
+  updateSyringesTaken(event, newValue) {
+    var eventData = {...this.state.eventData}
+    eventData.syringesTaken = newValue
+    this.setState({eventData})
+  }
+
+  updateNumPeople(event, newValue) {
+    var eventData = {...this.state.eventData}
+    eventData.numPeople = newValue
+    this.setState({eventData})
+  }
+
+  updateProfileNotes(event, newValue) {
+    var contactData = {...this.state.contactData}
+    contactData.profileNotes = newValue
+    this.setState({contactData})
+  }
+
+  updateEventNotes(event, newValue) {
+    var eventData = {...this.state.eventData}
+    eventData.eventNotes = newValue
+    this.setState({eventData})
   }
 
   submitForm() {
@@ -260,7 +272,7 @@ class IntakeForm extends Component {
 
           <div>
             <div style={labelStyle}>
-              Gender Identit
+              Gender Identity
             </div>
             <RadioButtonGroup
               name="gender"
