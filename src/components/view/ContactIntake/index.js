@@ -133,9 +133,12 @@ class IntakeForm extends Component {
   }
 
   setAgeOfFirstInjection(event, value) {
-    var contactData = {...this.state.contactData}
-    contactData.ageOfFirstInjection = value
-    this.setState({contactData})
+    this.setState({
+      contactData: {
+        ...this.state.contactData,
+        ageOfFirstInjection: value
+      }
+    })
   }
 
   setEventDate(event, value) {
@@ -363,24 +366,18 @@ class IntakeForm extends Component {
             </RadioButtonGroup>
           </div>
 
-          <div id="ageOfFirstInjection">
-            <div style={labelStyle}>Age of First Injection</div>
-            <span>
-                <Checkbox
-                  label="N/A"
-                  checked={this.state.disableAgeSlider}
-                  onCheck={this.disableSlider.bind(this)}
-                />
-                {this.state.contactData.ageOfFirstInjection}
+          <div id="ageOfFirstInjection" className="row">
+            <div style={labelStyle} className="col-xs-12">Age of First Injection</div>
+            <span className="col-xs-2">
+                {this.state.contactData.ageOfFirstInjection === -1 ? 'N/A' : this.state.contactData.ageOfFirstInjection}
             </span>
             <Slider
+                className="col-xs-10"
                 name="ageOfFirstInjection"
-                defaultValue={0}
-                min={0}
+                defaultValue={-1}
+                min={-1}
                 max={80}
-                style={{width: '100%'}}
                 step={1}
-                disabled={this.state.disableAgeSlider}
                 value={this.state.contactData.ageOfFirstInjection}
                 onChange={this.setAgeOfFirstInjection}
             />
