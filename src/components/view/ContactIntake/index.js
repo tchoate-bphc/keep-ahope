@@ -55,6 +55,7 @@ class IntakeForm extends Component {
 
     // TODO: prepopulate with personal info
     this.state = {
+      disableAgeSlider: true,
       newContact: false,
       outreach: false,
 
@@ -367,6 +368,7 @@ class IntakeForm extends Component {
             <span>
                 <Checkbox
                   label="N/A"
+                  checked={this.state.disableAgeSlider}
                   onCheck={this.disableSlider.bind(this)}
                 />
                 {this.state.contactData.ageOfFirstInjection}
@@ -378,6 +380,7 @@ class IntakeForm extends Component {
                 max={80}
                 style={{width: '100%'}}
                 step={1}
+                disabled={this.state.disableAgeSlider}
                 value={this.state.contactData.ageOfFirstInjection}
                 onChange={this.setAgeOfFirstInjection}
             />
