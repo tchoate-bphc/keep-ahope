@@ -32,6 +32,7 @@ class IntakeForm extends Component {
     this.selectReferrals = this.selectReferrals.bind(this)
     this.selectRace = this.selectRace.bind(this)
     this.setEventDate = this.setEventDate.bind(this)
+    this.setAgeOfFirstInjection = this.setAgeOfFirstInjection.bind(this)
     this.setDateOfBirth = this.setDateOfBirth.bind(this)
     this.updateCheckNewContact = this.updateCheckNewContact.bind(this)
     this.updateCheckOutreach = this.updateCheckOutreach.bind(this)
@@ -123,6 +124,12 @@ class IntakeForm extends Component {
   selectRace(event, index, value) {
     var contactData = {...this.state.contactData}
     contactData.race = value
+    this.setState({contactData})
+  }
+
+  setAgeOfFirstInjection(event, value) {
+    var contactData = {...this.state.contactData}
+    contactData.ageOfFirstInjection = value
     this.setState({contactData})
   }
 
@@ -230,7 +237,6 @@ class IntakeForm extends Component {
   }
 
   render() {
-
     const selectedMenuItemStyles = {
       color: this.themePalette.primary1Color
     }
@@ -354,7 +360,16 @@ class IntakeForm extends Component {
 
           <div id="ageOfFirstInjection">
             <div style={labelStyle}>Age of First Injection</div>
-            <Slider name="ageOfFirstInjection" defaultValue={0} min={0} max={80} />
+            <span>{this.state.contactData.ageOfFirstInjection}</span>
+            <Slider
+                name="ageOfFirstInjection"
+                defaultValue={0}
+                min={0}
+                max={80}
+                step={1}
+                value={this.state.contactData.ageOfFirstInjection}
+                onChange={this.setAgeOfFirstInjection}
+            />
           </div>
 
         </div>
