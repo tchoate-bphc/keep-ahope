@@ -115,6 +115,10 @@ class IntakeForm extends Component {
     }
   }
 
+  disableSlider(val) {
+      this.setState({disableAgeSlider: !this.state.disableAgeSlider})
+  }
+
   selectReferrals(event, index, value) {
     var eventData = {...this.state.eventData}
     eventData.referrals = value
@@ -360,12 +364,19 @@ class IntakeForm extends Component {
 
           <div id="ageOfFirstInjection">
             <div style={labelStyle}>Age of First Injection</div>
-            <span>{this.state.contactData.ageOfFirstInjection}</span>
+            <span>
+                <Checkbox
+                  label="N/A"
+                  onCheck={this.disableSlider.bind(this)}
+                />
+                {this.state.contactData.ageOfFirstInjection}
+            </span>
             <Slider
                 name="ageOfFirstInjection"
                 defaultValue={0}
                 min={0}
                 max={80}
+                style={{width: '100%'}}
                 step={1}
                 value={this.state.contactData.ageOfFirstInjection}
                 onChange={this.setAgeOfFirstInjection}
