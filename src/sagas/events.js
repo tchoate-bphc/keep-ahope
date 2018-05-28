@@ -14,6 +14,12 @@ import { refreshEvents } from '../actions';
 
 function* createEvent({ eventData }) {
 
+    // let options = {
+    //     enableHighAccuracy: true,
+    //     timeout: 1000,
+    //     maximumAge: 0
+    // };
+
     const updates = {};
     const eventUid = '2018/03/'+ Math.round(Math.random()*1000000);
     updates['events/' + eventUid] = {
@@ -21,10 +27,20 @@ function* createEvent({ eventData }) {
         // add timestamp?
     };
 
-    window._FIREBASE_DB_.ref()
-        .update(updates);
+    navigator.geolocation.getCurrentPosition(
+        (position => {
+            updates['events/' + eventUid].latitude = position.coords.latitude;
+            updates['events/' + eventUid].longitude = position.coords.longitude;
+            window._FIREBASE_DB_.ref().update(updates);
+        }),
+        (error => {
+            console.log(error);
+            window._FIREBASE_DB_.ref().update(updates);
+        })
+    );
 
     yield;
+
 }
 
 
