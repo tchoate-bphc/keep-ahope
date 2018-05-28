@@ -13,7 +13,13 @@ import MenuItem from 'material-ui/MenuItem';
 import { RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import DatePicker from 'material-ui/DatePicker';
 
+// TODO: this should be mapped via props instead
 import { createEvent } from 'actions';
+
+import EverySixForm from 'components/view/ContactIntake/everySix.form';
+import NewContactQuestionsForm from 'components/view/ContactIntake/newContactQuestions.form';
+import OutreachQuestionsForm from 'components/view/ContactIntake/outreachQuestions.form';
+import StandardQuestionsForm from 'components/view/ContactIntake/standardQuestions.form';
 
 import * as moment from 'moment';
 
@@ -22,524 +28,439 @@ import './styles.css';
 
 class IntakeForm extends Component {
 
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.submitForm = this.submitForm.bind(this)
-    this.clearForm = this.clearForm.bind(this)
-    this.checkNarcanOffered = this.checkNarcanOffered.bind(this)
-    this.checkNarcanGiven = this.checkNarcanGiven.bind(this)
-    this.selectReferrals = this.selectReferrals.bind(this)
-    this.selectRace = this.selectRace.bind(this)
-    this.setEventDate = this.setEventDate.bind(this)
-    this.setDateOfBirth = this.setDateOfBirth.bind(this)
-    this.updateCheckNewContact = this.updateCheckNewContact.bind(this)
-    this.updateCheckOutreach = this.updateCheckOutreach.bind(this)
-    this.updateEnrollmentRefill = this.updateEnrollmentRefill.bind(this)
-    this.updateGender = this.updateGender.bind(this)
-    this.updateCountryOfBirth = this.updateCountryOfBirth.bind(this)
-    this.updateSyringesGiven = this.updateSyringesGiven.bind(this)
-    this.updateSyringesTaken = this.updateSyringesTaken.bind(this)
-    this.updateNumPeople = this.updateNumPeople.bind(this)
-    this.updateEventNotes = this.updateEventNotes.bind(this)
-    this.updateProfileNotes = this.updateProfileNotes.bind(this)
+        this.submitForm = this.submitForm.bind(this)
 
-    this.themePalette = this.props.muiTheme.palette
+        const todayDate = new Date();
+        todayDate.setFullYear(todayDate.getFullYear());
+        todayDate.setHours(0, 0, 0, 0);
 
-    const todayDate = new Date();
-    todayDate.setFullYear(todayDate.getFullYear());
-    todayDate.setHours(0, 0, 0, 0);
+        const initDateOfBirth = new Date(1980, 0, 1)
 
-    const initDateOfBirth = new Date(1980, 0, 1)
+        // TODO: prepopulate with personal info
+        this.state = {
 
-    // TODO: prepopulate with personal info
-    this.state = {
-      newContact: false,
-      outreach: false,
+            showEverySix: false,
+            showOutreach: false,
+            showNewContactQuestions: false,
 
-      narcanOfferedLabel: "No",
-      narcanGivenLabel: "No",
+            uid: this.props.user.uid,
+            eventNotes: '',
 
-      eventData: {
-        uid: this.props.user.uid,
-        eventDate: todayDate,
-        enrollmentRefill: "enrollment",
-        syringesGiven: "N/A",
-        syringesTaken: "N/A",
-        referrals: "No Referrals",
-        narcanOffered: false,
-        narcanGiven: false,
-        numPeople: 0,
-        eventNotes: ""
-      },
+            // form
+            eventDate: todayDate,
 
-      contactData: {
-        uid: this.props.user.uid,
-        dateOfBirth: initDateOfBirth,
-        gender: "Male",
-        race: "White",
-        hispanic: false,
-        countryOfBirth: "United States",
-        ageOfFirstInjection: 0,
-        profileNotes: "",
-      }
-    }
-    this.initialState = this.state;
-    this.submittedState = this.state;
-  }
+            // every six
+            housingStatus: 'homeless',
+            hivStatus: 'neverTested',
+            isInCareForHiv: false,
+            hepCStatus: 'neverTested',
+            isInCareForHepC: false,
+            healthInsurer: 'MH',
+            primaryDrug: 'heroin',
+            didOdLastYear: false,
+            didSeeOdLastYear: false,
+            hasHealthInsurance: false,
+            otherDrugs: null,
 
-  checkNarcanOffered() {
-    var eventData = {...this.state.eventData}
-    if (this.state.eventData.narcanOffered == false) {
-      this.setState({narcanOfferedLabel: "Yes"})
-      eventData.narcanOffered = true;
-      this.setState({eventData})
-    } else {
-      this.setState({narcanOfferedLabel: "No"})
-      eventData.narcanOffered = false;
-      this.setState({eventData})
-    }
-  }
+            // new contact
+            newContactDate: '',
+            contactDateOfBirth: initDateOfBirth,
+            contactGenderIdentity: 'male',
+            contactEthnicity: 'White',
+            contactIsHispanic: false,
+            contactCountryOfBirth: '',
+            contactAgeOfFirstInjection: 0,
 
-  checkNarcanGiven() {
-    var eventData = {...this.state.eventData}
-    if (this.state.eventData.narcanGiven == false) {
-      this.setState({narcanGivenLabel: "Yes"})
-      eventData.narcanGiven = true;
-      this.setState({eventData})
-    } else {
-      this.setState({narcanGivenLabel: "No"})
-      eventData.narcanGiven = false;
-      this.setState({eventData})
-    }
-  }
+            // outreach
+            syringesGiven: 0,
+            syringesTaken: 0,
+            narcanWasOffered: false,
+            narcanWasTaken: false,
+            enrollment: '',
+            numberOfOthersHelping: 0,
 
-  selectReferrals(event, index, value) {
-    var eventData = {...this.state.eventData}
-    eventData.referrals = value
-    this.setState({eventData})
-  }
+            // standard
+            referral: null,
+        }
 
-  selectRace(event, index, value) {
-    var contactData = {...this.state.contactData}
-    contactData.race = value
-    this.setState({contactData})
-  }
-
-  setEventDate(event, value) {
-    var eventData = {...this.state.eventData}
-    eventData.eventDate = value
-    this.setState({eventData})
-  }
-
-  setDateOfBirth(event, value) {
-    var contactData = {...this.state.contactData}
-    contactData.dateOfBirth = value
-    this.setState({contactData})
-  }
-
-  updateCheckNewContact() {
-    this.setState({newContact: !this.state.newContact})
-  }
-
-  updateCheckOutreach() {
-    this.setState({outreach: !this.state.outreach})
-  }
-
-  updateGender(event, newValue) {
-    var contactData = {...this.state.contactData}
-    contactData.gender = newValue
-    this.setState({contactData})
-  }
-
-  updateEnrollmentRefill(event, newValue) {
-    var eventData = {...this.state.eventData}
-    eventData.enrollmentRefill = newValue
-    this.setState({eventData})
-  }
-
-  updateCountryOfBirth(event, newValue) {
-    var contactData = {...this.state.contactData}
-    contactData.countryOfBirth = newValue
-    this.setState({contactData})
-  }
-
-  updateSyringesGiven(event, newValue) {
-    var eventData = {...this.state.eventData}
-    eventData.syringesGiven = newValue
-    this.setState({eventData})
-  }
-
-  updateSyringesTaken(event, newValue) {
-    var eventData = {...this.state.eventData}
-    eventData.syringesTaken = newValue
-    this.setState({eventData})
-  }
-
-  updateNumPeople(event, newValue) {
-    var eventData = {...this.state.eventData}
-    eventData.numPeople = newValue
-    this.setState({eventData})
-  }
-
-  updateProfileNotes(event, newValue) {
-    var contactData = {...this.state.contactData}
-    contactData.profileNotes = newValue
-    this.setState({contactData})
-  }
-
-  updateEventNotes(event, newValue) {
-    var eventData = {...this.state.eventData}
-    eventData.eventNotes = newValue
-    this.setState({eventData})
-  }
-
-  submitForm() {
-    // Ultimately should change these cases to prompts, not alert; but React errors for now
-    if (this.initialState == this.state) {
-      alert("Cannot post empty form")
-    } else if (this.submittedState == this.state) {
-      alert("Cannot post duplicate")
-    } else {
-      const { dispatch } = this.props;
-      this.createEvent(dispatch)
-      this.updateContact(dispatch)
-      this.submittedState = this.state;
-    }
-  }
-
-  clearForm() {
-    // Ultimately should change this to a prompt, not alert; but React errors for now
-    // TODO: update checkboxes
-    alert("Are you sure you want to clear the form?")
-    this.setState(this.initialState)
-    this.setState({toggleRefillLabel: "No Refill"})
-    this.setState({narcanOfferedLabel: "No"})
-    this.setState({narcanGivenLabel: "No"})
-    this.setState({narcanOffered: false})
-    this.setState({narcanGiven: false})
-  }
-
-  // TODO: dispatch updated contact profile
-  createEvent(dispatch) {
-    dispatch(createEvent(this.state.eventData))
-  }
-
-  updateContact(dispatch) {
-    // dispatch(getContact(contactData))
-  }
-
-  render() {
-
-    const selectedMenuItemStyles = {
-      color: this.themePalette.primary1Color
+        this.initialState = this.state;
+        this.submittedState = this.state;
     }
 
-    const textareaStyles = {
-      width: '100%',
+    // i'm sure we'll want to change names on the db in the future at some time
+    // or locally within state. so I'm abstracting this call to make it clear what data
+    // we send in event creation
+    packageFormDataForSubmission() {
+        const eventData = {
+            date: this.state.eventDate,
+            housingStatus: this.state.housingStatus,
+            hivStatus: this.state.hivStatus,
+            isInCareForHiv: this.state.isInCareForHiv,
+            hepCStatus: this.state.hepCStatus,
+            isInCareForHepC: this.state.isInCareForHepC,
+            healthInsurer: this.state.healthInsurer,
+            primaryDrug: this.state.primaryDrug,
+            didOdLastYear: this.state.didOdLastYear,
+            didSeeOdLastYear: this.state.didSeeOdLastYear,
+            hasHealthInsurance: this.state.hasHealthInsurance,
+            otherDrugs: this.state.otherDrugs,
+            // outreach
+            syringesGiven: this.state.syringesGiven,
+            syringesTaken: this.state.syringesTaken,
+            narcanWasOffered: this.state.narcanWasOffered,
+            narcanWasTaken: this.state.narcanWasTaken,
+            enrollment: this.state.enrollment,
+            numberOfOthersHelping: this.state.numberOfOthersHelping,
+
+            // standard
+            referral: null,
+
+        }
+        const contactData = {
+            newContactDate: this.state.newContactDate,
+            contactDateOfBirth: this.state.contactDateOfBirth,
+            contactGenderIdentity: this.state.contactGenderIdentity,
+            contactEthnicity: this.state.contactEthnicity,
+            contactIsHispanic: this.state.contactIsHispanic,
+            contactCountryOfBirth: this.state.contactCountryOfBirth,
+            contactAgeOfFirstInjection: this.state.contactAgeOfFirstInjection,
+        }
+        return {
+            ...eventData,
+        }
     }
 
-    const clearLabelStyle = {
-      color: this.themePalette.errorColor
+    submitForm() {
+        // TODO: Ultimately should change these cases to prompts, not alert; but React errors for now
+        // TODO: what about validation?
+        if (this.initialState == this.state) {
+        alert("Cannot post empty form")
+        } else {
+            // TODO: should call an action 'SUBMIT_FORM' or something
+            // which should take the event and contact info, and call the update contact
+            // action from within
+        this.createEvent();
+        this.updateContact();
+        const { match: { params } } = this.props;
+        // TODO: 'form submitted successfully' or something dialog
+        this.props.history.push(`/contact/${params.uid}/info`)
+        }
     }
 
-    const titleColorStyle = {
-      color: this.themePalette.primary1Color
+    // TODO: dispatch updated contact profile
+    createEvent() {
+        let eventData = this.packageFormDataForSubmission()
+        this.props.dispatch(createEvent(eventData));
     }
 
-    const labelStyle = {
-      color: this.themePalette.primary3Color,
-      margin: '2rem 0 0'
+    updateContact() {
+        // this.props.dispatch(getContact(contactData))
     }
 
-    const toggleStyles = {
-      margin: '2rem 0 1rem'
-    }
-
-    const newContact = this.state.newContact ? (
-      <Card className="card">
-        <CardTitle style={titleColorStyle}>First Contact</CardTitle>
-        <div className="fields">
-
-          <DatePicker
-            hintText="Date of Birth"
-            floatingLabelText="Date of Birth"
-            value={this.state.contactData.dateOfBirth}
-            onChange={this.setDateOfBirth}
-            autoOk={true}
-            openToYearSelection={true}
-          />
-
-          <div>
-            <div style={labelStyle}>
-              Gender Identity
-            </div>
-            <RadioButtonGroup
-              name="gender"
-              className="radio"
-              onChange={(e, value) => this.updateGender(e, value)}
-            >
-              <RadioButton
-                label="Male"
-                value="male"
-              />
-              <RadioButton
-                label="Female"
-                value="female"
-              />
-              <RadioButton
-                label="MtF"
-                value="mtf"
-              />
-              <RadioButton
-                label="FtM"
-                value="ftm"
-              />
-              <RadioButton
-                label="Refused"
-                value="refused"
-              />
-            </RadioButtonGroup>
-          </div>
-
-          <div>
-            <div style={labelStyle}>Race/Ethnicity</div>
-            <SelectField
-              value={this.state.contactData.race}
-              onChange={this.selectRace}
-              selectedMenuItemStyle={selectedMenuItemStyles}
-              id="race"
-            >
-              <MenuItem primaryText="American Indian" value="AI" />
-              <MenuItem primaryText="Asian" value="Asian" />
-              <MenuItem primaryText="Black/African American" value="BAA" />
-              <MenuItem primaryText="Hawaiian/Pacific Islander" value="HPI "/>
-              <MenuItem primaryText="White" value="White" />
-              <MenuItem primaryText="Other" value="Other" />
-              <MenuItem primaryText="Prefer not to say" value="Refuse" />
-            </SelectField>
-          </div>
-
-          <Toggle
-            label="Hispanic"
-            defaultToggled={false}
-            labelPosition="right"
-            style={toggleStyles}
-          />
-
-          <div>
-            <div style={labelStyle}>
-              Country of Birth
-            </div>
-            <RadioButtonGroup
-              name="countryOfBirth"
-              className="radio"
-              defaultSelected="US"
-              onChange={(e, value) => this.updateCountryOfBirth(e, value)}
-            >
-              <RadioButton
-                label="US"
-                value="US"
-              />
-              <RadioButton
-                label="Puerto Rico"
-                value="PR"
-              />
-              <RadioButton
-                label="Other"
-                value="Other"
-              />
-            </RadioButtonGroup>
-          </div>
-
-          <div id="ageOfFirstInjection">
-            <div style={labelStyle}>Age of First Injection</div>
-            <Slider name="ageOfFirstInjection" defaultValue={0} min={0} max={80} />
-          </div>
-
-        </div>
-      </Card>
-    ) : (
-      <div></div>
-    )
-
-    const outreach = this.state.outreach ? (
-      <Card className="card">
-        <CardTitle style={titleColorStyle}>Outreach</CardTitle>
-        <div className="fields">
-
-          <div id="syringesGiven">
-            <div style={labelStyle}>Syringes Given</div>
-            <Slider
-              name="SyringesGiven"
-              defaultValue={0}
-              step={1}
-              min={0}
-              max={10}
-              onChange={(e, value) => this.updateSyringesGiven(e, value)}
-            />
-          </div>
-
-          <div id="syringesTaken">
-            <div style={labelStyle}>Syringes Taken</div>
-            <Slider
-              name="SyringesTaken"
-              defaultValue={0}
-              step={1}
-              min={0}
-              max={10}
-              onChange={(e, value) => this.updateSyringesTaken(e, value)}
-            />
-          </div>
-
-          <div className="checkbox narcanOfferedGiven">
-            <div className="narcanOffered">
-              <div style={labelStyle}>Narcan Offered</div>
-              <Checkbox
-                label={this.state.narcanOfferedLabel}
-                defaultChecked={false}
-                onClick={() => this.checkNarcanOffered()}
-              />
-            </div>
-
-            <div className="narcanGiven">
-              <div style={labelStyle}>Narcan Given</div>
-              <Checkbox
-                label={this.state.narcanGivenLabel}
-                defaultChecked={false}
-                onClick={() => this.checkNarcanGiven()}
-              />
-            </div>
-          </div>
-
-          <div style={labelStyle}>Enrollment or Refill</div>
-          <RadioButtonGroup
-            name="enrollmentRefill"
-            className="radio"
-            defaultSelected="Enrollment"
-            onChange={(e, value) => this.updateEnrollmentRefill(e, value)}
-          >
+    // helpers
+    buildRadio(title, radioOptionsList, name, updateCallback) {
+        let radioControls = radioOptionsList.map(option => (
             <RadioButton
-              label="Enrollment"
-              value="Enrollment"
+                key={option.name}
+                name={option.name}
+                label={option.label}
+                value={option.value}
             />
-            <RadioButton
-              label="Refill"
-              value="Refill"
+        ));
+
+        let labelStyle = {
+            color: this.props.palette.primary3Color,
+            margin: '2rem 0 1rem 0'
+        };
+
+        return (
+            <div>
+                <div style={labelStyle}>{title}</div>
+                <RadioButtonGroup name={name} onChange={updateCallback} defaultSelected={this.props[name]}>
+                    {radioControls}
+                </RadioButtonGroup>
+            </div>
+        )
+    };
+
+    buildToggle(toggleName, stateName, updateCallback) {
+        return (
+            <Toggle
+                label={toggleName}
+                defaultToggled={false}
+                labelPosition="right"
+                onToggle={(event, isInputChecked) => {
+                    updateCallback(stateName, isInputChecked)
+                }}
             />
-          </RadioButtonGroup>
+        )
+    };
 
-          <div style={labelStyle}>Number of People</div>
-          <Slider
-            name="NumPeople"
-            defaultValue={0}
-            step={1}
-            min={0}
-            max={10}
-            id="numPeople"
-            onChange={(e, value) => this.updateNumPeople(e, value)}
-          />
+    buildSelectField(title, selectOptionsList, name, updateCallback, multiple=false) {
+        let selectControls = selectOptionsList.map(ethnicity => (
+            <MenuItem
+                key={ethnicity.value}
+                primaryText={ethnicity.primaryText}
+                value={ethnicity.value}
+                name={name}
+            />
+        ));
 
-        </div>
-      </Card>
-    ) : (
-      <div></div>
-    )
+        let labelStyle = {
+            color: this.props.palette.primary3Color,
+            margin: '2rem 0 1rem 0'
+        };
 
-    return (
-      <div className="page">
-        <form className="form">
-
-          <Card className="card">
-            <div className="fields">
-              <DatePicker
-                hintText="Date"
-                floatingLabelText="Date"
-                value={this.state.eventData.eventDate}
-                onChange={this.setEventDate}
-                autoOk={true}
-              />
+        return (
+            <div>
+                <div style={labelStyle}>{title}</div>
+                <SelectField
+                    multiple={multiple}
+                    value={this.props[name]}
+                    style={{color: this.props.palette.primary1Color}}
+                    name={name}
+                    onChange={(e, index, value) => {
+                        updateCallback(name, value)
+                    }}
+                >
+                    {selectControls}
+                </SelectField>
             </div>
-          </Card>
+        )
+    };
 
-          <Card className="card">
-            <div className="checkbox">
-              <Checkbox
-                label="Standard Questions"
-                defaultChecked={true}
-                disabled={true}
-              />
-              <Checkbox
-                label="First Contact"
-                onCheck={this.updateCheckNewContact.bind(this)}
-              />
-              <Checkbox
-                label="Outreach"
-                onCheck={this.updateCheckOutreach.bind(this)}
-              />
+    buildSlider(sliderName, labelText, sliderValue, updateCallback, overrides = {}) {
+        let labelStyle = {
+            color: this.props.palette.primary3Color,
+            margin: '2rem 0 1rem 0'
+        }
+        const options = {
+            defaultValue: overrides.defaultValue || 0,
+            step: overrides.step || 1,
+            min: overrides.min || 0,
+            max: overrides.max || 15,
+        }
+        return (
+            <div id={sliderName}>
+            <div style={labelStyle}>{labelText}<span style={{paddingLeft: '.5rem', fontSize: '.5rem'}}>({sliderValue}/{options.max})</span></div>
+                <Slider
+                    name={sliderName}
+                    defaultValue={options.defaultValue}
+                    step={options.step}
+                    min={options.min}
+                    max={options.max}
+                    onChange={(e, value) => updateCallback(sliderName, value)}
+                />
             </div>
-          </Card>
+        )
+    }
 
-          <Card className="card">
-            <CardTitle style={titleColorStyle}>Standard Questions</CardTitle>
-            <div className="fields">
+    handleSliderChange(name, value) {
+        this.setState({
+            [name]: value
+        });
+    };
 
-              <SelectField
-                value={this.state.eventData.referrals}
-                onChange={this.selectReferrals}
-                selectedMenuItemStyle={selectedMenuItemStyles}
-                id="referrals"
-                floatingLabelText="Any referrals?"
-              >
-                <MenuItem value="No Referrals" primaryText="No Referrals" />
-                <MenuItem value="Referrals" primaryText="Referrals" />
-              </SelectField>
+    handleChildInputChange(event, value) {
+        const target = event.target;
+        const name = target.name;
 
-            </div>
-          </Card>
+        this.setState({
+            [name]: value
+        });
+    };
 
-          {newContact}
+    handleChildSelectChange(name, value) {
+        this.setState({
+            [name]: value
+        });
+    };
 
-          {outreach}
+    handleChildToggleChange(name, isInputChecked) {
+        this.setState({
+            [name]: isInputChecked
+        })
+    }
 
-          <Card className="card">
-            <div className="textAreaContainer">
-              <TextField
-                multiLine={true}
-                rows={5}
-                style={textareaStyles}
-                id="eventNotes"
-                floatingLabelText="Event Notes"
-                onChange={(e, value) => this.updateEventNotes(e, value)}
-              />
-            </div>
-          </Card>
+    render() {
 
-          <Card className="card">
-            <div className="textAreaContainer">
-              <TextField
-                multiLine={true}
-                rows={5}
-                style={textareaStyles}
-                id="profileNotes"
-                floatingLabelText="Profile Notes"
-                onChange={(e, value) => this.updateProfileNotes(e, value)}
-              />
-            </div>
-          </Card>
+        const palette = this.props.muiTheme.palette;
 
-          <Card className="card">
-            <div className="submitButtons">
-              <FlatButton label="Clear Form" labelStyle={clearLabelStyle} onClick={this.clearForm} />
-              <FlatButton label="Save" primary={true} onClick={this.submitForm} />
-            </div>
-          </Card>
-        </form>
-      </div>
-    )
+        const clearLabelStyle = {
+        color: palette.errorColor
+        }
 
-  }
+        const fieldsStyle = {
+            padding: '2rem',
+        };
 
+        // checkboxes to select which forms to show
+        const checkBoxLabelStyle = { width: 'auto' };
+        const checkboxOptionStyle = { width: 'auto' };
+        const formCheckboxOptionsArray = [
+            {
+                labelStyle: checkBoxLabelStyle, style: checkboxOptionStyle, label: 'Standard Questions',
+                defaultChecked: true, disabled: true
+            },
+            {
+                labelStyle: checkBoxLabelStyle, style: checkboxOptionStyle, label: 'First Contact',
+                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showNewContactQuestions: !this.state.showNewContactQuestions})
+            },
+            {
+                labelStyle: checkBoxLabelStyle, style: checkboxOptionStyle, label: 'Outreach',
+                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showOutreach: !this.state.showOutreach})
+            },
+            {
+                labelStyle: checkBoxLabelStyle, style: checkboxOptionStyle, label: 'Every Six',
+                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showEverySix: !this.state.showEverySix})
+            },
+        ];
+
+        return (
+            <form className="form">
+
+                <Card>
+                    <CardTitle title='Form Questions' titleColor={palette.primary1Color}/>
+                    <div style={fieldsStyle}>
+                    {/* FIXME: */}
+                    <DatePicker
+                        hintText="Date"
+                        floatingLabelText="Date"
+                        value={this.state.eventDate}
+                        onChange={(e, date) => this.setState({eventDate: date})}
+                        autoOk={true}
+                    />
+                    </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            padding: '1rem 0',
+                            justifyContent: 'space-around',
+                        }}
+                        >
+                        {formCheckboxOptionsArray.map(option => (
+                            <Checkbox
+                                key={option.label}
+                                labelStyle={option.labelStyle}
+                                style={option.style}
+                                label={option.label}
+                                defaultChecked={option.defaultChecked}
+                                disabled={option.disabled}
+                                onCheck={option.onCheckCallback}
+                            />
+                        ))}
+                    </div>
+                </Card>
+
+
+                <StandardQuestionsForm
+                    handleSelectChange={this.handleChildSelectChange.bind(this)}
+                    buildSelectField={this.buildSelectField}
+                    palette={palette}
+                    // form data
+                    referral={this.state.referral}
+                />
+
+                {this.state.showEverySix && <EverySixForm
+                    // helpers
+                    handleChange={this.handleChildInputChange.bind(this)}
+                    handleSelectChange={this.handleChildSelectChange.bind(this)}
+                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
+                    buildToggle={this.buildToggle}
+                    buildSelectField={this.buildSelectField}
+                    buildRadio={this.buildRadio}
+                    palette={palette}
+                    // form data
+                    housingStatus={this.state.housingStatus}
+                    hivStatus={this.state.hivStatus}
+                    isInCareForHiv={this.state.isInCareForHiv}
+                    hepCStatus={this.state.hepCStatus}
+                    isInCareForHepC={this.state.isInCareForHepC}
+                    hasHealthInsurance={this.state.hasHealthInsurance}
+                    healthInsurer={this.state.healthInsurer}
+                    primaryDrug={this.state.primaryDrug}
+                    otherDrugs={this.state.otherDrugs}
+                    odLastYear={this.state.didOdLastYear}
+                    sawOdLastYear={this.state.didSeeOdLastYear}
+                />}
+
+                {this.state.showNewContactQuestions && <NewContactQuestionsForm
+                    // helpers
+                    handleChange={this.handleChildInputChange.bind(this)}
+                    handleSelectChange={this.handleChildSelectChange.bind(this)}
+                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
+                    handleSliderChange={this.handleSliderChange.bind(this)}
+                    buildToggle={this.buildToggle}
+                    buildSelectField={this.buildSelectField}
+                    buildRadio={this.buildRadio}
+                    buildSlider={this.buildSlider}
+                    palette={palette}
+                    // form data
+                    contactDateOfBirth={this.state.contactDateOfBirth}
+                    contactGenderIdentity={this.state.contactGenderIdentity}
+                    contactEthnicity={this.state.contactEthnicity}
+                    contactIsHispanic={this.state.contactIsHispanic}
+                    contactCountryOfBirth={this.state.contactCountryOfBirth}
+                    contactAgeOfFirstInjection={this.state.contactAgeOfFirstInjection}
+                />}
+
+                {this.state.showOutreach && <OutreachQuestionsForm
+                    // helpers
+                    handleChange={this.handleChildInputChange.bind(this)}
+                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
+                    handleSliderChange={this.handleSliderChange.bind(this)}
+                    buildToggle={this.buildToggle}
+                    buildRadio={this.buildRadio}
+                    buildSlider={this.buildSlider}
+                    palette={palette}
+                    // form data
+                    syringesGiven={this.state.syringesGiven}
+                    syringesTaken={this.state.syringesTaken}
+                    narcanWasOffered={this.state.narcanWasOffered}
+                    narcanWasTaken={this.state.narcanWasTaken}
+                    enrollment={this.state.enrollment}
+                    numberOfOthersHelping={this.state.numberOfOthersHelping}
+                />}
+
+                <Card>
+                    <div className="textAreaContainer">
+                    <TextField
+                        multiLine={true}
+                        rows={5}
+                        fullWidth={true}
+                        id="eventNotes"
+                        floatingLabelText="Event Notes"
+                        onChange={(e, value) => this.setState({eventNotes: value})}
+                    />
+                    </div>
+                </Card>
+
+                <Card>
+                    <div className="textAreaContainer">
+                    <TextField
+                        multiLine={true}
+                        rows={5}
+                        fullWidth={true}
+                        id="profileNotes"
+                        floatingLabelText="Profile Notes"
+                        onChange={(e, value) => this.setState({profileNotes: value})}
+                    />
+                    </div>
+                </Card>
+
+                <Card>
+                    <div className="submitButtons">
+                    {/* TODO: handle this in a more elegant way than just reloading the page */}
+                    <FlatButton label="Clear Form" labelStyle={clearLabelStyle} onClick={() => window.location.reload()} />
+                    <FlatButton label="Save" primary={true} onClick={this.submitForm} />
+                    </div>
+                </Card>
+            </form>
+        )
+    }
 }
 
 export default muiThemeable()(IntakeForm);
