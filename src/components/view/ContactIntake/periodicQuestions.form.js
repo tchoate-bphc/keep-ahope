@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 
 
-class EverySixIntakeForm extends Component {
+class PeriodicIntakeForm extends Component {
 
     constructor(props) {
         super(props);
@@ -51,8 +51,6 @@ class EverySixIntakeForm extends Component {
             {primaryText: 'Other', value: 'other'},
         ];
 
-        // TODO:
-        // multiple
         const otherDrugOptionsList = [
             {primaryText: 'Heroin', value: 'heroin'},
             {primaryText: 'Methamphetamine', value: 'meth'},
@@ -71,7 +69,7 @@ class EverySixIntakeForm extends Component {
         // rest of the stuff for this form
         return (
             <Card>
-                <CardTitle title='Every Six' titleColor={this.props.palette.primary1Color}/>
+                <CardTitle title='Periodic' titleColor={this.props.palette.primary1Color}/>
 
                 <div style={{padding: '2rem'}}>
                     {this.buildRadio('Housing Status', housingRadioOptions, 'housingStatus', this.props.handleChange)}
@@ -123,4 +121,4 @@ class EverySixIntakeForm extends Component {
 
 }
 
-export default EverySixIntakeForm;
+export default PeriodicIntakeForm;

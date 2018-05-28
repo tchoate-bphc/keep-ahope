@@ -16,7 +16,7 @@ import DatePicker from 'material-ui/DatePicker';
 // TODO: this should be mapped via props instead
 import { createEvent } from 'actions';
 
-import EverySixForm from 'components/view/ContactIntake/everySix.form';
+import PeriodicQuestionsForm from 'components/view/ContactIntake/periodicQuestions.form';
 import NewContactQuestionsForm from 'components/view/ContactIntake/newContactQuestions.form';
 import OutreachQuestionsForm from 'components/view/ContactIntake/outreachQuestions.form';
 import StandardQuestionsForm from 'components/view/ContactIntake/standardQuestions.form';
@@ -54,7 +54,7 @@ class IntakeForm extends Component {
         // TODO: prepopulate with personal info
         this.state = {
 
-            showEverySix: false,
+            showPeriodic: false,
             showOutreach: false,
             showNewContactQuestions: false,
 
@@ -64,7 +64,7 @@ class IntakeForm extends Component {
             eventDate: todayDate,
 
 
-            // every six
+            // periodic
             housingStatus: 'homeless',
             hivStatus: 'neverTested',
             isInCareForHiv: false,
@@ -126,7 +126,7 @@ class IntakeForm extends Component {
              contactUid: this.state.uid,
          }
 
-        const everySix = this.state.showEverySix ? {
+        const periodic = this.state.showPeriodic ? {
             date: this.state.eventDate,
             housingStatus: this.state.housingStatus,
             hivStatus: this.state.hivStatus,
@@ -155,7 +155,7 @@ class IntakeForm extends Component {
         let prunedEventData = {
            ...outreach,
            ...standard,
-           ...everySix,
+           ...periodic,
            ...contactData,
         };
         return prunedEventData;
@@ -347,8 +347,8 @@ class IntakeForm extends Component {
                 defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showOutreach: !this.state.showOutreach})
             },
             {
-                label: 'Every Six',
-                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showEverySix: !this.state.showEverySix})
+                label: 'Periodic',
+                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showPeriodic: !this.state.showPeriodic})
             },
         ];
 
@@ -395,7 +395,7 @@ class IntakeForm extends Component {
                     referral={this.state.referral}
                 />
 
-                {this.state.showEverySix && <EverySixForm
+                {this.state.showPeriodic && <PeriodicQuestionsForm
                     // helpers
                     handleChange={this.handleChildInputChange.bind(this)}
                     handleSelectChange={this.handleChildSelectChange.bind(this)}
