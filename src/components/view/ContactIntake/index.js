@@ -49,6 +49,8 @@ class IntakeForm extends Component {
             });
         };
 
+        const { match: { params } } = this.props;
+
         // TODO: prepopulate with personal info
         this.state = {
 
@@ -56,7 +58,6 @@ class IntakeForm extends Component {
             showOutreach: false,
             showNewContactQuestions: false,
 
-            uid: this.props.user.uid,
             eventNotes: '',
 
             // form
@@ -94,6 +95,7 @@ class IntakeForm extends Component {
             numberOfOthersHelping: 0,
 
             // standard
+            uid: params.uid,
             referral: null,
             eventLocation: {
                 longitude: null,
@@ -121,6 +123,7 @@ class IntakeForm extends Component {
          const standard = {
              referral: this.state.referral,
              location: this.state.eventLocation,
+             contactUid: this.state.uid,
          }
 
         const everySix = this.state.showEverySix ? {
@@ -189,11 +192,10 @@ class IntakeForm extends Component {
     buildRadio(title, radioOptionsList, name, updateCallback) {
         let radioControls = radioOptionsList.map(option => (
             <RadioButton
-                key={option.name}
+                key={option.label}
                 name={option.name}
                 label={option.label}
                 value={option.value}
-                valueSelected={this.props[name]}
             />
         ));
 
@@ -205,7 +207,12 @@ class IntakeForm extends Component {
         return (
             <div>
                 <div style={labelStyle}>{title}</div>
-                <RadioButtonGroup name={name} onChange={updateCallback} defaultSelected={this.props[name]}>
+                <RadioButtonGroup
+                    name={name}
+                    onChange={updateCallback}
+                    defaultSelected={this.props[name]}
+                    valueSelected={this.props[name]}
+                >
                     {radioControls}
                 </RadioButtonGroup>
             </div>
