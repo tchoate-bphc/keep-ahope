@@ -21,7 +21,7 @@ function* createEvent({ eventData }) {
     const id = Math.round(Math.random()*1000000)
     const eventUid = `${year}/${month}/${id}`;
 
-    updates['events/' + eventUid] = {
+    updates['events/' + eventUid + 'alextest'] = {
         ...eventData,
     };
 

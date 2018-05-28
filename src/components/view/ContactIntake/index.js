@@ -94,7 +94,20 @@ class IntakeForm extends Component {
     // or locally within state. so I'm abstracting this call to make it clear what data
     // we send in event creation
     packageFormDataForSubmission() {
-        const eventData = {
+        const outreach = this.state.showOutreach ? {
+            syringesGiven: this.state.syringesGiven,
+            syringesTaken: this.state.syringesTaken,
+            narcanWasOffered: this.state.narcanWasOffered,
+            narcanWasTaken: this.state.narcanWasTaken,
+            enrollment: this.state.enrollment,
+            numberOfOthersHelping: this.state.numberOfOthersHelping,
+        } : null;
+
+         const standard = {
+             referral: null,
+         }
+
+        const everySix = this.state.showEverySix ? {
             date: this.state.eventDate,
             housingStatus: this.state.housingStatus,
             hivStatus: this.state.hivStatus,
@@ -107,19 +120,9 @@ class IntakeForm extends Component {
             didSeeOdLastYear: this.state.didSeeOdLastYear,
             hasHealthInsurance: this.state.hasHealthInsurance,
             otherDrugs: this.state.otherDrugs,
-            // outreach
-            syringesGiven: this.state.syringesGiven,
-            syringesTaken: this.state.syringesTaken,
-            narcanWasOffered: this.state.narcanWasOffered,
-            narcanWasTaken: this.state.narcanWasTaken,
-            enrollment: this.state.enrollment,
-            numberOfOthersHelping: this.state.numberOfOthersHelping,
+        } : null;
 
-            // standard
-            referral: null,
-
-        }
-        const contactData = {
+        const contactData = this.state.showNewContactQuestions ? {
             newContactDate: this.state.newContactDate,
             contactDateOfBirth: this.state.contactDateOfBirth,
             contactGenderIdentity: this.state.contactGenderIdentity,
@@ -127,10 +130,17 @@ class IntakeForm extends Component {
             contactIsHispanic: this.state.contactIsHispanic,
             contactCountryOfBirth: this.state.contactCountryOfBirth,
             contactAgeOfFirstInjection: this.state.contactAgeOfFirstInjection,
-        }
-        return {
-            ...eventData,
-        }
+        } : null;
+
+        // dirty check to only submit data for visible forms
+        let prunedEventData = {
+           ...outreach,
+           ...standard,
+           ...everySix,
+           ...contactData,
+        };
+        debugger;
+        return prunedEventData;
     }
 
     submitForm() {
@@ -160,7 +170,7 @@ class IntakeForm extends Component {
         // this.props.dispatch(getContact(contactData))
     }
 
-    // helpers
+    // helpers to build controlled input elements
     buildRadio(title, radioOptionsList, name, updateCallback) {
         let radioControls = radioOptionsList.map(option => (
             <RadioButton
@@ -168,6 +178,7 @@ class IntakeForm extends Component {
                 name={option.name}
                 label={option.label}
                 value={option.value}
+                valueSelected={this.props[name]}
             />
         ));
 
@@ -192,6 +203,7 @@ class IntakeForm extends Component {
                 label={toggleName}
                 defaultToggled={false}
                 labelPosition="right"
+                toggled={this.props[stateName]}
                 onToggle={(event, isInputChecked) => {
                     updateCallback(stateName, isInputChecked)
                 }}
