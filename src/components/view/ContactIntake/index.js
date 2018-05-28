@@ -39,6 +39,16 @@ class IntakeForm extends Component {
 
         const initDateOfBirth = new Date(1980, 0, 1)
 
+        // grab location if we can
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                let stateLocationObject = {...this.state.eventLocation}
+                stateLocationObject.latitude = position.coords.latitude;
+                stateLocationObject.longitude = position.coords.longitude;
+                this.setState({eventLocation: stateLocationObject});
+            });
+        };
+
         // TODO: prepopulate with personal info
         this.state = {
 
@@ -51,6 +61,7 @@ class IntakeForm extends Component {
 
             // form
             eventDate: todayDate,
+
 
             // every six
             housingStatus: 'homeless',
@@ -84,6 +95,10 @@ class IntakeForm extends Component {
 
             // standard
             referral: null,
+            eventLocation: {
+                longitude: null,
+                latitude: null,
+            },
         }
 
         this.initialState = this.state;
@@ -104,7 +119,8 @@ class IntakeForm extends Component {
         } : null;
 
          const standard = {
-             referral: null,
+             referral: this.state.referral,
+             location: this.state.eventLocation,
          }
 
         const everySix = this.state.showEverySix ? {
@@ -139,7 +155,6 @@ class IntakeForm extends Component {
            ...everySix,
            ...contactData,
         };
-        debugger;
         return prunedEventData;
     }
 
