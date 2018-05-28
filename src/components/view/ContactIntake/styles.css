@@ -1,16 +1,3 @@
-.checkbox, .radio {
-  display: flex;
-  padding: 1rem;
-}
-
-.checkbox.narcanOfferedGiven {
-  padding: 0 0 1rem;
-}
-
-.fields {
-  padding: 2rem;
-}
-
 .form {
   max-width: 80%;
   margin: auto;
@@ -35,14 +22,6 @@
 
 .toggle {
   margin: 1rem 0;
-}
-
-.narcanOffered, .narcanGiven {
-  min-width: 10rem;
-}
-
-#syringesGiven, #syringesTaken, #numPeople, #ageOfFirstInjection {
-  /* width: 20rem; */
 }
 
 @media screen and (max-width: 760px) {
