@@ -79,17 +79,17 @@ class PeriodicIntakeForm extends Component {
                     {this.buildRadio('HIV Status', hivRadioOptions, 'hivStatus', this.props.handleChange)}
                 </div>
 
-                <div style={{padding: '2rem'}}>
+                {this.props.hivStatus === 'positive' && <div style={{padding: '2rem'}}>
                     {this.buildToggle('In care for HIV?', 'isInCareForHiv', this.props.handleChildToggleChange)}
-                </div>
+                </div>}
 
                 <div style={{padding: '2rem'}}>
                     {this.buildRadio('Hepatitus C Status', hepCOptions, 'hepCStatus', this.props.handleChange)}
                 </div>
 
-                <div style={{padding: '2rem'}}>
+                {this.props.hepCStatus === 'positive' &&  <div style={{padding: '2rem'}}>
                     {this.buildToggle('In care for Hepatitis C?', 'isInCareForHepC', this.props.handleChildToggleChange)}
-                </div>
+                </div>}
 
                 <div style={{padding: '2rem'}}>
                     {this.buildToggle('Health Insurance?', 'hasHealthInsurance', this.props.handleChildToggleChange)}
