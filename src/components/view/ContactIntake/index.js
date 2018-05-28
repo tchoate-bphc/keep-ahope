@@ -279,6 +279,7 @@ class IntakeForm extends Component {
                     step={options.step}
                     min={options.min}
                     max={options.max}
+                    value={this.props[sliderName]}
                     onChange={(e, value) => updateCallback(sliderName, value)}
                 />
             </div>
