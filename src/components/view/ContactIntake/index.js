@@ -401,7 +401,7 @@ class IntakeForm extends Component {
                         fullWidth={true}
                         id="eventNotes"
                         floatingLabelText="Event Notes"
-                        onChange={(e, value) => this.updateEventNotes(e, value)}
+                        onChange={(e, value) => this.setState({eventNotes: value})}
                     />
                     </div>
                 </Card>
@@ -414,7 +414,7 @@ class IntakeForm extends Component {
                         fullWidth={true}
                         id="profileNotes"
                         floatingLabelText="Profile Notes"
-                        onChange={(e, value) => this.updateProfileNotes(e, value)}
+                        onChange={(e, value) => this.setState({profileNotes: value})}
                     />
                     </div>
                 </Card>
