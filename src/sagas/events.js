@@ -15,13 +15,12 @@ import { refreshEvents } from '../actions';
 
 
 function* createEvent({ eventData }) {
-
     const updates = {};
     const year = moment().format('YYYY');
     const month = moment().format('MM');
     const id = Math.round(Math.random()*1000000)
     const eventUid = `${year}/${month}/${id}`;
-    
+
     updates['events/' + eventUid] = {
         ...eventData,
     };
