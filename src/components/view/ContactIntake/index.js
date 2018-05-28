@@ -13,6 +13,7 @@ import MenuItem from 'material-ui/MenuItem';
 import { RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import DatePicker from 'material-ui/DatePicker';
 
+// TODO: this should be mapped via props instead
 import { createEvent } from 'actions';
 
 import EverySixForm from 'components/view/ContactIntake/everySix.form';
@@ -83,24 +84,54 @@ class IntakeForm extends Component {
 
             // standard
             referral: null,
-
-            contactData: {
-                uid: this.props.user.uid,
-                dateOfBirth: initDateOfBirth,
-                gender: "Male",
-                race: "White",
-                hispanic: false,
-                countryOfBirth: "United States",
-                ageOfFirstInjection: 0,
-                profileNotes: "",
-            }
         }
 
         this.initialState = this.state;
         this.submittedState = this.state;
     }
 
+    // i'm sure we'll want to change names on the db in the future at some time
+    // or locally within state. so I'm abstracting this call to make it clear what data
+    // we send in event creation
+    packageFormDataForSubmission() {
+        const eventData = {
+            date: this.state.eventDate,
+            housingStatus: this.state.housingStatus,
+            hivStatus: this.state.hivStatus,
+            isInCareForHiv: this.state.isInCareForHiv,
+            hepCStatus: this.state.hepCStatus,
+            isInCareForHepC: this.state.isInCareForHepC,
+            healthInsurer: this.state.healthInsurer,
+            primaryDrug: this.state.primaryDrug,
+            didOdLastYear: this.state.didOdLastYear,
+            didSeeOdLastYear: this.state.didSeeOdLastYear,
+            hasHealthInsurance: this.state.hasHealthInsurance,
+            otherDrugs: this.state.otherDrugs,
+            // outreach
+            syringesGiven: this.state.syringesGiven,
+            syringesTaken: this.state.syringesTaken,
+            narcanWasOffered: this.state.narcanWasOffered,
+            narcanWasTaken: this.state.narcanWasTaken,
+            enrollment: this.state.enrollment,
+            numberOfOthersHelping: this.state.numberOfOthersHelping,
 
+            // standard
+            referral: null,
+
+        }
+        const contactData = {
+            newContactDate: this.state.newContactDate,
+            contactDateOfBirth: this.state.contactDateOfBirth,
+            contactGenderIdentity: this.state.contactGenderIdentity,
+            contactEthnicity: this.state.contactEthnicity,
+            contactIsHispanic: this.state.contactIsHispanic,
+            contactCountryOfBirth: this.state.contactCountryOfBirth,
+            contactAgeOfFirstInjection: this.state.contactAgeOfFirstInjection,
+        }
+        return {
+            ...eventData,
+        }
+    }
 
     submitForm() {
         // TODO: Ultimately should change these cases to prompts, not alert; but React errors for now
@@ -121,7 +152,8 @@ class IntakeForm extends Component {
 
     // TODO: dispatch updated contact profile
     createEvent() {
-        this.props.dispatch(createEvent(this.state.eventData))
+        let eventData = this.packageFormDataForSubmission()
+        this.props.dispatch(createEvent(eventData));
     }
 
     updateContact() {
