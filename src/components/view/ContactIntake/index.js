@@ -42,7 +42,7 @@ class IntakeForm extends Component {
         // grab location if we can
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
-                let stateLocationObject = {...this.state.eventLocation}
+                let stateLocationObject = {...this.state.eventLocation};
                 stateLocationObject.latitude = position.coords.latitude;
                 stateLocationObject.longitude = position.coords.longitude;
                 this.setState({eventLocation: stateLocationObject});
@@ -162,7 +162,7 @@ class IntakeForm extends Component {
         // TODO: Ultimately should change these cases to prompts, not alert; but React errors for now
         // TODO: what about validation?
         if (this.initialState == this.state) {
-        alert("Cannot post empty form")
+        alert("Cannot post empty form");
         } else {
             // TODO: should call an action 'SUBMIT_FORM' or something
             // which should take the event and contact info, and call the update contact
@@ -325,23 +325,21 @@ class IntakeForm extends Component {
         };
 
         // checkboxes to select which forms to show
-        const checkBoxLabelStyle = { width: 'auto' };
-        const checkboxOptionStyle = { width: 'auto' };
         const formCheckboxOptionsArray = [
             {
-                labelStyle: checkBoxLabelStyle, style: checkboxOptionStyle, label: 'Standard Questions',
+                label: 'Standard Questions',
                 defaultChecked: true, disabled: true
             },
             {
-                labelStyle: checkBoxLabelStyle, style: checkboxOptionStyle, label: 'First Contact',
+                label: 'First Contact',
                 defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showNewContactQuestions: !this.state.showNewContactQuestions})
             },
             {
-                labelStyle: checkBoxLabelStyle, style: checkboxOptionStyle, label: 'Outreach',
+                label: 'Outreach',
                 defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showOutreach: !this.state.showOutreach})
             },
             {
-                labelStyle: checkBoxLabelStyle, style: checkboxOptionStyle, label: 'Every Six',
+                label: 'Every Six',
                 defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showEverySix: !this.state.showEverySix})
             },
         ];
@@ -362,14 +360,12 @@ class IntakeForm extends Component {
                     />
                     </div>
                     <div
-                        style={{
-                            display: 'flex',
-                            padding: '1rem 0',
-                            justifyContent: 'space-around',
-                        }}
+                        className="row"
+                        style={{padding: '2rem'}}
                         >
                         {formCheckboxOptionsArray.map(option => (
                             <Checkbox
+                                className="col-xs-12 col-sm-6 col-md-3"
                                 key={option.label}
                                 labelStyle={option.labelStyle}
                                 style={option.style}
