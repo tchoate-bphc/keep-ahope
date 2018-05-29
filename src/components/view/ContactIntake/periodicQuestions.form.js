@@ -95,9 +95,9 @@ class PeriodicIntakeForm extends Component {
                     {this.buildToggle('Health Insurance?', 'hasHealthInsurance', this.props.handleChildToggleChange)}
                 </div>
 
-                <div style={{padding: '2rem'}}>
+                {this.props.hasHealthInsurance && <div style={{padding: '2rem'}}>
                     {this.buildSelectField('Health Insurer', enthnicityOptionsList, 'healthInsurer', this.props.handleSelectChange)}
-                </div>
+                </div>}
 
                 <div style={{padding: '2rem'}}>
                     {this.buildToggle('OD In Last Year?', 'didOdLastYear', this.props.handleChildToggleChange)}

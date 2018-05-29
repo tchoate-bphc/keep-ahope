@@ -39,19 +39,9 @@ class IntakeForm extends Component {
 
         const initDateOfBirth = new Date(1980, 0, 1)
 
-        // grab location if we can
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                let stateLocationObject = {...this.state.eventLocation};
-                stateLocationObject.latitude = position.coords.latitude;
-                stateLocationObject.longitude = position.coords.longitude;
-                this.setState({eventLocation: stateLocationObject});
-            });
-        };
-
         const { match: { params } } = this.props;
 
-        // TODO: prepopulate with personal info
+        // TODO: prepopulate with personal info issue #34
         this.state = {
 
             showPeriodic: false,
@@ -70,7 +60,7 @@ class IntakeForm extends Component {
             isInCareForHiv: false,
             hepCStatus: 'neverTested',
             isInCareForHepC: false,
-            healthInsurer: 'MH',
+            healthInsurer: null,
             primaryDrug: 'heroin',
             didOdLastYear: false,
             didSeeOdLastYear: false,
@@ -97,10 +87,6 @@ class IntakeForm extends Component {
             // standard
             uid: params.uid,
             referral: null,
-            eventLocation: {
-                longitude: null,
-                latitude: null,
-            },
         }
 
         this.initialState = this.state;
@@ -170,11 +156,11 @@ class IntakeForm extends Component {
             // TODO: should call an action 'SUBMIT_FORM' or something
             // which should take the event and contact info, and call the update contact
             // action from within
-        this.createEvent();
-        this.updateContact();
-        const { match: { params } } = this.props;
-        // TODO: 'form submitted successfully' or something dialog
-        this.props.history.push(`/contact/${params.uid}/info`)
+            this.createEvent();
+            this.updateContact();
+            const { match: { params } } = this.props;
+            // TODO: 'form submitted successfully' or something dialog
+            this.props.history.push(`/contact/${params.uid}/info`)
         }
     }
 
@@ -343,12 +329,12 @@ class IntakeForm extends Component {
                 defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showNewContactQuestions: !this.state.showNewContactQuestions})
             },
             {
-                label: 'Outreach',
-                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showOutreach: !this.state.showOutreach})
-            },
-            {
                 label: 'Periodic',
                 defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showPeriodic: !this.state.showPeriodic})
+            },
+            {
+                label: 'Outreach',
+                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showOutreach: !this.state.showOutreach})
             },
         ];
 
@@ -395,6 +381,26 @@ class IntakeForm extends Component {
                     referral={this.state.referral}
                 />
 
+                {this.state.showNewContactQuestions && <NewContactQuestionsForm
+                    // helpers
+                    handleChange={this.handleChildInputChange.bind(this)}
+                    handleSelectChange={this.handleChildSelectChange.bind(this)}
+                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
+                    handleSliderChange={this.handleSliderChange.bind(this)}
+                    buildToggle={this.buildToggle}
+                    buildSelectField={this.buildSelectField}
+                    buildRadio={this.buildRadio}
+                    buildSlider={this.buildSlider}
+                    palette={palette}
+                    // form data
+                    contactDateOfBirth={this.state.contactDateOfBirth}
+                    contactGenderIdentity={this.state.contactGenderIdentity}
+                    contactEthnicity={this.state.contactEthnicity}
+                    contactIsHispanic={this.state.contactIsHispanic}
+                    contactCountryOfBirth={this.state.contactCountryOfBirth}
+                    contactAgeOfFirstInjection={this.state.contactAgeOfFirstInjection}
+                />}
+
                 {this.state.showPeriodic && <PeriodicQuestionsForm
                     // helpers
                     handleChange={this.handleChildInputChange.bind(this)}
@@ -416,26 +422,6 @@ class IntakeForm extends Component {
                     otherDrugs={this.state.otherDrugs}
                     odLastYear={this.state.didOdLastYear}
                     sawOdLastYear={this.state.didSeeOdLastYear}
-                />}
-
-                {this.state.showNewContactQuestions && <NewContactQuestionsForm
-                    // helpers
-                    handleChange={this.handleChildInputChange.bind(this)}
-                    handleSelectChange={this.handleChildSelectChange.bind(this)}
-                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
-                    handleSliderChange={this.handleSliderChange.bind(this)}
-                    buildToggle={this.buildToggle}
-                    buildSelectField={this.buildSelectField}
-                    buildRadio={this.buildRadio}
-                    buildSlider={this.buildSlider}
-                    palette={palette}
-                    // form data
-                    contactDateOfBirth={this.state.contactDateOfBirth}
-                    contactGenderIdentity={this.state.contactGenderIdentity}
-                    contactEthnicity={this.state.contactEthnicity}
-                    contactIsHispanic={this.state.contactIsHispanic}
-                    contactCountryOfBirth={this.state.contactCountryOfBirth}
-                    contactAgeOfFirstInjection={this.state.contactAgeOfFirstInjection}
                 />}
 
                 {this.state.showOutreach && <OutreachQuestionsForm
