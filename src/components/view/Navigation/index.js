@@ -13,6 +13,7 @@ import ArrowDownIcon from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import ContactTypeaheadSearch from 'components/controller/ContactTypeaheadSearch';
 import EventNoteIcon from 'material-ui/svg-icons/notification/event-note';
 import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app';
+// import EditIcon from 'material-ui/svg-icons/image/edit';
 import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
 import PersonIcon from 'material-ui/svg-icons/social/person';
 
@@ -60,6 +61,27 @@ class Navigation extends React.Component {
         this.props.logout();
     }
 
+    displayForAppBarTitle() {
+        const path = this.props.location.pathname;
+        // TODO: see https://github.com/ReactTraining/react-router/issues/5870
+        // so that we can use match instead of includes
+        if(path.includes('/contact')) {
+            if(path.includes('/intake') || path.includes('/info')) {
+                return this.props.contactUid;
+            }
+            return (<ContactTypeaheadSearch/>);
+        }  else if (path.includes('/reports')) {
+            return 'Reports';
+        }
+    };
+
+    displayContactSearchEditButton() {
+        if(this.props.location.pathname.includes('/intake') || this.props.location.pathname.includes('info')){
+            return true;
+        }
+        return false;
+    }
+
     render () {
         const { user, muiTheme } = this.props;
 
@@ -71,7 +93,7 @@ class Navigation extends React.Component {
             <div>
                 <AppBar
                     onLeftIconButtonTouchTap={this.handleToggle}
-                    title={this.props.location.pathname === '/contact' ? <ContactTypeaheadSearch/> : 'Reports'}
+                    title={this.displayForAppBarTitle()}
                     titleStyle={{
                         paddingTop: '0.5rem',
                         paddingBottom: '1rem',
