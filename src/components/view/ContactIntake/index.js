@@ -13,9 +13,6 @@ import MenuItem from 'material-ui/MenuItem';
 import { RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import DatePicker from 'material-ui/DatePicker';
 
-// TODO: this should be mapped via props instead
-import { createEvent } from 'actions';
-
 import PeriodicQuestionsForm from 'components/view/ContactIntake/periodicQuestions.form';
 import NewContactQuestionsForm from 'components/view/ContactIntake/newContactQuestions.form';
 import OutreachQuestionsForm from 'components/view/ContactIntake/outreachQuestions.form';
@@ -32,12 +29,7 @@ class IntakeForm extends Component {
         super(props);
 
         this.submitForm = this.submitForm.bind(this)
-
-        const todayDate = new Date();
-        todayDate.setFullYear(todayDate.getFullYear());
-        todayDate.setHours(0, 0, 0, 0);
-
-        const initDateOfBirth = new Date(1980, 0, 1)
+        this.isNewContact = this.isNewContact.bind(this);
 
         const { match: { params } } = this.props;
 
@@ -51,7 +43,7 @@ class IntakeForm extends Component {
             eventNotes: '',
 
             // form
-            eventDate: todayDate,
+            eventDate: this.getTodayDate(),
 
 
             // periodic
@@ -68,12 +60,12 @@ class IntakeForm extends Component {
             otherDrugs: null,
 
             // new contact
-            newContactDate: '',
-            contactDateOfBirth: initDateOfBirth,
-            contactGenderIdentity: 'male',
+            newContactDate: null,
+            contactDateOfBirth: this.getInitialDateOfBirth(),
+            contactGenderIdentity: 'Male',
             contactEthnicity: 'White',
             contactIsHispanic: false,
-            contactCountryOfBirth: '',
+            contactCountryOfBirth: 'US',
             contactAgeOfFirstInjection: 0,
 
             // outreach
@@ -85,6 +77,12 @@ class IntakeForm extends Component {
             numberOfOthersHelping: 0,
 
             // standard
+            // NOTE: it's very important here that we are getting the uid from the url, because if
+            // the user does not exist (ie: it does not have an ID yet) then this will still allow
+            // us to create the event and associate it with the contact that we will create in parallel
+            // FIXME: ultimately we'll need to create the contact first, ensure that the creation is
+            // successful, and then create the event, otherwise we may end up with orphaned events
+            // and potentially lost data if the contact creation fails but the event creation does not
             uid: params.uid,
             referral: null,
         }
@@ -92,6 +90,24 @@ class IntakeForm extends Component {
         this.initialState = this.state;
         this.submittedState = this.state;
     }
+
+    isNewContact(contact){
+        if(contact && contact.uid) {
+            return false;
+        }
+        return true;
+    }
+
+    getInitialDateOfBirth() {
+        return new Date(1980, 0, 1);
+    };
+
+    getTodayDate() {
+        const todayDate = new Date();
+        todayDate.setFullYear(todayDate.getFullYear());
+        todayDate.setHours(0, 0, 0, 0);
+        return todayDate;
+    };
 
     // i'm sure we'll want to change names on the db in the future at some time
     // or locally within state. so I'm abstracting this call to make it clear what data
@@ -153,11 +169,9 @@ class IntakeForm extends Component {
         if (this.initialState == this.state) {
         alert("Cannot post empty form");
         } else {
-            // TODO: should call an action 'SUBMIT_FORM' or something
-            // which should take the event and contact info, and call the update contact
-            // action from within
-            this.createEvent();
-            this.updateContact();
+            this.props.createEvent();
+            this.saveContact();
+
             const { match: { params } } = this.props;
             // TODO: 'form submitted successfully' or something dialog
             this.props.history.push(`/contact/${params.uid}/info`)
@@ -167,11 +181,22 @@ class IntakeForm extends Component {
     // TODO: dispatch updated contact profile
     createEvent() {
         let eventData = this.packageFormDataForSubmission()
-        this.props.dispatch(createEvent(eventData));
+        this.props.createEvent(eventData);
     }
 
-    updateContact() {
-        // this.props.dispatch(getContact(contactData))
+    saveContact() {
+        const contact = {
+            uid: this.state.uid,
+            data: {
+                dateOfBirth: this.state.contactDateOfBirth,
+                genderIdentity: this.state.contactGenderIdentity,
+                ethnicity: this.state.contactEthnicity,
+                hispanic: this.state.contactIsHispanic,
+                birthCountry: this.state.contactCountryOfBirth,
+                firstInjectionAge: this.state.contactAgeOfFirstInjection,
+            },
+        };
+        this.props.createContact(contact);
     }
 
     // helpers to build controlled input elements
@@ -268,11 +293,11 @@ class IntakeForm extends Component {
             <div style={labelStyle}>{labelText}<span style={{paddingLeft: '.5rem', fontSize: '.5rem'}}>({sliderValue}/{options.max})</span></div>
                 <Slider
                     name={sliderName}
-                    defaultValue={options.defaultValue}
+                    defaultValue={parseInt(options.defaultValue)}
                     step={options.step}
                     min={options.min}
                     max={options.max}
-                    value={this.props[sliderName]}
+                    value={parseInt(this.props[sliderName])}
                     onChange={(e, value) => updateCallback(sliderName, value)}
                 />
             </div>
@@ -322,19 +347,19 @@ class IntakeForm extends Component {
         const formCheckboxOptionsArray = [
             {
                 label: 'Standard Questions',
-                defaultChecked: true, disabled: true
+                value: true, disabled: true
             },
             {
                 label: 'First Contact',
-                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showNewContactQuestions: !this.state.showNewContactQuestions})
+                value: this.state.showNewContactQuestions, disabled: false, onCheckCallback: () => this.setState({showNewContactQuestions: !this.state.showNewContactQuestions})
             },
             {
                 label: 'Periodic',
-                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showPeriodic: !this.state.showPeriodic})
+                value: this.state.showPeriodic, disabled: false, onCheckCallback: () => this.setState({showPeriodic: !this.state.showPeriodic})
             },
             {
                 label: 'Outreach',
-                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showOutreach: !this.state.showOutreach})
+                value: this.state.showOutreach, disabled: false, onCheckCallback: () => this.setState({showOutreach: !this.state.showOutreach})
             },
         ];
 
@@ -364,7 +389,7 @@ class IntakeForm extends Component {
                                 labelStyle={option.labelStyle}
                                 style={option.style}
                                 label={option.label}
-                                defaultChecked={option.defaultChecked}
+                                checked={option.value}
                                 disabled={option.disabled}
                                 onCheck={option.onCheckCallback}
                             />

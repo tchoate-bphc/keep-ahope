@@ -14,11 +14,13 @@ import {
 
     // CONTACT
     GET_CONTACT,
+    CREATE_CONTACT,
     UPDATE_CURRENT_CONTACT,
 
     // CONTACTS
     SET_CONTACT_SEARCH_RESULTS,
     SET_CURRENT_SEARCH_QUERY,
+    SET_CURRENT_SEARCH_QUERY_VALIDITY,
     SEARCH_CONTACTS,
 
     // CONFIG
@@ -137,6 +139,13 @@ export function setCurrentSearchQuery(searchQuery) {
     }
 }
 
+export function setCurrentSearchQueryValidity(isValid) {
+    return {
+        type: SET_CURRENT_SEARCH_QUERY_VALIDITY,
+        isValid,
+    }
+}
+
 /** EVENTS */
 export function fetchEvents() {
     return {
@@ -157,7 +166,14 @@ export function refreshEvents(eventCollection) {
     }
 }
 
-export function createEvent(userInputData, user) {
+export function createContact({ uid, data }) {
+    return {
+        type: CREATE_CONTACT,
+        uid,
+        data,
+    }
+}
+export function createEvent(userInputData, use) {
 
     const eventData = {
         ...userInputData

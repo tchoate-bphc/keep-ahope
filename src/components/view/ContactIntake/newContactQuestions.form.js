@@ -19,27 +19,27 @@ class NewContactQuestionsForm extends Component {
     render() {
 
         const radioButtonGenderList = [
-            {label: 'Male', value: 'male'},
-            {label: 'Female', value: 'female'},
-            {label: 'MtF', value: 'mtf'},
-            {label: 'FtM', value: 'ftm'},
-            {label: 'Refused', value: 'refused'},
+            {label: 'Male', value: 'Male'},
+            {label: 'Female', value: 'Female'},
+            {label: 'MtF', value: 'MtF'},
+            {label: 'FtM', value: 'FtM'},
+            {label: 'Refused', value: 'Refused'},
         ];
 
         const enthnicityOptionsList = [
-            {primaryText: 'American Indian', value: 'AI'},
+            {primaryText: 'American Indian', value: 'American Indian'},
             {primaryText: 'Asian', value: 'Asian'},
-            {primaryText: 'Black/African American', value: 'BAA'},
-            {primaryText: 'Hawaiin/Pacific Islander', value: 'HPI'},
+            {primaryText: 'Black/African American', value: 'Black/African American'},
+            {primaryText: 'Hawaiian/Pacific Islander', value: 'Hawaiian/Pacific Islander'},
             {primaryText: 'White', value: 'White'},
             // TODO: user needs to be able to click this and enter in their own custom entry
             {primaryText: 'Other', value: 'Other'},
-            {primaryText: 'Prefer not to say', value: 'Refuse'},
+            {primaryText: 'Prefer not to say', value: 'Prefer not to say'},
         ];
 
         const countryOfBirthList = [
             {label: 'US', value: 'US'},
-            {label: 'Puerto Rico', value: 'PR'},
+            {label: 'Puerto Rico', value: 'Puerto Rico'},
             // TODO: user needs to be able to click this and enter in their own custom entry
             {label: 'Other', value: 'Other'},
         ];

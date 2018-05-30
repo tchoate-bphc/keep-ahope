@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import { getImageForEnv } from 'static/images/index';
 import ContactInfoProfileCard from './contactInfoProfileCard';
 import ContactInfoNotesCard from './contactInfoNotesCard';
 import ContactInfoEventsCard from './contactInfoEventsCard';
