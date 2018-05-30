@@ -13,6 +13,7 @@ import ArrowDownIcon from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import ContactTypeaheadSearch from 'components/controller/ContactTypeaheadSearch';
 import EventNoteIcon from 'material-ui/svg-icons/notification/event-note';
 import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app';
+// import EditIcon from 'material-ui/svg-icons/image/edit';
 import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
 import PersonIcon from 'material-ui/svg-icons/social/person';
 
