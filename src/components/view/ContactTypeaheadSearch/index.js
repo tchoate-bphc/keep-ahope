@@ -36,11 +36,11 @@ class ContactTypeaheadSearch extends Component {
         let errorMsg = '';
         // can this be done with a single RegEx??
         if (value.length > 0 && value.length <= 4) {
-            regex = new RegExp('(\\w{1,4})');
+            regex = new RegExp('([a-zA-z]{1,4})');
         } else if (value.length > 4 && value.length <= 10) {
-            regex = new RegExp('\\w{4}\\d{1,6}');
+            regex = new RegExp('[a-zA-z]{4}\\d{1,6}');
         } else if (value.length > 10) {
-            regex = new RegExp('\\w{4}\\d{6}\\w{1,3}');
+            regex = new RegExp('[a-zA-z]{4}\\d{6}[a-zA-z]{1,3}');
         }
 
         if (value.length > 0 && !regex.test(value)) {
