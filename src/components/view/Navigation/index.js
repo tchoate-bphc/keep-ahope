@@ -71,7 +71,7 @@ class Navigation extends React.Component {
             <div>
                 <AppBar
                     onLeftIconButtonTouchTap={this.handleToggle}
-                    title={this.props.location.pathname === '/contact' ? <ContactTypeaheadSearch/> : 'Reports'}
+                    title={this.props.location.pathname.includes('/contact') ? <ContactTypeaheadSearch/> : 'Reports'}
                     titleStyle={{
                         paddingTop: '0.5rem',
                         paddingBottom: '1rem',
