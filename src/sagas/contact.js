@@ -18,7 +18,7 @@ function* getContact({ uid }) {
                 // set the contact to null if it doesn't exist
                 contactData = Object.assign({}, snapshot.val());
             }
-            window._UI_STORE_.dispatch(updateCurrentContact(contactData))
+            window._UI_STORE_.dispatch(updateCurrentContact(contactData));
         })
 }
 
