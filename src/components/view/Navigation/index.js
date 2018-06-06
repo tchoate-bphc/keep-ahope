@@ -64,12 +64,12 @@ class Navigation extends React.Component {
         const path = this.props.location.pathname;
         // TODO: see https://github.com/ReactTraining/react-router/issues/5870
         // so that we can use match instead of includes
-        if(path.includes('/contact')) {
+        if(path.startsWith('/contact')) {
             if(path.includes('/intake') || path.includes('/info')) {
                 return this.props.contactUid;
             }
             return (<ContactTypeaheadSearch/>);
-        }  else if (path.includes('/reports')) {
+        }  else if (path.startsWith('/reports')) {
             return 'Reports';
         } else if (path === '/') {
             return (<ContactTypeaheadSearch/>);
