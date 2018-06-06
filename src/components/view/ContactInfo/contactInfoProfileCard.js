@@ -3,8 +3,6 @@ import React from 'react';
 
 import {Card, CardHeader, CardText} from 'material-ui/Card';
 
-import './styles.css';
-
 class ContactInfo extends React.Component {
 
   render() {
@@ -15,8 +13,16 @@ class ContactInfo extends React.Component {
       paddingRight: '.5rem'
     }
 
+    const cardStyle = {
+      marginBottom: '1rem'
+    }
+
+    const rowSpacing = {
+      margin: '0 0 1rem'
+    }
+
     return (
-      <div>
+      <div style={cardStyle}>
         <Card initiallyExpanded={true} >
           <CardHeader
               title='Profile'
@@ -28,7 +34,7 @@ class ContactInfo extends React.Component {
           />
 
           <CardText expandable={true}>
-            <div className="row contactInfo">
+            <div className="row" style={rowSpacing}>
               <div className="col-xs-6">
                 <span style={infoKeyStyle}>DOB</span>
                 {/* TODO: add this to the DB */}
@@ -40,7 +46,7 @@ class ContactInfo extends React.Component {
                 {contact.race}
               </div>
             </div>
-            <div className="row contactInfo">
+            <div className="row" style={rowSpacing}>
               <div className="col-xs-6">
                 <span style={infoKeyStyle}>Gender</span>
                 {contact.genderIdentity}
@@ -50,7 +56,7 @@ class ContactInfo extends React.Component {
                 {contact.ethnicity}
               </div>
             </div>
-            <div className="row contactInfo">
+            <div className="row" style={rowSpacing}>
               <div className="col-xs-6">
                 <span style={infoKeyStyle}>Age of first injection</span>
                 {contact.firstInjectionAge}

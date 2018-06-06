@@ -26,8 +26,15 @@ class ContactInfoEventsCard extends Component {
             titleColor: palette.primary1Color
         }
 
+        const cardStyle = {
+          marginBottom: '1rem'
+        }
+
         return (
-            <Card initiallyExpanded={true}>
+            <Card
+                initiallyExpanded={true}
+                style={cardStyle}
+            >
                 <CardHeader {...cardHeaderProps} />
                 <CardText expandable={true}>
                     <List

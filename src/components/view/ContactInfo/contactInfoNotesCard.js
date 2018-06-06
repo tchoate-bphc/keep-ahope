@@ -7,9 +7,17 @@ class ContactInfoNotesCard extends React.Component {
 
   render() {
     const {palette} = this.props;
+
+    const cardStyle = {
+      marginBottom: '1rem'
+    }
+
     return (
       <div>
-        <Card initiallyExpanded={true} >
+        <Card
+          initiallyExpanded={true}
+          style={cardStyle}
+        >
           <CardHeader
               title='Notes'
               titleColor={palette.primary1Color}

@@ -7,17 +7,25 @@ import ContactInfoEventsCard from './contactInfoEventsCard';
 // import EventsCard from '';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
-import './styles.css';
-
 class ContactInfo extends Component {
 
     render() {
 
         const { contact, muiTheme: {palette} } = this.props;
 
+        const formStyles = {
+          maxWidth: '60%',
+          margin: 'auto',
+          display: 'block'
+        }
+
+        const divStyles = {
+          margin: '2rem 0'
+        }
+
         return (
-            <form className="form">
-                <div className="cards">
+            <form style={formStyles}>
+                <div style={divStyles}>
                     <ContactInfoProfileCard
                         palette={palette}
                         contact={contact}

@@ -326,8 +326,30 @@ class IntakeForm extends Component {
             },
         ];
 
+        const formStyles = {
+          maxWidth: '60%',
+          margin: '2rem auto',
+          display: 'block'
+        }
+
+        const submitDivStyles = {
+          padding: '1rem 0',
+          display: 'flex'
+        }
+
+        const submitFlatButtonStyles = {
+          flexGrow: '1'
+        }
+
+        const textAreaContainerStyles = {
+          width: '100%',
+          height: '100%',
+          padding: '0 1rem 2rem',
+          boxSizing: 'border-box'
+        }
+
         return (
-            <form className="form">
+            <form style={formStyles}>
 
                 <Card>
                     <CardTitle title='Form Questions' titleColor={palette.primary1Color}/>
@@ -427,7 +449,7 @@ class IntakeForm extends Component {
                 />}
 
                 <Card>
-                    <div className="textAreaContainer">
+                    <div style={textAreaContainerStyles}>
                     <TextField
                         multiLine={true}
                         rows={5}
@@ -440,7 +462,7 @@ class IntakeForm extends Component {
                 </Card>
 
                 <Card>
-                    <div className="textAreaContainer">
+                    <div style={textAreaContainerStyles}>
                     <TextField
                         multiLine={true}
                         rows={5}
@@ -453,10 +475,10 @@ class IntakeForm extends Component {
                 </Card>
 
                 <Card>
-                    <div className="submitButtons">
-                    {/* TODO: handle this in a more elegant way than just reloading the page */}
-                    <FlatButton label="Clear Form" labelStyle={clearLabelStyle} onClick={() => window.location.reload()} />
-                    <FlatButton label="Save" primary={true} onClick={this.submitForm} />
+                    <div style={submitDivStyles}>
+                        {/* TODO: handle this in a more elegant way than just reloading the page */}
+                        <FlatButton label="Clear Form" labelStyle={clearLabelStyle} onClick={() => window.location.reload()} style={submitFlatButtonStyles}/>
+                        <FlatButton label="Save" primary={true} onClick={this.submitForm} style={submitFlatButtonStyles}/>
                     </div>
                 </Card>
             </form>
