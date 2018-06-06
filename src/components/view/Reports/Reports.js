@@ -28,7 +28,7 @@ class Results extends React.Component {
         super(props);
 
         const { dispatch } = props;
-        
+
         this.dateRangeChange = this.dateRangeChange.bind(this);
 
         this.state = {
@@ -38,7 +38,7 @@ class Results extends React.Component {
 
         dispatch(fetchReportsData({ dateRange: this.state.dateRange }));
     }
-    
+
     dateRangeChange = (event, index, dateRange) => {
 
         const { dispatch } = this.props;
@@ -66,9 +66,9 @@ class Results extends React.Component {
         return (
             <div className="page">
                 <div className="text-content">
-                
+
                     <div style={{display:'flex', alignItems:'center'}}>
-                        Metrics from: 
+                        Metrics from:
                         &nbsp;
                         <SelectField value={this.state.dateRange} onChange={this.dateRangeChange}>
                             <MenuItem value={RANGE_CURRENT_WEEK} label="Current Week" primaryText="Current Week" />
@@ -111,7 +111,7 @@ class Results extends React.Component {
                             path='contacts._meta.count'
                             data={reportsData}
                             />
-                            
+
                         <ReportsCard
                             type='simple'
                             hSize={1}

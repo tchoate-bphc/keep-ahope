@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 /** MATERIAL UI **/
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {cyan100, cyan500, cyan700, grey400, grey900} from 'material-ui/styles/colors/';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 /** ROUTER **/
 import { Route } from 'react-router-dom';
@@ -69,21 +70,23 @@ class App extends Component {
 
         const muiTheme = getMuiTheme({
             palette: {
-                primary1Color: '#1DAFEC', // override
+                // primary1Color: '#1DAFEC', // override
                 fadedPrimary1Color: '#4FDFFF', // additional
-                primary2Color: '#47B4E0', // overrides the default
+                // primary2Color: '#47B4E0', // overrides the default
                 tertiaryTextColor: '#8DC3DB', // additional
                 accent1Color: '#8EC449', // override
                 primaryLinkColor: '#1DAFEC', // additional
                 secondaryLinkColor: '#8AC9EC', // additional
-                highlight1Color: '#E8448B', // additional
+                // highlight1Color: '#E8448B', // additional
                 errorColor: '#E8448B', // additional
                 warningColor: '#FF953F', // additional
                 successColor: '#8EC449', // additional
                 // DEFAULTS
-                // primary1Color: cyan500,
-                // primary2Color: cyan700,
-                // primary3Color: grey400,
+                primary1Color: cyan500,
+                primary2Color: cyan700,
+                highlight1Color: cyan100,
+                primary3Color: grey400,
+                grey1Color: grey900,
                 // accent1Color: pinkA200,
                 // accent2Color: grey100,
                 // accent3Color: grey500,

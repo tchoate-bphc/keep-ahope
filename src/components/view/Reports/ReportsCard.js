@@ -12,7 +12,7 @@ class Results extends React.Component {
     constructor(props) {
         super(props);
     }
-    
+
     convertDataToGoogleFormat({data, xLabel, yLabel}) {
 
         return [
@@ -52,17 +52,16 @@ class Results extends React.Component {
             >
                 <Card
                     className='box'
-                    style={{ background: '#f4f4f4', boxShadow: 'none', height: '150px' }}
+                    style={{background: '#f4f4f4', boxShadow: 'none'}}
                 >
                     <CardHeader
                         title={label}
                         style={{
-                            paddingBottom: '4px',
                             width: '100%',
                         }}
                         textStyle={{
-                            paddingRight: 0,
                             width: '100%',
+                            fontWeight: '400'
                         }}
                         titleStyle={{
                             whiteSpace: 'nowrap',
@@ -76,7 +75,6 @@ class Results extends React.Component {
                             style={{
                                 fontSize:  value || value === 0 ? '5em' : '1em',
                                 fontWeight: '800',
-                                padding: '4px',
                                 display: 'flex', justifyContent: 'center',
                                 width: '100%',
                             }}
@@ -100,7 +98,7 @@ class Results extends React.Component {
                                 <Chart
                                     chartType="BarChart"
                                     data={this.convertDataToGoogleFormat({
-                                        data: value, 
+                                        data: value,
                                         xLabel: 'Count',
                                         yLabel: label,
                                     })}
@@ -123,7 +121,6 @@ class Results extends React.Component {
                                 style={{
                                     fontSize: value && value.length === 0 ? '5em' : '1em',
                                     fontWeight: '800',
-                                    padding: '4px',
                                     display: 'flex', justifyContent: 'center',
                                     width: '100%',
                                 }}

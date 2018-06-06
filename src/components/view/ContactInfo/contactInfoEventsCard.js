@@ -43,7 +43,7 @@ class ContactInfoEventsCard extends Component {
                             </ListItem>
                         ))
                     ) : (
-                        'There are no events for this user'
+                        'There are no events for this contact.'
                     )}
                     </List>
                 </CardText>

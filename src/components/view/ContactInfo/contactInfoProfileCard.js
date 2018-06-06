@@ -3,13 +3,15 @@ import React from 'react';
 
 import {Card, CardHeader, CardText} from 'material-ui/Card';
 
+import './styles.css';
+
 class ContactInfo extends React.Component {
 
   render() {
     const { contact, palette } = this.props;
 
     const infoKeyStyle = {
-      color: '#90A4AE',
+      color: palette.primary3color,
       paddingRight: '.5rem'
     }
 
@@ -26,7 +28,7 @@ class ContactInfo extends React.Component {
           />
 
           <CardText expandable={true}>
-            <div className="row">
+            <div className="row contactInfo">
               <div className="col-xs-6">
                 <span style={infoKeyStyle}>DOB</span>
                 {/* TODO: add this to the DB */}
@@ -38,7 +40,7 @@ class ContactInfo extends React.Component {
                 {contact.race}
               </div>
             </div>
-            <div className="row">
+            <div className="row contactInfo">
               <div className="col-xs-6">
                 <span style={infoKeyStyle}>Gender</span>
                 {contact.genderIdentity}
@@ -48,7 +50,7 @@ class ContactInfo extends React.Component {
                 {contact.ethnicity}
               </div>
             </div>
-            <div className="row">
+            <div className="row contactInfo">
               <div className="col-xs-6">
                 <span style={infoKeyStyle}>Age of first injection</span>
                 {contact.firstInjectionAge}

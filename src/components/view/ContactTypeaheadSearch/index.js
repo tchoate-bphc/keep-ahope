@@ -63,7 +63,8 @@ class ContactTypeaheadSearch extends Component {
                     display: 'flex',
                     alignItems: 'baseline',
                     width: 'auto',
-                    padding: '0.5rem',
+                    padding: '0 2.5rem .5rem 1rem',
+                    boxSizing: 'border-box',
                     position: 'relative', // cancel and char count are absolutely positioned
                 }}
                 zDepth={1}
@@ -82,8 +83,8 @@ class ContactTypeaheadSearch extends Component {
                     color = {palette.accent3Color}
                     style = {{
                         position: 'absolute',
-                        top: '2.5rem',
-                        right: '0.4rem',
+                        top: '2rem',
+                        right: '1rem',
                         cursor: 'pointer',
                         zIndex: 1101, // appBar is 1100
                     }}
@@ -91,7 +92,7 @@ class ContactTypeaheadSearch extends Component {
                 />
                 <div style={{
                     position: 'absolute',
-                    right: '0.5rem',
+                    right: '2.5rem',
                     bottom: '-1rem',
                     fontSize: '0.6rem',
                 }}>

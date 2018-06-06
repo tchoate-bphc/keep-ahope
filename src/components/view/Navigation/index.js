@@ -63,41 +63,43 @@ class Navigation extends React.Component {
     render () {
         const { user, muiTheme } = this.props;
 
-        const avatarSize = 60,
+        const avatarSize = 80,
             paddingSize = 15,
-            drawerWidth = Math.min(450, window.outerWidth * .8);
+            drawerWidth = Math.min(400, window.outerWidth * .8);
 
         return (
             <div>
                 <AppBar
                     onLeftIconButtonTouchTap={this.handleToggle}
+                    iconStyleLeft={this.props.location.pathname === '/contact' ? {
+                        padding: '2rem 0 0'
+                    } : {}}
                     title={this.props.location.pathname === '/contact' ? <ContactTypeaheadSearch/> : 'Reports'}
-                    titleStyle={{
-                        paddingTop: '0.5rem',
-                        paddingBottom: '1rem',
-                        height: 'auto' //override
-                    }}
+                    titleStyle={this.props.location.pathname === '/contact' ? {
+                        padding: '0.5rem 0 1rem',
+                        height: 'auto'
+                    } : {}}
                 />
                 <Drawer docked={false} width={drawerWidth} open={this.state.drawerOpen} onRequestChange={() => this.setState({drawerOpen : false})}>
                     <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
                         <div style={{backgroundColor: muiTheme.palette.primary1Color, padding: paddingSize }}>
-                            <Avatar size={avatarSize} icon={<PersonOutlineIcon/>}/>
+                            <Avatar size={avatarSize} icon={<PersonOutlineIcon/>} style={{margin: '1rem 1rem 0'}}/>
                             <MenuItem
-                                style={{ color: muiTheme.palette.alternateTextColor, paddingTop: paddingSize }}
+                                style={{ color: muiTheme.palette.alternateTextColor, marginTop: '1rem' }}
                                 primaryText={user.email}
                                 rightIcon={<ArrowDownIcon color={muiTheme.palette.alternateTextColor}/>}
                             />
                         </div>
-                        <MenuItem onTouchTap={this.getMenuItemHandler('/contact')} primaryText='Contact' leftIcon={<PersonIcon/>}/>
-                        <MenuItem onTouchTap={this.getMenuItemHandler('/reports')} primaryText='Reports' leftIcon={<EventNoteIcon/>}/>
-                        <div style={{marginTop: 'auto'}}>
+                        <MenuItem onTouchTap={this.getMenuItemHandler('/contact')} primaryText='Contact' leftIcon={<PersonIcon/>} style={{margin: '1rem 1rem 0'}}/>
+                        <MenuItem onTouchTap={this.getMenuItemHandler('/reports')} primaryText='Reports' leftIcon={<EventNoteIcon/>} style={{margin: '0 1rem'}}/>
+                        <div style={{margin: 'auto 1rem 1rem'}}>
                             <MenuItem
                                 onTouchTap={this.handleLogout}
                                 primaryText='Logout'
                                 leftIcon={<ExitToAppIcon/>}
                             />
                         </div>
-                        </div>
+                    </div>
                 </Drawer>
             </div>
         );

@@ -76,7 +76,10 @@ class ContactNavigation extends React.Component {
                 data-route={link}
                 icon={icon}
                 key={link}
-                style={style}
+                style={{
+                    // textTransform: "Capitalize",
+                    fontWeight: "400",
+                }}
             />
             );
     };
@@ -86,12 +89,12 @@ class ContactNavigation extends React.Component {
         const tabObjs = [
             {
                 icon: <ChromeReaderModeIcon />,
-                label: 'Intake',
+                // label: 'Intake',
                 link: 'intake',
             },
             {
                 icon: <AssignmentInd />,
-                label: 'Contact Info',
+                // label: 'Contact Info',
                 link: 'info',
             },
             // {
@@ -117,11 +120,17 @@ class ContactNavigation extends React.Component {
 
         return (
             <Tabs
-                inkBarStyle={{background: this.themePalette.highlight1Color}}
+                inkBarStyle={{
+                    background: this.themePalette.highlight1Color,
+                    height: '.25rem',
+                    marginTop: '-.25rem'
+                }}
                 initialSelectedIndex={initialSelectedIndex === -1 ? 0 : initialSelectedIndex}
                 onChange={this.navigateToRoute}
-                tabItemContainerStyle={{backgroundColor: this.themePalette.primary2Color}}
-                >
+                tabItemContainerStyle={{
+                    backgroundColor: this.themePalette.primary2Color,
+                }}
+            >
                 {tabs}
             </Tabs>
         );
