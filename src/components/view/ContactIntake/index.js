@@ -325,13 +325,7 @@ class IntakeForm extends Component {
                 defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showPeriodic: !this.state.showPeriodic})
             },
         ];
-
-        const formStyles = {
-          maxWidth: '60%',
-          margin: '2rem auto',
-          display: 'block'
-        }
-
+        
         const submitDivStyles = {
           padding: '1rem 0',
           display: 'flex'
@@ -349,7 +343,7 @@ class IntakeForm extends Component {
         }
 
         return (
-            <form style={formStyles}>
+            <form className="form">
 
                 <Card>
                     <CardTitle title='Form Questions' titleColor={palette.primary1Color}/>

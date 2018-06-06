@@ -13,18 +13,12 @@ class ContactInfo extends Component {
 
         const { contact, muiTheme: {palette} } = this.props;
 
-        const formStyles = {
-          maxWidth: '60%',
-          margin: 'auto',
-          display: 'block'
-        }
-
         const divStyles = {
-          margin: '2rem 0'
+          margin: '0 0 2rem'
         }
 
         return (
-            <form style={formStyles}>
+            <form className="form">
                 <div style={divStyles}>
                     <ContactInfoProfileCard
                         palette={palette}
