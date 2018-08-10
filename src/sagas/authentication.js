@@ -11,6 +11,8 @@ function* loginGoogleRequest() {
 
     window._UI_STORE_.dispatch(showLoginSpinner(true));
 
+    console.log('dump login code here');
+    // window.__parse__
     window._FIREBASE_.auth().signInWithRedirect(window._FIREBASE_PROVIDER_)
         .catch(function(error) {
 

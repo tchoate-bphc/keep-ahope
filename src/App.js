@@ -26,8 +26,9 @@ import Messages from 'components/controller/Messages';
 
 import Navigation from 'components/controller/Navigation';
 import { getUser, fetchConfig, showLoginSpinner } from './actions';
-
 import './app.css';
+
+const parse = require('parse');
 
 class App extends Component {
 
@@ -35,6 +36,11 @@ class App extends Component {
         super(props);
 
         injectTapEventPlugin();
+
+        // parse setup
+        let p = parse.initialize("AHOPEPARSESERVER");
+        p = parse.serverURL = '/parse';
+        window.__parse__ = p;
 
         /** Firebase Setup **/
         window._FIREBASE_ = firebase.initializeApp(config.firebase);
