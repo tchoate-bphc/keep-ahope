@@ -10,24 +10,22 @@ import { Switch } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
 /** REDUX **/
 import { Provider } from 'react-redux';
-/** FIREBASE **/
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
-import 'firebase/storage';
-import 'firebase/functions';
+
 /** APP **/
 import config from 'config';
 import AuthorizedRoute from 'components/controller/AuthorizedRoute';
+import AuthorizedNav from 'components/controller/AuthorizedNav';
 
 import Contact from 'components/controller/Contact';
 import Reports from 'components/controller/Reports';
 import Messages from 'components/controller/Messages';
 
 import Navigation from 'components/controller/Navigation';
-import { getUser, fetchConfig, showLoginSpinner, loginGoogleRequest } from './actions';
+import { setCurrentSearchQuery, loginGoogleRequest } from './actions';
 
 import './app.css';
+
+const Parse = require('parse');
 
 class App extends Component {
 
@@ -36,15 +34,15 @@ class App extends Component {
 
         injectTapEventPlugin();
         
-        window._UI_STORE_.dispatch( loginGoogleRequest( { signInOverride: false } ) );
+        Parse.initialize("AHOPEPARSESERVER");
 
-        /** Firebase Setup **/
-        // window._FIREBASE_ = firebase.initializeApp(config.firebase);
-        // window._FIREBASE_PROVIDER_ = new firebase.auth.GoogleAuthProvider();
-        // window._FIREBASE_PROVIDER_.addScope('https://www.googleapis.com/auth/userinfo.email');
-        // window._FIREBASE_DB_ = firebase.database();
-        // window._FIREBASE_FUNCTIONS_ = firebase.functions();
-        // window._FIREBASE_STORAGE_ = firebase.storage().ref();
+        Parse.serverURL = 'https://keep-ahope.appspot.com/parse'
+        window._Parse_ = Parse;
+
+        // try to login with google (enables re-login on page refresh)
+        window._UI_STORE_.dispatch( loginGoogleRequest() );
+
+        window._UI_STORE_.dispatch(setCurrentSearchQuery(''));
     }
 
 
@@ -88,7 +86,8 @@ class App extends Component {
                 <Provider store={store}>
                     <ConnectedRouter history={history}>
                         <div className="app">
-                            <Navigation/>
+                            <AuthorizedNav path="/:context/:uid/:action/" component={Navigation} />
+                            <AuthorizedNav exact path="/" component={Navigation} />
                             <Messages />
                             <Switch>
                                 <AuthorizedRoute exact path="/contact/" component={Contact} />

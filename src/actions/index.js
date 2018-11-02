@@ -42,10 +42,9 @@ import {
 } from '../constants';
 
 /** AUTHENTICATION **/
-export function loginGoogleRequest( { signInOverride } ) {
+export function loginGoogleRequest() {
     return { 
         type: LOGIN_GOOGLE_REQUEST,
-        signInOverride
      };
 }
 
@@ -60,20 +59,6 @@ export function setCurrentUser(userData) {
 export function logoutUserRequest() {
     return {
         type: LOGOUT_USER_REQUEST,
-    };
-}
-
-export function getUser(googleUserData = null) {
-    return {
-        type: GET_USER,
-        googleUserData,
-    };
-}
-
-export function updateUser(userData) {
-    return {
-        type: UPDATE_USER,
-        userData,
     };
 }
 
