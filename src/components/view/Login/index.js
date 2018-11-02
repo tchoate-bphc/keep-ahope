@@ -9,6 +9,7 @@ import Paper from 'material-ui/Paper';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 
 import muiThemeable from 'material-ui/styles/muiThemeable';
+import { fetchConfig, showLoginSpinner } from '../../../actions';
 
 class Login extends Component {
 
@@ -18,6 +19,7 @@ class Login extends Component {
             hideUnsupportedBrowserText: false
         });
         this.themePalette = this.props.muiTheme.palette;
+        // this.onSignIn = this.onSignIn.bind(this);
     }
 
     isBrowserSupported () {
@@ -74,6 +76,7 @@ class Login extends Component {
                     </div>
                 ) : (
                     <div>
+                    {/* TODO: do not show this when user is logged in */}
                     Please sign in.
                         <div onClick={loginGoogleRequest}>
                             <img
