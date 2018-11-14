@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { List, ListItem } from 'material-ui/List';
+import { List } from 'material-ui/List';
 
-class ContactInfoEventsCard extends Component {
+import { ContactInfoEventDetailsCard } from './contactInfoEventDetailsCard';
+
+export default class ContactInfoEventsCard extends Component {
 
     /*
     * convert event uid to date format
@@ -35,13 +37,17 @@ class ContactInfoEventsCard extends Component {
                     >
                     {!!events ? (
                         // if there are events, list each one
-                        events.map(event => (
-                            <ListItem key={event.uid}
-                                disabled={true}
-                                primaryText={this.formatUidToDate(event.uid)}
-                                innerDivStyle={{paddingLeft: 0, paddingTop: 0}}>
-                            </ListItem>
-                        ))
+                        events.map(event => {
+
+                            return (
+                                <ContactInfoEventDetailsCard
+                                    key={event.id}
+                                    event={event}
+                                    palette={palette}
+                                    >
+                                </ContactInfoEventDetailsCard>
+                            );
+                        })
                     ) : (
                         'There are no events for this user'
                     )}
@@ -51,5 +57,3 @@ class ContactInfoEventsCard extends Component {
         );
     }
 }
-
-export default ContactInfoEventsCard;
