@@ -15,11 +15,13 @@ import {
     // CONTACT
     GET_CONTACT,
     UPDATE_CURRENT_CONTACT,
-
+    SEARCH_CONTACTS,
+    UPDATE_CURRENT_CONTACT_WITH_EVENTS,
+    
     // CONTACTS
     SET_CONTACT_SEARCH_RESULTS,
     SET_CURRENT_SEARCH_QUERY,
-    SEARCH_CONTACTS,
+    GET_EVENTS_FOR_CONTACT,
 
     // CONFIG
     FETCH_CONFIG,
@@ -34,6 +36,11 @@ import {
     GET_EVENTS, // why set and get?
     REFRESH_EVENTS,
     CREATE_EVENT,
+
+    // NOTIFICATIONS
+    NEW_NOTIFICATION,
+    UPDATE_NOTIFICATION_SINGLETON,
+    CLOSE_NOTIFICATION,
     
     // REPORTS
     FETCH_REPORTS_DATA,
@@ -107,6 +114,13 @@ export function updateCurrentContact(contact) {
     }
 }
 
+export function updateCurrentContactWithEvents({eventsForContact}) {
+    return {
+        type: UPDATE_CURRENT_CONTACT_WITH_EVENTS,
+        eventsForContact,
+    }
+}
+
 /** CONTACTS */
 export function searchContacts(searchStringUid) {
     return {
@@ -127,6 +141,12 @@ export function setCurrentSearchQuery(searchQuery) {
         type: SET_CURRENT_SEARCH_QUERY,
         searchQuery,
     }
+}
+export function getEventsForContact({uid}) {
+    return {
+        type: GET_EVENTS_FOR_CONTACT,
+        uid,
+    };
 }
 
 /** EVENTS */
@@ -149,17 +169,36 @@ export function refreshEvents(eventCollection) {
     }
 }
 
-export function createEvent(userInputData, user) {
-
-    const eventData = {
-        ...userInputData
-    };
-
+export function createEvent({ eventData, history }) {
     return {
         type: CREATE_EVENT,
         eventData,
-    }
+        history,
+    };
 
+}
+
+/** NOTIFICATIONS */
+
+export function updateNotificationSingleton({notificationSingleton}) {
+    return {
+        type: UPDATE_NOTIFICATION_SINGLETON,
+        notificationSingleton,
+    };
+}
+
+export function newNotification({newNotification}) {
+    return {
+        type: NEW_NOTIFICATION,
+        newNotification,
+    };
+}
+
+export function closeNotification({notificationId}) {
+    return {
+        type: CLOSE_NOTIFICATION,
+        notificationId
+    };
 }
 
 /** REPORTS PAGE */

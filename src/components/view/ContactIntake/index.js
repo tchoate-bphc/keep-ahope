@@ -20,8 +20,6 @@ import PeriodicQuestionsForm from 'components/view/ContactIntake/periodicQuestio
 import NewContactQuestionsForm from 'components/view/ContactIntake/newContactQuestions.form';
 import VisitOrOutreachQuestions from 'components/view/ContactIntake/visitOrOutreachQuestions.form';
 
-import * as moment from 'moment';
-
 import './styles.css';
 
 
@@ -33,15 +31,13 @@ class IntakeForm extends Component {
         this.submitForm = this.submitForm.bind(this)
 
         const todayDate = new Date();
-        todayDate.setFullYear(todayDate.getFullYear());
-        todayDate.setHours(0, 0, 0, 0);
 
         const initDateOfBirth = new Date(1980, 0, 1)
 
         const { match: { params } } = this.props;
 
         // TODO: prepopulate with personal info issue #34
-        this.state = {
+        this.initialFormState = {
 
             showPeriodic: false,
             showNewContactQuestions: false,
@@ -76,14 +72,16 @@ class IntakeForm extends Component {
             // visit or isOutreach
             uid: params.uid,
             isOutreach: false,
-            referral: null,
+            referrals: null,
             syringesGiven: 0,
             syringesTaken: 0,
             narcanWasOffered: false,
             narcanWasTaken: false,
             enrollment: '',
             numberOfOthersHelping: 0,
-        }
+        };
+
+        this.state = { ...this.initialFormState };
 
         this.initialState = this.state;
         this.submittedState = this.state;
@@ -94,47 +92,49 @@ class IntakeForm extends Component {
     // we send in event creation
     packageFormDataForSubmission() {
         const visitOrOutreach = {
-            isOutreach: this.state.isOutreach,
-            referral: this.state.referral,
-            syringesGiven: this.state.syringesGiven,
-            syringesTaken: this.state.syringesTaken,
-            narcanWasOffered: this.state.narcanWasOffered,
-            narcanWasTaken: this.state.narcanWasTaken,
-            enrollment: this.state.enrollment,
-            numberOfOthersHelping: this.state.numberOfOthersHelping,
-            contactUid: this.state.uid,
+            isOutreach: this.initialFormState.isOutreach !== this.state.isOutreach ? this.state.isOutreach : null,
+            referrals: this.initialFormState.referrals !== this.state.referrals ? this.state.referrals : null,
+            syringesGiven: this.initialFormState.syringesGiven !== this.state.syringesGiven ? this.state.syringesGiven : null,
+            syringesTaken: this.initialFormState.syringesTaken !== this.state.syringesTaken ? this.state.syringesTaken : null,
+            narcanWasOffered: this.initialFormState.narcanWasOffered !== this.state.narcanWasOffered ? this.state.narcanWasOffered : null,
+            narcanWasTaken: this.initialFormState.narcanWasTaken !== this.state.narcanWasTaken ? this.state.narcanWasTaken : null,
+            enrollment: this.initialFormState.enrollment !== this.state.enrollment ? this.state.enrollment : null,
+            numberOfOthersHelping: this.initialFormState.numberOfOthersHelping !== this.state.numberOfOthersHelping ? this.state.numberOfOthersHelping : null,
         }
-
+        
         const periodic = this.state.showPeriodic ? {
-            date: this.state.eventDate,
-            housingStatus: this.state.housingStatus,
-            hivStatus: this.state.hivStatus,
-            isInCareForHiv: this.state.isInCareForHiv,
-            hepCStatus: this.state.hepCStatus,
-            isInCareForHepC: this.state.isInCareForHepC,
-            healthInsurer: this.state.healthInsurer,
-            primaryDrug: this.state.primaryDrug,
-            didOdLastYear: this.state.didOdLastYear,
-            didSeeOdLastYear: this.state.didSeeOdLastYear,
-            hasHealthInsurance: this.state.hasHealthInsurance,
-            otherDrugs: this.state.otherDrugs,
+            housingStatus: this.initialFormState.housingStatus !== this.state.housingStatus ? this.state.housingStatus : null,
+            hivStatus: this.initialFormState.hivStatus !== this.state.hivStatus ? this.state.hivStatus : null,
+            isInCareForHiv: this.initialFormState.isInCareForHiv !== this.state.isInCareForHiv ? this.state.isInCareForHiv : null,
+            hepCStatus: this.initialFormState.hepCStatus !== this.state.hepCStatus ? this.state.hepCStatus : null,
+            isInCareForHepC: this.initialFormState.isInCareForHepC !== this.state.isInCareForHepC ? this.state.isInCareForHepC : null,
+            healthInsurer: this.initialFormState.healthInsurer !== this.state.healthInsurer ? this.state.healthInsurer : null,
+            primaryDrug: this.initialFormState.primaryDrug !== this.state.primaryDrug ? this.state.primaryDrug : null,
+            didOdLastYear: this.initialFormState.didOdLastYear !== this.state.didOdLastYear ? this.state.didOdLastYear : null,
+            didSeeOdLastYear: this.initialFormState.didSeeOdLastYear !== this.state.didSeeOdLastYear ? this.state.didSeeOdLastYear : null,
+            hasHealthInsurance: this.initialFormState.hasHealthInsurance !== this.state.hasHealthInsurance ? this.state.hasHealthInsurance : null,
+            otherDrugs: this.initialFormState.otherDrugs !== this.state.otherDrugs ? this.state.otherDrugs : null,
         } : null;
-
+        
         const contactData = this.state.showNewContactQuestions ? {
             newContactDate: this.state.newContactDate,
-            contactDateOfBirth: this.state.contactDateOfBirth,
-            contactGenderIdentity: this.state.contactGenderIdentity,
-            contactEthnicity: this.state.contactEthnicity,
-            contactIsHispanic: this.state.contactIsHispanic,
-            contactCountryOfBirth: this.state.contactCountryOfBirth,
-            contactAgeOfFirstInjection: this.state.contactAgeOfFirstInjection,
+            contactDateOfBirth: this.initialFormState.contactDateOfBirth !== this.state.contactDateOfBirth ? this.state.contactDateOfBirth : null,
+            contactGenderIdentity: this.initialFormState.contactGenderIdentity !== this.state.contactGenderIdentity ? this.state.contactGenderIdentity : null,
+            contactEthnicity: this.initialFormState.contactEthnicity !== this.state.contactEthnicity ? this.state.contactEthnicity : null,
+            contactIsHispanic: this.initialFormState.contactIsHispanic !== this.state.contactIsHispanic ? this.state.contactIsHispanic : null,
+            contactCountryOfBirth: this.initialFormState.contactCountryOfBirth !== this.state.contactCountryOfBirth ? this.state.contactCountryOfBirth : null,
+            contactAgeOfFirstInjection: this.initialFormState.contactAgeOfFirstInjection !== this.state.contactAgeOfFirstInjection ? this.state.contactAgeOfFirstInjection : null,
         } : null;
 
         // dirty check to only submit data for visible forms
         let prunedEventData = {
-           ...visitOrOutreach,
-           ...periodic,
-           ...contactData,
+            ...visitOrOutreach,
+            ...periodic,
+            ...contactData,
+            profileNotes: this.state.profileNotes,
+            eventNotes: this.state.eventNotes,
+            date: this.state.eventDate,
+            contactUid: this.state.uid,
         };
         return prunedEventData;
     }
@@ -143,27 +143,14 @@ class IntakeForm extends Component {
         // TODO: Ultimately should change these cases to prompts, not alert; but React errors for now
         // TODO: what about validation?
         if (this.initialState == this.state) {
-        alert("Cannot post empty form");
+            alert("Cannot post empty form");
         } else {
             // TODO: should call an action 'SUBMIT_FORM' or something
             // which should take the event and contact info, and call the update contact
             // action from within
-            this.createEvent();
-            this.updateContact();
-            const { match: { params } } = this.props;
-            // TODO: 'form submitted successfully' or something dialog
-            this.props.history.push(`/contact/${params.uid}/info`)
+            let eventData = this.packageFormDataForSubmission()
+            this.props.dispatch( createEvent( { eventData, history: this.props.history } ) );
         }
-    }
-
-    // TODO: dispatch updated contact profile
-    createEvent() {
-        let eventData = this.packageFormDataForSubmission()
-        this.props.dispatch(createEvent(eventData));
-    }
-
-    updateContact() {
-        // this.props.dispatch(getContact(contactData))
     }
 
     // helpers to build controlled input elements
@@ -198,7 +185,6 @@ class IntakeForm extends Component {
     };
 
     buildToggle(toggleName, stateName, updateCallback) {
-        // console.log(toggleName, stateName)
         return (
             <Toggle
                 label={toggleName}
@@ -375,7 +361,7 @@ class IntakeForm extends Component {
                     buildSlider={this.buildSlider}
                     // form data
                     isOutreach={this.state.isOutreach}
-                    referral={this.state.referral}
+                    referrals={this.state.referrals}
                     syringesGiven={this.state.syringesGiven}
                     syringesTaken={this.state.syringesTaken}
                     narcanWasOffered={this.state.narcanWasOffered}
