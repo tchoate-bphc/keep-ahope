@@ -42,7 +42,7 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, 'build'),
-        publicPath: '',
+        publicPath: '/front-end',
         filename: '[name].js'
     },
     resolve: {
