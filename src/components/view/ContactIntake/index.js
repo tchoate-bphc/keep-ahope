@@ -28,102 +28,48 @@ class IntakeForm extends Component {
     constructor(props) {
         super(props);
 
-        this.submitForm = this.submitForm.bind(this)
-
-        const todayDate = new Date();
-
-        const initDateOfBirth = new Date(1980, 0, 1)
-
-        const { match: { params } } = this.props;
-
-        // TODO: prepopulate with personal info issue #34
-        this.initialFormState = {
-
-            showPeriodic: false,
-            showNewContactQuestions: false,
-
-            eventNotes: '',
-
-            // form
-            eventDate: todayDate,
-
-            // periodic
-            housingStatus: 'homeless',
-            hivStatus: 'neverTested',
-            isInCareForHiv: false,
-            hepCStatus: 'neverTested',
-            isInCareForHepC: false,
-            healthInsurer: null,
-            primaryDrug: null,
-            didOdLastYear: true,
-            didSeeOdLastYear: true,
-            hasHealthInsurance: false,
-            otherDrugs: [null],
-
-            // new contact
-            newContactDate: todayDate,
-            contactDateOfBirth: initDateOfBirth,
-            contactGenderIdentity: 'male',
-            contactEthnicity: 'White',
-            contactIsHispanic: true,
-            contactCountryOfBirth: '',
-            contactAgeOfFirstInjection: 0,
-
-            // visit or isOutreach
-            uid: params.uid,
-            isOutreach: false,
-            referrals: [null],
-            syringesGiven: 0,
-            syringesTaken: 0,
-            narcanWasOffered: false,
-            narcanWasTaken: false,
-            enrollment: '',
-            numberOfOthersHelping: 0,
-        };
-
-        this.state = { ...this.initialFormState };
-
-        this.initialState = this.state;
-        this.submittedState = this.state;
+        this.submitForm = this.submitForm.bind(this);
+        this.updateIntakeFormField = this.props.updateIntakeFormField;
     }
+
 
     // i'm sure we'll want to change names on the db in the future at some time
     // or locally within state. so I'm abstracting this call to make it clear what data
     // we send in event creation
-    packageFormDataForSubmission() {
+    packageFormDataForSubmission({initialState, userStateForDisplay}) {
         const visitOrOutreach = {
-            isOutreach: this.initialFormState.isOutreach !== this.state.isOutreach ? this.state.isOutreach : null,
-            referrals: this.initialFormState.referrals !== this.state.referrals ? this.state.referrals : null,
-            syringesGiven: this.initialFormState.syringesGiven !== this.state.syringesGiven ? this.state.syringesGiven : null,
-            syringesTaken: this.initialFormState.syringesTaken !== this.state.syringesTaken ? this.state.syringesTaken : null,
-            narcanWasOffered: this.initialFormState.narcanWasOffered !== this.state.narcanWasOffered ? this.state.narcanWasOffered : null,
-            narcanWasTaken: this.initialFormState.narcanWasTaken !== this.state.narcanWasTaken ? this.state.narcanWasTaken : null,
-            enrollment: this.initialFormState.enrollment !== this.state.enrollment ? this.state.enrollment : null,
-            numberOfOthersHelping: this.initialFormState.numberOfOthersHelping !== this.state.numberOfOthersHelping ? this.state.numberOfOthersHelping : null,
+            isOutreach: initialState.isOutreach !== initialState.isOutreach.isOutreach ? userStateForDisplay.isOutreach : null,
+            referrals: initialState.referrals !== initialState.referrals.referrals ? userStateForDisplay.referrals : null,
+            syringesGiven: initialState.syringesGiven !== initialState.syringesGiven.syringesGiven ? userStateForDisplay.syringesGiven : null,
+            syringesTaken: initialState.syringesTaken !== initialState.syringesTaken.syringesTaken ? userStateForDisplay.syringesTaken : null,
+            narcanWasOffered: initialState.narcanWasOffered !== initialState.narcanWasOffered.narcanWasOffered ? userStateForDisplay.narcanWasOffered : null,
+            narcanWasTaken: initialState.narcanWasTaken !== initialState.narcanWasTaken.narcanWasTaken ? userStateForDisplay.narcanWasTaken : null,
+            enrollment: initialState.enrollment !== initialState.enrollment.enrollment ? userStateForDisplay.enrollment : null,
+            numberOfOthersHelping: initialState.numberOfOthersHelping !== initialState.numberOfOthersHelping.numberOfOthersHelping ? userStateForDisplay.numberOfOthersHelping : null,
         }
         
-        const periodic = this.state.showPeriodic ? {
-            housingStatus: this.initialFormState.housingStatus !== this.state.housingStatus ? this.state.housingStatus : null,
-            hivStatus: this.initialFormState.hivStatus !== this.state.hivStatus ? this.state.hivStatus : null,
-            isInCareForHiv: this.initialFormState.isInCareForHiv !== this.state.isInCareForHiv ? this.state.isInCareForHiv : null,
-            hepCStatus: this.initialFormState.hepCStatus !== this.state.hepCStatus ? this.state.hepCStatus : null,
-            isInCareForHepC: this.initialFormState.isInCareForHepC !== this.state.isInCareForHepC ? this.state.isInCareForHepC : null,
-            healthInsurer: this.initialFormState.healthInsurer !== this.state.healthInsurer ? this.state.healthInsurer : null,
-            primaryDrug: this.initialFormState.primaryDrug !== this.state.primaryDrug ? this.state.primaryDrug : null,
-            didOdLastYear: this.initialFormState.didOdLastYear !== this.state.didOdLastYear ? this.state.didOdLastYear : null,
-            didSeeOdLastYear: this.initialFormState.didSeeOdLastYear !== this.state.didSeeOdLastYear ? this.state.didSeeOdLastYear : null,
-            hasHealthInsurance: this.initialFormState.hasHealthInsurance !== this.state.hasHealthInsurance ? this.state.hasHealthInsurance : null,
-            otherDrugs: this.initialFormState.otherDrugs !== this.state.otherDrugs ? this.state.otherDrugs : null,
+        const periodic = userStateForDisplay.showPeriodic ? {
+            housingStatus: initialState.housingStatus !== initialState.housingStatus.housingStatus ? userStateForDisplay.housingStatus : null,
+            hivStatus: initialState.hivStatus !== initialState.hivStatus.hivStatus ? userStateForDisplay.hivStatus : null,
+            isInCareForHiv: initialState.isInCareForHiv !== initialState.isInCareForHiv.isInCareForHiv ? userStateForDisplay.isInCareForHiv : null,
+            hepCStatus: initialState.hepCStatus !== initialState.hepCStatus.hepCStatus ? userStateForDisplay.hepCStatus : null,
+            isInCareForHepC: initialState.isInCareForHepC !== initialState.isInCareForHepC.isInCareForHepC ? userStateForDisplay.isInCareForHepC : null,
+            healthInsurer: initialState.healthInsurer !== initialState.healthInsurer.healthInsurer ? userStateForDisplay.healthInsurer : null,
+            primaryDrug: initialState.primaryDrug !== initialState.primaryDrug.primaryDrug ? userStateForDisplay.primaryDrug : null,
+            didOdLastYear: initialState.didOdLastYear !== initialState.didOdLastYear.didOdLastYear ? userStateForDisplay.didOdLastYear : null,
+            didSeeOdLastYear: initialState.didSeeOdLastYear !== initialState.didSeeOdLastYear.didSeeOdLastYear ? userStateForDisplay.didSeeOdLastYear : null,
+            hasHealthInsurance: initialState.hasHealthInsurance !== initialState.hasHealthInsurance.hasHealthInsurance ? userStateForDisplay.hasHealthInsurance : null,
+            otherDrugs: initialState.otherDrugs !== initialState.otherDrugs.otherDrugs ? userStateForDisplay.otherDrugs : null,
         } : null;
         
-        const contactData = this.state.showNewContactQuestions ? {
-            newContactDate: this.state.newContactDate,
-            contactDateOfBirth: this.initialFormState.contactDateOfBirth !== this.state.contactDateOfBirth ? this.state.contactDateOfBirth : null,
-            contactGenderIdentity: this.initialFormState.contactGenderIdentity !== this.state.contactGenderIdentity ? this.state.contactGenderIdentity : null,
-            contactEthnicity: this.initialFormState.contactEthnicity !== this.state.contactEthnicity ? this.state.contactEthnicity : null,
-            contactIsHispanic: this.initialFormState.contactIsHispanic !== this.state.contactIsHispanic ? this.state.contactIsHispanic : null,
-            contactCountryOfBirth: this.initialFormState.contactCountryOfBirth !== this.state.contactCountryOfBirth ? this.state.contactCountryOfBirth : null,
-            contactAgeOfFirstInjection: this.initialFormState.contactAgeOfFirstInjection !== this.state.contactAgeOfFirstInjection ? this.state.contactAgeOfFirstInjection : null,
+        const contactData = userStateForDisplay.showNewContactQuestions ? {
+            newContactDate: userStateForDisplay.newContactDate,
+            contactDateOfBirth: initialState.contactDateOfBirth !== initialState.contactDateOfBirth.contactDateOfBirth ? userStateForDisplay.contactDateOfBirth : null,
+            contactGenderIdentity: initialState.contactGenderIdentity !== initialState.contactGenderIdentity.contactGenderIdentity ? userStateForDisplay.contactGenderIdentity : null,
+            contactEthnicity: initialState.contactEthnicity !== initialState.contactEthnicity.contactEthnicity ? userStateForDisplay.contactEthnicity : null,
+            contactIsHispanic: initialState.contactIsHispanic !== initialState.contactIsHispanic.contactIsHispanic ? userStateForDisplay.contactIsHispanic : null,
+            contactCountryOfBirth: initialState.contactCountryOfBirth !== initialState.contactCountryOfBirth.contactCountryOfBirth ? userStateForDisplay.contactCountryOfBirth : null,
+            contactAgeOfFirstInjection: initialState.contactAgeOfFirstInjection !== initialState.contactAgeOfFirstInjection.contactAgeOfFirstInjection ? userStateForDisplay.contactAgeOfFirstInjection : null,
         } : null;
 
         // dirty check to only submit data for visible forms
@@ -131,24 +77,24 @@ class IntakeForm extends Component {
             ...visitOrOutreach,
             ...periodic,
             ...contactData,
-            profileNotes: this.state.profileNotes,
-            eventNotes: this.state.eventNotes,
-            date: this.state.eventDate,
-            contactUid: this.state.uid,
+            profileNotes: userStateForDisplay.profileNotes,
+            eventNotes: userStateForDisplay.eventNotes,
+            date: userStateForDisplay.eventDate,
+            contactUid: userStateForDisplay.uid,
         };
         return prunedEventData;
     }
 
-    submitForm() {
+    submitForm({initialState, userStateForDisplay}) {
         // TODO: Ultimately should change these cases to prompts, not alert; but React errors for now
         // TODO: what about validation?
-        if (this.initialState == this.state) {
+        if (initialState === userStateForDisplay) {
             alert("Cannot post empty form");
         } else {
             // TODO: should call an action 'SUBMIT_FORM' or something
             // which should take the event and contact info, and call the update contact
             // action from within
-            let eventData = this.packageFormDataForSubmission()
+            let eventData = this.packageFormDataForSubmission({initialState, userStateForDisplay});
             this.props.dispatch( createEvent( { eventData, history: this.props.history } ) );
         }
     }
@@ -259,8 +205,9 @@ class IntakeForm extends Component {
     }
 
     handleSliderChange(name, value) {
-        this.setState({
-            [name]: value
+        this.updateIntakeFormField({
+            key: name,
+            val: value,
         });
     };
 
@@ -268,8 +215,9 @@ class IntakeForm extends Component {
         const target = event.target;
         const name = target.name;
 
-        this.setState({
-            [name]: value
+        this.updateIntakeFormField({
+            key: name,
+            val: value,
         });
     };
 
@@ -279,11 +227,11 @@ class IntakeForm extends Component {
             value = this.handleMultiSelectChangeWithNull({newVal: value, prevVal});
         }
 
-        this.setState({
-            [name]: value
+        this.updateIntakeFormField({
+            key: name,
+            val: value,
         });
     };
-
 
     handleMultiSelectChangeWithNull({newVal, prevVal}) {
         
@@ -309,19 +257,68 @@ class IntakeForm extends Component {
         }
     }
 
-
     handleChildToggleChange(name, isInputChecked) {
-        this.setState({
-            [name]: isInputChecked
+        this.updateIntakeFormField({
+            key: name,
+            val: isInputChecked,
         })
+    }
+
+    addDefaultValuesToIntakeForm({initialState, userState}) {
+
+        return {
+            showPeriodic: userState.showPeriodic !== initialState.showPeriodic ? userState.showPeriodic : false,
+            showNewContactQuestions: userState.showNewContactQuestions !== initialState.showNewContactQuestions ? userState.showNewContactQuestions : false,
+        
+            eventNotes: userState.eventNotes !== initialState.eventNotes ? userState.eventNotes : '',
+            profileNotes: userState.profileNotes !== initialState.profileNotes ? userState.profileNotes : '',
+        
+            // form
+            eventDate: userState.eventDate !== initialState.eventDate ? userState.eventDate : new Date(),
+        
+            // periodic
+            housingStatus: userState.housingStatus !== initialState.housingStatus ? userState.housingStatus : 'homeless',
+            hivStatus: userState.hivStatus !== initialState.hivStatus ? userState.hivStatus : 'neverTested',
+            isInCareForHiv: userState.isInCareForHiv !== initialState.isInCareForHiv ? userState.isInCareForHiv : false,
+            hepCStatus: userState.hepCStatus !== initialState.hepCStatus ? userState.hepCStatus : 'neverTested',
+            isInCareForHepC: userState.isInCareForHepC !== initialState.isInCareForHepC ? userState.isInCareForHepC : false,
+            healthInsurer: userState.healthInsurer !== initialState.healthInsurer ? userState.healthInsurer : null,
+            primaryDrug: userState.primaryDrug !== initialState.primaryDrug ? userState.primaryDrug : null,
+            didOdLastYear: userState.didOdLastYear !== initialState.didOdLastYear ? userState.didOdLastYear : true,
+            didSeeOdLastYear: userState.didSeeOdLastYear !== initialState.didSeeOdLastYear ? userState.didSeeOdLastYear : true,
+            hasHealthInsurance: userState.hasHealthInsurance !== initialState.hasHealthInsurance ? userState.hasHealthInsurance : false,
+            otherDrugs: userState.otherDrugs !== initialState.otherDrugs ? userState.otherDrugs : [null],
+        
+            // new contact
+            newContactDate: userState.newContactDate !== initialState.newContactDate ? userState.newContactDate : new Date(),
+            contactDateOfBirth: userState.contactDateOfBirth !== initialState.contactDateOfBirth ? userState.contactDateOfBirth : new Date(1980, 0, 1),
+            contactGenderIdentity: userState.contactGenderIdentity !== initialState.contactGenderIdentity ? userState.contactGenderIdentity : 'male',
+            contactEthnicity: userState.contactEthnicity !== initialState.contactEthnicity ? userState.contactEthnicity : 'White',
+            contactIsHispanic: userState.contactIsHispanic !== initialState.contactIsHispanic ? userState.contactIsHispanic : true,
+            contactCountryOfBirth: userState.contactCountryOfBirth !== initialState.contactCountryOfBirth ? userState.contactCountryOfBirth : '',
+            contactAgeOfFirstInjection: userState.contactAgeOfFirstInjection !== initialState.contactAgeOfFirstInjection ? userState.contactAgeOfFirstInjection : 0,
+        
+            // visit or isOutreach
+            uid: userState.uid !== initialState.uid ? userState.uid : '',
+            isOutreach: userState.isOutreach !== initialState.isOutreach ? userState.isOutreach : false,
+            referrals: userState.referrals !== initialState.referrals ? userState.referrals : [null],
+            syringesGiven: userState.syringesGiven !== initialState.syringesGiven ? userState.syringesGiven : 0,
+            syringesTaken: userState.syringesTaken !== initialState.syringesTaken ? userState.syringesTaken : 0,
+            narcanWasOffered: userState.narcanWasOffered !== initialState.narcanWasOffered ? userState.narcanWasOffered : false,
+            narcanWasTaken: userState.narcanWasTaken !== initialState.narcanWasTaken ? userState.narcanWasTaken : false,
+            enrollment: userState.enrollment !== initialState.enrollment ? userState.enrollment : '',
+            numberOfOthersHelping: userState.numberOfOthersHelping !== initialState.numberOfOthersHelping ? userState.numberOfOthersHelping : 0,
+        };
     }
 
     render() {
 
-        const palette = this.props.muiTheme.palette;
+        const { intakeForm: {userState, initialState }, muiTheme: {palette} } = this.props;
+
+        const userStateForDisplay = this.addDefaultValuesToIntakeForm({initialState, userState});
 
         const clearLabelStyle = {
-        color: palette.errorColor
+            color: palette.errorColor
         }
 
         const fieldsStyle = {
@@ -336,13 +333,15 @@ class IntakeForm extends Component {
             },
             {
                 label: 'First Contact',
-                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showNewContactQuestions: !this.state.showNewContactQuestions})
+                defaultChecked: false, disabled: false, onCheckCallback: () => this.updateIntakeFormField({key: 'showNewContactQuestions', val: !userStateForDisplay.showNewContactQuestions})
             },
             {
                 label: 'Periodic',
-                defaultChecked: false, disabled: false, onCheckCallback: () => this.setState({showPeriodic: !this.state.showPeriodic})
+                defaultChecked: false, disabled: false, onCheckCallback: () => this.updateIntakeFormField({key: 'showPeriodic', val: !userStateForDisplay.showPeriodic})
             },
         ];
+
+        console.log('userStateForDisplay.eventDate', userStateForDisplay.eventDate);
 
         return (
             <form className="form">
@@ -350,12 +349,11 @@ class IntakeForm extends Component {
                 <Card>
                     <CardTitle title='Form Questions' titleColor={palette.primary1Color}/>
                     <div style={fieldsStyle}>
-                    {/* FIXME: */}
                     <DatePicker
                         hintText="Date"
                         floatingLabelText="Date"
-                        value={this.state.eventDate}
-                        onChange={(e, date) => this.setState({eventDate: date})}
+                        value={userStateForDisplay.eventDate}
+                        onChange={(e, date) => this.updateIntakeFormField({key: 'eventDate', val: date})}
                         autoOk={true}
                     />
                     </div>
@@ -391,17 +389,17 @@ class IntakeForm extends Component {
                     buildRadio={this.buildRadio}
                     buildSlider={this.buildSlider}
                     // form data
-                    isOutreach={this.state.isOutreach}
-                    referrals={this.state.referrals}
-                    syringesGiven={this.state.syringesGiven}
-                    syringesTaken={this.state.syringesTaken}
-                    narcanWasOffered={this.state.narcanWasOffered}
-                    narcanWasTaken={this.state.narcanWasTaken}
-                    enrollment={this.state.enrollment}
-                    numberOfOthersHelping={this.state.numberOfOthersHelping}
+                    isOutreach={userStateForDisplay.isOutreach}
+                    referrals={userStateForDisplay.referrals}
+                    syringesGiven={userStateForDisplay.syringesGiven}
+                    syringesTaken={userStateForDisplay.syringesTaken}
+                    narcanWasOffered={userStateForDisplay.narcanWasOffered}
+                    narcanWasTaken={userStateForDisplay.narcanWasTaken}
+                    enrollment={userStateForDisplay.enrollment}
+                    numberOfOthersHelping={userStateForDisplay.numberOfOthersHelping}
                 />
 
-                {this.state.showNewContactQuestions && <NewContactQuestionsForm
+                {userStateForDisplay.showNewContactQuestions && <NewContactQuestionsForm
                     // helpers
                     handleChange={this.handleChildInputChange.bind(this)}
                     handleSelectChange={this.handleChildSelectChange.bind(this)}
@@ -413,15 +411,15 @@ class IntakeForm extends Component {
                     buildSlider={this.buildSlider}
                     palette={palette}
                     // form data
-                    contactDateOfBirth={this.state.contactDateOfBirth}
-                    contactGenderIdentity={this.state.contactGenderIdentity}
-                    contactEthnicity={this.state.contactEthnicity}
-                    contactIsHispanic={this.state.contactIsHispanic}
-                    contactCountryOfBirth={this.state.contactCountryOfBirth}
-                    contactAgeOfFirstInjection={this.state.contactAgeOfFirstInjection}
+                    contactDateOfBirth={userStateForDisplay.contactDateOfBirth}
+                    contactGenderIdentity={userStateForDisplay.contactGenderIdentity}
+                    contactEthnicity={userStateForDisplay.contactEthnicity}
+                    contactIsHispanic={userStateForDisplay.contactIsHispanic}
+                    contactCountryOfBirth={userStateForDisplay.contactCountryOfBirth}
+                    contactAgeOfFirstInjection={userStateForDisplay.contactAgeOfFirstInjection}
                 />}
 
-                {this.state.showPeriodic && <PeriodicQuestionsForm
+                {userStateForDisplay.showPeriodic && <PeriodicQuestionsForm
                     // helpers
                     handleChange={this.handleChildInputChange.bind(this)}
                     handleSelectChange={this.handleChildSelectChange.bind(this)}
@@ -431,17 +429,17 @@ class IntakeForm extends Component {
                     buildRadio={this.buildRadio}
                     palette={palette}
                     // form data
-                    housingStatus={this.state.housingStatus}
-                    hivStatus={this.state.hivStatus}
-                    isInCareForHiv={this.state.isInCareForHiv}
-                    hepCStatus={this.state.hepCStatus}
-                    isInCareForHepC={this.state.isInCareForHepC}
-                    hasHealthInsurance={this.state.hasHealthInsurance}
-                    healthInsurer={this.state.healthInsurer}
-                    primaryDrug={this.state.primaryDrug}
-                    otherDrugs={this.state.otherDrugs}
-                    didOdLastYear={this.state.didOdLastYear}
-                    didSeeOdLastYear={this.state.didSeeOdLastYear}
+                    housingStatus={userStateForDisplay.housingStatus}
+                    hivStatus={userStateForDisplay.hivStatus}
+                    isInCareForHiv={userStateForDisplay.isInCareForHiv}
+                    hepCStatus={userStateForDisplay.hepCStatus}
+                    isInCareForHepC={userStateForDisplay.isInCareForHepC}
+                    hasHealthInsurance={userStateForDisplay.hasHealthInsurance}
+                    healthInsurer={userStateForDisplay.healthInsurer}
+                    primaryDrug={userStateForDisplay.primaryDrug}
+                    otherDrugs={userStateForDisplay.otherDrugs}
+                    didOdLastYear={userStateForDisplay.didOdLastYear}
+                    didSeeOdLastYear={userStateForDisplay.didSeeOdLastYear}
                 />}
 
                 <Card>
@@ -452,7 +450,7 @@ class IntakeForm extends Component {
                         fullWidth={true}
                         id="eventNotes"
                         floatingLabelText="Event Notes"
-                        onChange={(e, value) => this.setState({eventNotes: value})}
+                        onChange={(e, value) => this.updateIntakeFormField({key: 'eventNotes', val: value})}
                     />
                     </div>
                 </Card>
@@ -465,7 +463,7 @@ class IntakeForm extends Component {
                         fullWidth={true}
                         id="profileNotes"
                         floatingLabelText="Profile Notes"
-                        onChange={(e, value) => this.setState({profileNotes: value})}
+                        onChange={(e, value) => this.updateIntakeFormField({key: 'profileNotes', val: value})}
                     />
                     </div>
                 </Card>
@@ -474,7 +472,7 @@ class IntakeForm extends Component {
                     <div className="submitButtons">
                     {/* TODO: handle this in a more elegant way than just reloading the page */}
                     <FlatButton label="Clear Form" labelStyle={clearLabelStyle} onClick={() => window.location.reload()} />
-                    <FlatButton label="Save" primary={true} onClick={this.submitForm} />
+                    <FlatButton label="Save" primary={true} onClick={() => this.submitForm({initialState, userStateForDisplay})} />
                     </div>
                 </Card>
             </form>

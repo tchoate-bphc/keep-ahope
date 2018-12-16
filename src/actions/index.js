@@ -29,6 +29,8 @@ import {
 
     // INTAKE
     CREATE_INTAKE,
+    UPDATE_INTAKE_FORM_FIELD,
+    UPDATE_INTAKE_FORM_WITH_CONTACT,
 
     // EVENTS
     ASYNC_FORM_STATUS_UPDATE,
@@ -148,6 +150,23 @@ export function getEventsForContact({uid}) {
         uid,
     };
 }
+
+/** Intake */
+export function updateIntakeFormField({key, val}) {
+    console.log('UPDATE_INTAKE_FORM_FIELD', UPDATE_INTAKE_FORM_FIELD, key, val)
+    return {
+        type: UPDATE_INTAKE_FORM_FIELD,
+        key,
+        val,
+    };
+}
+export function updateIntakeFormWithContact({contact}) {
+    return {
+        type: UPDATE_INTAKE_FORM_WITH_CONTACT,
+        contact,
+    };
+}
+
 
 /** EVENTS */
 export function fetchEvents() {
