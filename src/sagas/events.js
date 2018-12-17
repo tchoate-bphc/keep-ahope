@@ -6,7 +6,7 @@ import {
     NOTIFICATION_SAVE_FAIL,
 } from '../constants';
 
-import { getContact, newNotification } from '../actions';
+import { getContact, newNotification, setIntakeFormToInitialState } from '../actions';
 
 function* createEvent({ eventData, history }) {
     const Event = window._Parse_.Object.extend("event");
@@ -70,14 +70,16 @@ function* createEvent({ eventData, history }) {
             ...prevOtherDrugsAggregate,
         ])).filter( item => !!item );
 
-        // update contact
+        // ----------------------------------------------
+        // update CONTACT
+        // ----------------------------------------------
         parseContact.set('dateOfLastVisit', eventData.date);
         // aggregate fields
         eventData.syringesGiven && parseContact.set('syringesGivenAggregate', 
-            (parseContact.get('syringesGivenAggregate') || 0) + eventData.syringesGiven
+        (parseContact.get('syringesGivenAggregate') || 0) + eventData.syringesGiven
         );
         eventData.syringesTaken && parseContact.set('syringesTakenAggregate', 
-            (parseContact.get('syringesTakenAggregate') || 0) + eventData.syringesTaken
+        (parseContact.get('syringesTakenAggregate') || 0) + eventData.syringesTaken
         );
         if (eventData.primaryDrug || eventData.otherDrugs) {
             parseContact.set('otherDrugsAggregate', otherDrugsAggregate); // TODO: aggregate all drugs here (or on server)
@@ -91,7 +93,7 @@ function* createEvent({ eventData, history }) {
         eventData.contactIsHispanic && parseContact.set('hispanic', eventData.contactIsHispanic);
         eventData.didOdLastYear && parseContact.set('didOdLastYear', eventData.didOdLastYear);
         eventData.hasHealthInsurance && parseContact.set('hasHealthInsurance', eventData.hasHealthInsurance);
-        eventData.hasHealthInsurance && parseContact.set('isEnrolled', eventData.hasHealthInsurance);
+        eventData.healthInsurer && parseContact.set('healthInsurer', eventData.healthInsurer);
         eventData.hepCStatus && parseContact.set('hepCStatus', eventData.hepCStatus); 
         eventData.hivStatus && parseContact.set('hivStatus', eventData.hivStatus); // TODO: on server ensure this can't go from `true` to `false`
         eventData.housingStatus && parseContact.set('housingStatus', eventData.housingStatus);
@@ -100,8 +102,10 @@ function* createEvent({ eventData, history }) {
         eventData.otherDrugs && parseContact.set('otherDrugs', eventData.otherDrugs); // TODO: aggregate all drugs here (or on server)
         eventData.primaryDrug && parseContact.set('primaryDrug', eventData.primaryDrug); 
         eventData.profileNotes && parseContact.set('profileNotes', eventData.profileNotes); // TODO: on server check if this changes to a LATER date
-
-        // update event
+        
+        // ----------------------------------------------
+        // update EVENT
+        // ----------------------------------------------
         event.set('date', eventData.date);
         // add event pointer to contact
         event.set('contactUidPointer', parseContact);
@@ -115,7 +119,7 @@ function* createEvent({ eventData, history }) {
         eventData.didOdLastYear && event.set('didOdLastYear', eventData.didOdLastYear);
         eventData.eventNotes && event.set('eventNotes', eventData.eventNotes);
         eventData.hasHealthInsurance && event.set('hasHealthInsurance', eventData.hasHealthInsurance);
-        eventData.hasHealthInsurance && event.set('isEnrolled', eventData.hasHealthInsurance);
+        eventData.healthInsurer && event.set('healthInsurer', eventData.healthInsurer);
         eventData.hepCStatus && event.set('hepCStatus', eventData.hepCStatus);
         eventData.hivStatus && event.set('hivStatus', eventData.hivStatus);
         eventData.housingStatus && event.set('housingStatus', eventData.housingStatus);
@@ -135,14 +139,18 @@ function* createEvent({ eventData, history }) {
 
         event.save()
             .then( successfulSave => {
+                
+                // clear the old form
+                window._UI_STORE_.dispatch( setIntakeFormToInitialState( ));
+
                 // TODO: show save success message
                 window._UI_STORE_.dispatch( newNotification( { newNotification: { notificationType: NOTIFICATION_SAVE_SUCCESS } } ));
-                
+
                 // fetch new contact data
                 // TODO: include events
                 window._UI_STORE_.dispatch( getContact( eventData.contactUid ) );
                 // TODO: show spinner on contact info
-                
+
                 // navigate to contact info
                 history.push(`/contact/${eventData.contactUid}/info`);
                 
