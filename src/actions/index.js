@@ -31,6 +31,7 @@ import {
     CREATE_INTAKE,
     UPDATE_INTAKE_FORM_FIELD,
     UPDATE_INTAKE_FORM_WITH_CONTACT,
+    SET_INTAKE_FORM_TO_INITIAL_STATE,
 
     // EVENTS
     ASYNC_FORM_STATUS_UPDATE,
@@ -151,7 +152,7 @@ export function getEventsForContact({uid}) {
     };
 }
 
-/** Intake */
+/** INTAKE FORM */
 export function updateIntakeFormField({key, val}) {
     // console.log('UPDATE_INTAKE_FORM_FIELD', UPDATE_INTAKE_FORM_FIELD, key, val)
     return {
@@ -165,6 +166,11 @@ export function updateIntakeFormWithContact({contact}) {
     return {
         type: UPDATE_INTAKE_FORM_WITH_CONTACT,
         contact,
+    };
+}
+export function setIntakeFormToInitialState() {
+    return {
+        type: SET_INTAKE_FORM_TO_INITIAL_STATE,
     };
 }
 

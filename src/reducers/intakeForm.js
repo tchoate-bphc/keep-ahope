@@ -1,6 +1,7 @@
 import {
     UPDATE_INTAKE_FORM_FIELD,
     UPDATE_INTAKE_FORM_WITH_CONTACT,
+    SET_INTAKE_FORM_TO_INITIAL_STATE,
 } from '../constants';
 
 const INITIAL_FORM_STATE = {
@@ -58,6 +59,13 @@ function intakeForm(state = intakeFormState, action) {
     const { key, val, contact } = action;
     
     switch (action.type) {
+        case SET_INTAKE_FORM_TO_INITIAL_STATE:
+            return {
+                ...state,
+                initialState: {...INITIAL_FORM_STATE},
+                userState: {...INITIAL_FORM_STATE},
+            };
+
         case UPDATE_INTAKE_FORM_FIELD:
 
             // console.log('reducer: ', key, val)

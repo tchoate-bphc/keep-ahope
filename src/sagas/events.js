@@ -6,7 +6,7 @@ import {
     NOTIFICATION_SAVE_FAIL,
 } from '../constants';
 
-import { getContact, newNotification } from '../actions';
+import { getContact, newNotification, setIntakeFormToInitialState } from '../actions';
 
 function* createEvent({ eventData, history }) {
     const Event = window._Parse_.Object.extend("event");
@@ -139,14 +139,18 @@ function* createEvent({ eventData, history }) {
 
         event.save()
             .then( successfulSave => {
+                
+                // clear the old form
+                window._UI_STORE_.dispatch( setIntakeFormToInitialState( ));
+
                 // TODO: show save success message
                 window._UI_STORE_.dispatch( newNotification( { newNotification: { notificationType: NOTIFICATION_SAVE_SUCCESS } } ));
-                
+
                 // fetch new contact data
                 // TODO: include events
                 window._UI_STORE_.dispatch( getContact( eventData.contactUid ) );
                 // TODO: show spinner on contact info
-                
+
                 // navigate to contact info
                 history.push(`/contact/${eventData.contactUid}/info`);
                 

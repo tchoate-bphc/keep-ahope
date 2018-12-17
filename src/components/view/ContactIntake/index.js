@@ -349,8 +349,6 @@ class IntakeForm extends Component {
             },
         ];
 
-        console.log('userStateForDisplay.eventDate', userStateForDisplay.eventDate);
-
         return (
             <form className="form">
 
