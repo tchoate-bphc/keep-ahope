@@ -3,8 +3,8 @@ import {
     UPDATE_INTAKE_FORM_WITH_CONTACT,
 } from '../constants';
 
-const initialFormState = {
-
+const INITIAL_FORM_STATE = {
+    visitOrOutreach: null, // true
     showPeriodic: null, // false,
     showNewContactQuestions: null, // false,
 
@@ -49,8 +49,8 @@ const initialFormState = {
 };
 
 const intakeFormState = {
-    userState: initialFormState,
-    initialState : initialFormState,
+    userState: INITIAL_FORM_STATE,
+    initialState : INITIAL_FORM_STATE,
 };
 
 function intakeForm(state = intakeFormState, action) {
@@ -60,7 +60,7 @@ function intakeForm(state = intakeFormState, action) {
     switch (action.type) {
         case UPDATE_INTAKE_FORM_FIELD:
 
-            console.log('reducer: ', key, val)
+            // console.log('reducer: ', key, val)
 
             let updatedStateValObj = {};
             updatedStateValObj[key] = val;
@@ -74,8 +74,8 @@ function intakeForm(state = intakeFormState, action) {
             };
 
         case UPDATE_INTAKE_FORM_WITH_CONTACT:
-
-            const initialStateWithContactInfo = getInitialStateWithContactInfo({contact, initialState: state.initialState});
+            
+            const { initialStateWithContactInfo , userStateWithContactInfo } = getStateWithContactInfo({contact, initialState: state.initialState, userState: state.userState});
 
             return {
                 ...state,
@@ -85,7 +85,8 @@ function intakeForm(state = intakeFormState, action) {
                 }},
                 ...{userState: {
                     ...state.userState,
-                    ...updatedStateValObj
+                    ...userStateWithContactInfo,
+                    // ...initialStateWithContactInfo // TODO ADD SOMETHING HERE!
                 }}
             };
 
@@ -97,6 +98,52 @@ function intakeForm(state = intakeFormState, action) {
 
 export default intakeForm;
 
-function getInitialStateWithContactInfo({contact, initialState}) {
-    return initialState;
+function getStateWithContactInfo({contact, initialState, userState}) {
+
+    let initialStateWithContactInfo = {}, 
+        userStateWithContactInfo = {};
+
+    const initialStateFieldToContactFieldMapping = {
+        uid: 'uid',
+        profileNotes: 'profileNotes',
+
+        // new contact
+        newContactDate: 'createdAt',
+        contactDateOfBirth: 'dateOfBirth',
+        contactGenderIdentity: 'genderIdentity',
+        contactEthnicity: 'ethnicity',
+        contactIsHispanic: 'isHispanic',
+        contactCountryOfBirth: 'birthCountry',
+        contactAgeOfFirstInjection: 'ageOfFirstInjection',
+
+        // periodic
+        housingStatus: 'housingStatus',
+        hivStatus: 'hivStatus',
+        isInCareForHiv: 'isInCareForHiv',
+        hepCStatus: 'hepCStatus',
+        isInCareForHepC: 'isInCareForHepC',
+        healthInsurer: 'healthInsurer',
+        primaryDrug: 'primaryDrug',
+        didOdLastYear: 'didOdLastYear',
+        didSeeOdLastYear: 'didSeeOdLastYear',
+        hasHealthInsurance: 'hasHealthInsurance',
+        otherDrugs: 'otherDrugs',
+    }
+
+    // if initialState val is default, then use val from contact, else don't return that prop
+    Object.keys(initialState).forEach( initialStateKey => {
+        if ( contact[ initialStateFieldToContactFieldMapping[initialStateKey] ] ) {
+
+            initialStateWithContactInfo[ initialStateKey ] = contact[ initialStateFieldToContactFieldMapping[initialStateKey] ];
+
+            // only override if user has not yet set the value
+            if ( userState[ initialStateKey ] === INITIAL_FORM_STATE[ initialStateKey ]) {
+                userStateWithContactInfo[ initialStateKey ] = contact[ initialStateFieldToContactFieldMapping[initialStateKey] ];
+            } else {
+                return;
+            }
+        }
+    });
+
+    return { initialStateWithContactInfo , userStateWithContactInfo };
 }

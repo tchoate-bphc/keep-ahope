@@ -153,7 +153,7 @@ export function getEventsForContact({uid}) {
 
 /** Intake */
 export function updateIntakeFormField({key, val}) {
-    console.log('UPDATE_INTAKE_FORM_FIELD', UPDATE_INTAKE_FORM_FIELD, key, val)
+    // console.log('UPDATE_INTAKE_FORM_FIELD', UPDATE_INTAKE_FORM_FIELD, key, val)
     return {
         type: UPDATE_INTAKE_FORM_FIELD,
         key,
@@ -161,6 +161,7 @@ export function updateIntakeFormField({key, val}) {
     };
 }
 export function updateIntakeFormWithContact({contact}) {
+    // console.log('UPDATE_INTAKE_FORM_WITH_CONTACT', contact)
     return {
         type: UPDATE_INTAKE_FORM_WITH_CONTACT,
         contact,

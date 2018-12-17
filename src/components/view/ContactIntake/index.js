@@ -13,9 +13,6 @@ import MenuItem from 'material-ui/MenuItem';
 import { RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import DatePicker from 'material-ui/DatePicker';
 
-// TODO: this should be mapped via props instead
-import { createEvent } from 'actions';
-
 import PeriodicQuestionsForm from 'components/view/ContactIntake/periodicQuestions.form';
 import NewContactQuestionsForm from 'components/view/ContactIntake/newContactQuestions.form';
 import VisitOrOutreachQuestions from 'components/view/ContactIntake/visitOrOutreachQuestions.form';
@@ -30,6 +27,7 @@ class IntakeForm extends Component {
 
         this.submitForm = this.submitForm.bind(this);
         this.updateIntakeFormField = this.props.updateIntakeFormField;
+        this.createEvent = this.props.createEvent;
     }
 
 
@@ -38,38 +36,38 @@ class IntakeForm extends Component {
     // we send in event creation
     packageFormDataForSubmission({initialState, userStateForDisplay}) {
         const visitOrOutreach = {
-            isOutreach: initialState.isOutreach !== initialState.isOutreach.isOutreach ? userStateForDisplay.isOutreach : null,
-            referrals: initialState.referrals !== initialState.referrals.referrals ? userStateForDisplay.referrals : null,
-            syringesGiven: initialState.syringesGiven !== initialState.syringesGiven.syringesGiven ? userStateForDisplay.syringesGiven : null,
-            syringesTaken: initialState.syringesTaken !== initialState.syringesTaken.syringesTaken ? userStateForDisplay.syringesTaken : null,
-            narcanWasOffered: initialState.narcanWasOffered !== initialState.narcanWasOffered.narcanWasOffered ? userStateForDisplay.narcanWasOffered : null,
-            narcanWasTaken: initialState.narcanWasTaken !== initialState.narcanWasTaken.narcanWasTaken ? userStateForDisplay.narcanWasTaken : null,
-            enrollment: initialState.enrollment !== initialState.enrollment.enrollment ? userStateForDisplay.enrollment : null,
-            numberOfOthersHelping: initialState.numberOfOthersHelping !== initialState.numberOfOthersHelping.numberOfOthersHelping ? userStateForDisplay.numberOfOthersHelping : null,
+            isOutreach: userStateForDisplay.isOutreach,
+            referrals: userStateForDisplay.referrals,
+            syringesGiven: userStateForDisplay.syringesGiven,
+            syringesTaken: userStateForDisplay.syringesTaken,
+            narcanWasOffered: userStateForDisplay.narcanWasOffered,
+            narcanWasTaken: userStateForDisplay.narcanWasTaken,
+            enrollment: userStateForDisplay.enrollment,
+            numberOfOthersHelping: userStateForDisplay.numberOfOthersHelping,
         }
         
         const periodic = userStateForDisplay.showPeriodic ? {
-            housingStatus: initialState.housingStatus !== initialState.housingStatus.housingStatus ? userStateForDisplay.housingStatus : null,
-            hivStatus: initialState.hivStatus !== initialState.hivStatus.hivStatus ? userStateForDisplay.hivStatus : null,
-            isInCareForHiv: initialState.isInCareForHiv !== initialState.isInCareForHiv.isInCareForHiv ? userStateForDisplay.isInCareForHiv : null,
-            hepCStatus: initialState.hepCStatus !== initialState.hepCStatus.hepCStatus ? userStateForDisplay.hepCStatus : null,
-            isInCareForHepC: initialState.isInCareForHepC !== initialState.isInCareForHepC.isInCareForHepC ? userStateForDisplay.isInCareForHepC : null,
-            healthInsurer: initialState.healthInsurer !== initialState.healthInsurer.healthInsurer ? userStateForDisplay.healthInsurer : null,
-            primaryDrug: initialState.primaryDrug !== initialState.primaryDrug.primaryDrug ? userStateForDisplay.primaryDrug : null,
-            didOdLastYear: initialState.didOdLastYear !== initialState.didOdLastYear.didOdLastYear ? userStateForDisplay.didOdLastYear : null,
-            didSeeOdLastYear: initialState.didSeeOdLastYear !== initialState.didSeeOdLastYear.didSeeOdLastYear ? userStateForDisplay.didSeeOdLastYear : null,
-            hasHealthInsurance: initialState.hasHealthInsurance !== initialState.hasHealthInsurance.hasHealthInsurance ? userStateForDisplay.hasHealthInsurance : null,
-            otherDrugs: initialState.otherDrugs !== initialState.otherDrugs.otherDrugs ? userStateForDisplay.otherDrugs : null,
+            housingStatus: userStateForDisplay.housingStatus,
+            hivStatus: userStateForDisplay.hivStatus,
+            isInCareForHiv: userStateForDisplay.isInCareForHiv,
+            hepCStatus: userStateForDisplay.hepCStatus,
+            isInCareForHepC: userStateForDisplay.isInCareForHepC,
+            healthInsurer: userStateForDisplay.healthInsurer,
+            primaryDrug: userStateForDisplay.primaryDrug,
+            didOdLastYear: userStateForDisplay.didOdLastYear,
+            didSeeOdLastYear: userStateForDisplay.didSeeOdLastYear,
+            hasHealthInsurance: userStateForDisplay.hasHealthInsurance,
+            otherDrugs: userStateForDisplay.otherDrugs,
         } : null;
         
         const contactData = userStateForDisplay.showNewContactQuestions ? {
             newContactDate: userStateForDisplay.newContactDate,
-            contactDateOfBirth: initialState.contactDateOfBirth !== initialState.contactDateOfBirth.contactDateOfBirth ? userStateForDisplay.contactDateOfBirth : null,
-            contactGenderIdentity: initialState.contactGenderIdentity !== initialState.contactGenderIdentity.contactGenderIdentity ? userStateForDisplay.contactGenderIdentity : null,
-            contactEthnicity: initialState.contactEthnicity !== initialState.contactEthnicity.contactEthnicity ? userStateForDisplay.contactEthnicity : null,
-            contactIsHispanic: initialState.contactIsHispanic !== initialState.contactIsHispanic.contactIsHispanic ? userStateForDisplay.contactIsHispanic : null,
-            contactCountryOfBirth: initialState.contactCountryOfBirth !== initialState.contactCountryOfBirth.contactCountryOfBirth ? userStateForDisplay.contactCountryOfBirth : null,
-            contactAgeOfFirstInjection: initialState.contactAgeOfFirstInjection !== initialState.contactAgeOfFirstInjection.contactAgeOfFirstInjection ? userStateForDisplay.contactAgeOfFirstInjection : null,
+            contactDateOfBirth: userStateForDisplay.contactDateOfBirth,
+            contactGenderIdentity: userStateForDisplay.contactGenderIdentity,
+            contactEthnicity: userStateForDisplay.contactEthnicity,
+            contactIsHispanic: userStateForDisplay.contactIsHispanic,
+            contactCountryOfBirth: userStateForDisplay.contactCountryOfBirth,
+            contactAgeOfFirstInjection: userStateForDisplay.contactAgeOfFirstInjection,
         } : null;
 
         // dirty check to only submit data for visible forms
@@ -95,7 +93,7 @@ class IntakeForm extends Component {
             // which should take the event and contact info, and call the update contact
             // action from within
             let eventData = this.packageFormDataForSubmission({initialState, userStateForDisplay});
-            this.props.dispatch( createEvent( { eventData, history: this.props.history } ) );
+            this.createEvent( { eventData, history: this.props.history } );
         }
     }
 
@@ -267,47 +265,49 @@ class IntakeForm extends Component {
     addDefaultValuesToIntakeForm({initialState, userState}) {
 
         return {
-            showPeriodic: userState.showPeriodic !== initialState.showPeriodic ? userState.showPeriodic : false,
-            showNewContactQuestions: userState.showNewContactQuestions !== initialState.showNewContactQuestions ? userState.showNewContactQuestions : false,
+            visitOrOutreach: userState.visitOrOutreach !== null ? userState.visitOrOutreach : true,
+            showPeriodic: userState.showPeriodic !== null ? userState.showPeriodic : false,
+            showNewContactQuestions: userState.showNewContactQuestions !== null ? userState.showNewContactQuestions : false,
         
-            eventNotes: userState.eventNotes !== initialState.eventNotes ? userState.eventNotes : '',
-            profileNotes: userState.profileNotes !== initialState.profileNotes ? userState.profileNotes : '',
+            eventNotes: userState.eventNotes !== null ? userState.eventNotes : '',
+            profileNotes: userState.profileNotes !== null ? userState.profileNotes : '',
         
             // form
-            eventDate: userState.eventDate !== initialState.eventDate ? userState.eventDate : new Date(),
+            eventDate: userState.eventDate !== null ? userState.eventDate : new Date(),
         
             // periodic
-            housingStatus: userState.housingStatus !== initialState.housingStatus ? userState.housingStatus : 'homeless',
-            hivStatus: userState.hivStatus !== initialState.hivStatus ? userState.hivStatus : 'neverTested',
-            isInCareForHiv: userState.isInCareForHiv !== initialState.isInCareForHiv ? userState.isInCareForHiv : false,
-            hepCStatus: userState.hepCStatus !== initialState.hepCStatus ? userState.hepCStatus : 'neverTested',
-            isInCareForHepC: userState.isInCareForHepC !== initialState.isInCareForHepC ? userState.isInCareForHepC : false,
-            healthInsurer: userState.healthInsurer !== initialState.healthInsurer ? userState.healthInsurer : null,
-            primaryDrug: userState.primaryDrug !== initialState.primaryDrug ? userState.primaryDrug : null,
-            didOdLastYear: userState.didOdLastYear !== initialState.didOdLastYear ? userState.didOdLastYear : true,
-            didSeeOdLastYear: userState.didSeeOdLastYear !== initialState.didSeeOdLastYear ? userState.didSeeOdLastYear : true,
-            hasHealthInsurance: userState.hasHealthInsurance !== initialState.hasHealthInsurance ? userState.hasHealthInsurance : false,
-            otherDrugs: userState.otherDrugs !== initialState.otherDrugs ? userState.otherDrugs : [null],
+            didOdLastYear: userState.didOdLastYear !== null ? userState.didOdLastYear : true,
+            didSeeOdLastYear: userState.didSeeOdLastYear !== null ? userState.didSeeOdLastYear : true,
+            hasHealthInsurance: userState.hasHealthInsurance !== null ? userState.hasHealthInsurance : false,
+            healthInsurer: userState.healthInsurer !== null ? userState.healthInsurer : null,
+            healthInsurer: userState.healthInsurer !== null ? userState.healthInsurer : null,
+            hepCStatus: userState.hepCStatus !== null ? userState.hepCStatus : 'neverTested',
+            hivStatus: userState.hivStatus !== null ? userState.hivStatus : 'neverTested',
+            housingStatus: userState.housingStatus !== null ? userState.housingStatus : 'homeless',
+            isInCareForHepC: userState.isInCareForHepC !== null ? userState.isInCareForHepC : false,
+            isInCareForHiv: userState.isInCareForHiv !== null ? userState.isInCareForHiv : false,
+            otherDrugs: userState.otherDrugs || [null],
+            primaryDrug: userState.primaryDrug !== null ? userState.primaryDrug : null,
         
             // new contact
-            newContactDate: userState.newContactDate !== initialState.newContactDate ? userState.newContactDate : new Date(),
-            contactDateOfBirth: userState.contactDateOfBirth !== initialState.contactDateOfBirth ? userState.contactDateOfBirth : new Date(1980, 0, 1),
-            contactGenderIdentity: userState.contactGenderIdentity !== initialState.contactGenderIdentity ? userState.contactGenderIdentity : 'male',
-            contactEthnicity: userState.contactEthnicity !== initialState.contactEthnicity ? userState.contactEthnicity : 'White',
-            contactIsHispanic: userState.contactIsHispanic !== initialState.contactIsHispanic ? userState.contactIsHispanic : true,
-            contactCountryOfBirth: userState.contactCountryOfBirth !== initialState.contactCountryOfBirth ? userState.contactCountryOfBirth : '',
-            contactAgeOfFirstInjection: userState.contactAgeOfFirstInjection !== initialState.contactAgeOfFirstInjection ? userState.contactAgeOfFirstInjection : 0,
+            contactAgeOfFirstInjection: userState.contactAgeOfFirstInjection !== null ? userState.contactAgeOfFirstInjection : 0,
+            contactCountryOfBirth: userState.contactCountryOfBirth !== null ? userState.contactCountryOfBirth : '',
+            contactDateOfBirth: userState.contactDateOfBirth !== null ? userState.contactDateOfBirth : new Date(1980, 0, 1),
+            contactEthnicity: userState.contactEthnicity !== null ? userState.contactEthnicity : 'White',
+            contactGenderIdentity: userState.contactGenderIdentity !== null ? userState.contactGenderIdentity : 'male',
+            contactIsHispanic: userState.contactIsHispanic !== null ? userState.contactIsHispanic : true,
+            newContactDate: userState.newContactDate !== null ? userState.newContactDate : new Date(),
         
             // visit or isOutreach
-            uid: userState.uid !== initialState.uid ? userState.uid : '',
-            isOutreach: userState.isOutreach !== initialState.isOutreach ? userState.isOutreach : false,
-            referrals: userState.referrals !== initialState.referrals ? userState.referrals : [null],
-            syringesGiven: userState.syringesGiven !== initialState.syringesGiven ? userState.syringesGiven : 0,
-            syringesTaken: userState.syringesTaken !== initialState.syringesTaken ? userState.syringesTaken : 0,
-            narcanWasOffered: userState.narcanWasOffered !== initialState.narcanWasOffered ? userState.narcanWasOffered : false,
-            narcanWasTaken: userState.narcanWasTaken !== initialState.narcanWasTaken ? userState.narcanWasTaken : false,
-            enrollment: userState.enrollment !== initialState.enrollment ? userState.enrollment : '',
-            numberOfOthersHelping: userState.numberOfOthersHelping !== initialState.numberOfOthersHelping ? userState.numberOfOthersHelping : 0,
+            enrollment: userState.enrollment !== null ? userState.enrollment : '',
+            isOutreach: userState.isOutreach !== null ? userState.isOutreach : false,
+            narcanWasOffered: userState.narcanWasOffered !== null ? userState.narcanWasOffered : false,
+            narcanWasTaken: userState.narcanWasTaken !== null ? userState.narcanWasTaken : false,
+            numberOfOthersHelping: userState.numberOfOthersHelping !== null ? userState.numberOfOthersHelping : 0,
+            referrals: userState.referrals || [null],
+            syringesGiven: userState.syringesGiven !== null ? userState.syringesGiven : 0,
+            syringesTaken: userState.syringesTaken !== null ? userState.syringesTaken : 0,
+            uid: initialState.uid,
         };
     }
 
@@ -329,15 +329,23 @@ class IntakeForm extends Component {
         const formCheckboxOptionsArray = [
             {
                 label: 'Visit or Outreach',
-                defaultChecked: true, disabled: true
+                key: 'visitOrOutreach',
+                defaultChecked: true, 
+                disabled: true
             },
             {
                 label: 'First Contact',
-                defaultChecked: false, disabled: false, onCheckCallback: () => this.updateIntakeFormField({key: 'showNewContactQuestions', val: !userStateForDisplay.showNewContactQuestions})
+                key: 'showNewContactQuestions',
+                defaultChecked: false, 
+                disabled: false, 
+                onCheckCallback: () => this.updateIntakeFormField({key: 'showNewContactQuestions', val: !userStateForDisplay.showNewContactQuestions})
             },
             {
                 label: 'Periodic',
-                defaultChecked: false, disabled: false, onCheckCallback: () => this.updateIntakeFormField({key: 'showPeriodic', val: !userStateForDisplay.showPeriodic})
+                key: 'showPeriodic',
+                defaultChecked: false, 
+                disabled: false, 
+                onCheckCallback: () => this.updateIntakeFormField({key: 'showPeriodic', val: !userStateForDisplay.showPeriodic})
             },
         ];
 
@@ -364,11 +372,12 @@ class IntakeForm extends Component {
                         {formCheckboxOptionsArray.map(option => (
                             <Checkbox
                                 className="col-xs-12 col-sm-6 col-md-3"
-                                key={option.label}
+                                key={option.key}
                                 labelStyle={option.labelStyle}
                                 style={option.style}
                                 label={option.label}
-                                defaultChecked={option.defaultChecked}
+                                checked={userStateForDisplay[option.key]}
+                                // defaultChecked={option.defaultChecked}
                                 disabled={option.disabled}
                                 onCheck={option.onCheckCallback}
                             />
@@ -379,6 +388,7 @@ class IntakeForm extends Component {
 
                 <VisitOrOutreachQuestions
                     // helpers
+                    updateIntakeFormField={this.updateIntakeFormField}
                     palette={palette}
                     handleSelectChange={this.handleChildSelectChange.bind(this)}
                     handleChange={this.handleChildInputChange.bind(this)}
@@ -401,6 +411,7 @@ class IntakeForm extends Component {
 
                 {userStateForDisplay.showNewContactQuestions && <NewContactQuestionsForm
                     // helpers
+                    updateIntakeFormField={this.updateIntakeFormField}
                     handleChange={this.handleChildInputChange.bind(this)}
                     handleSelectChange={this.handleChildSelectChange.bind(this)}
                     handleChildToggleChange={this.handleChildToggleChange.bind(this)}
@@ -421,6 +432,7 @@ class IntakeForm extends Component {
 
                 {userStateForDisplay.showPeriodic && <PeriodicQuestionsForm
                     // helpers
+                    updateIntakeFormField={this.updateIntakeFormField}
                     handleChange={this.handleChildInputChange.bind(this)}
                     handleSelectChange={this.handleChildSelectChange.bind(this)}
                     handleChildToggleChange={this.handleChildToggleChange.bind(this)}
@@ -440,7 +452,7 @@ class IntakeForm extends Component {
                     otherDrugs={userStateForDisplay.otherDrugs}
                     didOdLastYear={userStateForDisplay.didOdLastYear}
                     didSeeOdLastYear={userStateForDisplay.didSeeOdLastYear}
-                />}
+                    />}
 
                 <Card>
                     <div className="textAreaContainer">
@@ -450,8 +462,9 @@ class IntakeForm extends Component {
                         fullWidth={true}
                         id="eventNotes"
                         floatingLabelText="Event Notes"
+                        value={userStateForDisplay.eventNotes}
                         onChange={(e, value) => this.updateIntakeFormField({key: 'eventNotes', val: value})}
-                    />
+                        />
                     </div>
                 </Card>
 
@@ -463,6 +476,7 @@ class IntakeForm extends Component {
                         fullWidth={true}
                         id="profileNotes"
                         floatingLabelText="Profile Notes"
+                        value={userStateForDisplay.profileNotes}
                         onChange={(e, value) => this.updateIntakeFormField({key: 'profileNotes', val: value})}
                     />
                     </div>

@@ -18,6 +18,8 @@ class NewContactQuestionsForm extends Component {
 
     render() {
 
+        const { updateIntakeFormField } = this.props;
+
         const radioButtonGenderList = [
             {label: 'Male', value: 'male'},
             {label: 'Female', value: 'female'},
@@ -61,8 +63,7 @@ class NewContactQuestionsForm extends Component {
                         hintText="Date of Birth"
                         floatingLabelText="Date of Birth"
                         value={this.props.contactDateOfBirth}
-                        // FIXME:
-                        // onChange={this.setDateOfBirth}
+                        onChange={(e, date) => updateIntakeFormField({key: 'contactDateOfBirth', val: date})}
                         autoOk={true}
                         openToYearSelection={true}
                     />

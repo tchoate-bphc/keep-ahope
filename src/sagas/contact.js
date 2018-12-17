@@ -5,7 +5,7 @@ import {
     GET_EVENTS_FOR_CONTACT,
 } from '../constants';
 
-import { updateCurrentContact, updateCurrentContactWithEvents, getEventsForContact as getEventsForContactAction } from 'actions';
+import { updateCurrentContact, updateCurrentContactWithEvents, getEventsForContact as getEventsForContactAction, updateIntakeFormWithContact } from 'actions';
 
 function* getContact( { uid } ) {
 
@@ -19,12 +19,17 @@ function* getContact( { uid } ) {
         query.first().then( parseContact => {
             // if contact exists
             if (parseContact) {
-                let contactDataPlusUid = Object.assign({}, parseContact.attributes, { uid: uid });
+                const contactDataPlusUid = {
+                    ...parseContact.attributes, 
+                    uid,
+                };
                 window._UI_STORE_.dispatch( updateCurrentContact( contactDataPlusUid ) );
+                window._UI_STORE_.dispatch( updateIntakeFormWithContact( {contact: contactDataPlusUid}) );
             }
         });
     } else {
         window._UI_STORE_.dispatch( updateCurrentContact( {} ) );
+        window._UI_STORE_.dispatch( updateIntakeFormWithContact( {contact: {}} ) );
     }
 
     yield;
