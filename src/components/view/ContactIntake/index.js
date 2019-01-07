@@ -109,7 +109,7 @@ class IntakeForm extends Component {
         ));
 
         let labelStyle = {
-            color: this.props.palette.primary3Color,
+            color: this.props.palette.accent3Color,
             margin: '2rem 0 1rem 0'
         };
 
@@ -153,7 +153,7 @@ class IntakeForm extends Component {
         ));
 
         const labelStyle = {
-            color: this.props.palette.primary3Color,
+            color: this.props.palette.accent3Color,
             margin: '2rem 0 1rem 0'
         };
 
@@ -177,9 +177,10 @@ class IntakeForm extends Component {
 
     buildSlider(sliderName, labelText, sliderValue, updateCallback, overrides = {}) {
         let labelStyle = {
-            color: this.props.palette.primary3Color,
+            color: this.props.palette.accent3Color,
             margin: '2rem 0 1rem 0'
-        }
+        };
+        
         const options = {
             defaultValue: overrides.defaultValue || 0,
             step: overrides.step || 10,
@@ -188,7 +189,13 @@ class IntakeForm extends Component {
         }
         return (
             <div id={sliderName}>
-            <div style={labelStyle}>{labelText}<span style={{paddingLeft: '.5rem', fontSize: '.5rem'}}>({sliderValue}/{options.max})</span></div>
+                <div style={labelStyle}>
+                    {labelText}
+                    <span style={{paddingLeft: '.5rem'}}>
+                        (<span style={{fontWeight: 'bold', color: this.props.palette.primary1Color, letterSpacing: '1px'}}>{sliderValue}</span>
+                        <span>/{options.max}</span>)
+                    </span>
+                </div>
                 <Slider
                     name={sliderName}
                     defaultValue={options.defaultValue}
