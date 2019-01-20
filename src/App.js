@@ -20,7 +20,7 @@ import Reports from 'components/controller/Reports';
 import Messages from 'components/controller/Messages';
 
 import Navigation from 'components/controller/Navigation';
-import { setCurrentSearchQuery, loginGoogleRequest } from './actions';
+import { setCurrentSearchQuery, loginGoogleRequest, getConsentText } from './actions';
 
 import './app.css';
 
