@@ -1,4 +1,5 @@
 import config from './config';
+import consentText from './consentText';
 import contact from './contact';
 import contacts from './contacts';
 import intakeForm from './intakeForm';
@@ -12,6 +13,7 @@ function isLoggedIn(state = false) {
 
 const reducers = {
     config,
+    consentText,
     contact,
     contacts,
     intakeForm,

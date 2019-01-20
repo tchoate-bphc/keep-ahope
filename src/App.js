@@ -40,6 +40,8 @@ class App extends Component {
 
         // try to login with google (enables re-login on page refresh)
         window._UI_STORE_.dispatch( loginGoogleRequest() );
+        
+        window._UI_STORE_.dispatch( getConsentText( { consentVersion: '0.0.1' } ) );
 
         window._UI_STORE_.dispatch(setCurrentSearchQuery(''));
     }

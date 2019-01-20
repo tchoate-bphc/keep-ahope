@@ -38,6 +38,10 @@ import {
     NEW_NOTIFICATION,
     UPDATE_NOTIFICATION_SINGLETON,
     CLOSE_NOTIFICATION,
+
+    // CONSENT
+    GET_CONSENT_TEXT,
+    UPDATE_CONSENT_TEXT,
     
     // REPORTS
     FETCH_REPORTS_DATA,
@@ -218,6 +222,21 @@ export function closeNotification({notificationId}) {
     return {
         type: CLOSE_NOTIFICATION,
         notificationId
+    };
+}
+
+/** CONSENT */
+
+export function updateConsentText({consentText}) {
+    return {
+        type: UPDATE_CONSENT_TEXT,
+        consentText,
+    };
+}
+export function getConsentText({consentVersion}) {
+    return {
+        type: GET_CONSENT_TEXT,
+        consentVersion,
     };
 }
 

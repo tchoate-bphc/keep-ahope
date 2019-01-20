@@ -338,7 +338,7 @@ class IntakeForm extends Component {
 
     render() {
 
-        const { intakeForm: {userState, initialState }, muiTheme: {palette}, CONSENT_VERSION } = this.props;
+        const { intakeForm: {userState, initialState }, muiTheme: {palette}, consentText } = this.props;
 
         const userStateForDisplay = this.addDefaultValuesToIntakeForm({initialState, userState});
 
@@ -384,7 +384,7 @@ class IntakeForm extends Component {
                 onClick={ () => {
                     window.open(
                         'mailto:?cc=ahopeconsent@bphc.com&subject=AHOPE%20Data%20Collection%20Consent%20Form&body=' + 
-                        this.getConsentText({ version: CONSENT_VERSION, format: 'email' })
+                        this.convertConsentText({ format: 'email', text: consentText })
                     )
                 }}
             />,
@@ -410,7 +410,7 @@ class IntakeForm extends Component {
                             onRequestClose={this.handleConsentDialogClose}
                             autoScrollBodyContent={true}
                             >
-                            { this.getConsentText({ version: CONSENT_VERSION }) }
+                            { this.convertConsentText({ text: consentText }) }
                         </Dialog>
 
                         <div className="row">
@@ -582,7 +582,9 @@ class IntakeForm extends Component {
         )
     }
 
-    getConsentText({version, format}) {
+    convertConsentText({format, text}) {
+
+
 
         const paragraphs_0_0_1 = [
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec posuere consectetur velit eget pulvinar. Donec quis dignissim lectus. Vestibulum finibus vehicula est, sed consequat metus fermentum ac. Integer sollicitudin ante id quam volutpat efficitur non sit amet orci. Nam scelerisque odio volutpat, tincidunt nunc eget, mattis nibh. Aliquam erat volutpat. Sed eleifend vehicula erat vitae ornare. Sed sed risus in mi tincidunt maximus. Fusce pretium molestie ex a efficitur. Vestibulum at hendrerit orci. Duis imperdiet tellus felis, vitae porta tortor sodales sit amet. Proin pharetra ornare orci id efficitur.',
