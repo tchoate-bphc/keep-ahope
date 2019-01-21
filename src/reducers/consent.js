@@ -3,10 +3,10 @@ import {
 } from '../constants'
 
 const defaultState = {
-    consentText
+    text: '',
 };
 
-function consentText(state = defaultState, action) {
+function consent(state = defaultState, action) {
 
     const { consentText } = action;
 
@@ -15,7 +15,7 @@ function consentText(state = defaultState, action) {
 
             return {
                 ...state,
-                consentText,
+                text: consentText,
             };
 
         default:
@@ -23,4 +23,4 @@ function consentText(state = defaultState, action) {
     }
 }
 
-export default consentText;
+export default consent;

@@ -21,7 +21,7 @@ function* getConsentText( { consentVersion } ) {
     query.equalTo('versionMinor', semVer.minor);
     query.equalTo('versionPatch', semVer.patch);
     query.first().then( consentObj => {
-        window._UI_STORE_.dispatch( updateConsentText( { consentText: consentObj.text } ) );
+        window._UI_STORE_.dispatch( updateConsentText( { consentText: consentObj.get('text') } ) );
     });
 
     yield;

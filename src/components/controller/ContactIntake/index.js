@@ -7,7 +7,7 @@ import {updateIntakeFormField, updateIntakeFormWithContact, createEvent} from 'a
 const mapStateToProps = (state) => {
     return {
         intakeForm: state.intakeForm,
-        consentText: state.consentText,
+        consentText: state.consent.text,
     }
 };
 

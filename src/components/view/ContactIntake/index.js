@@ -584,7 +584,7 @@ class IntakeForm extends Component {
 
     convertConsentText({format, text}) {
 
-        const paragraphs = text.split(/(\r\n)+|\r+|\n+/);
+        const paragraphs = !text || !text.length ? [] : text.split(/(\r\n)+|\r+|\n+/);
 
         if (format === 'email') {
             return paragraphs.join('\r\n %0D%0A %0D%0A \r\n');
