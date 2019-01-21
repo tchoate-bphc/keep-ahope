@@ -4,6 +4,8 @@ import { Chart } from 'react-google-charts';
 
 import { Card, CardHeader, CardText, CardMedia } from 'material-ui/Card';
 
+import { Textfit } from 'react-textfit';
+
 class Results extends React.Component {
 
     // constructor(props) {
@@ -18,6 +20,49 @@ class Results extends React.Component {
                 return [series.label, parseInt(series.count, 10)];
             })
         ];
+    }
+
+    abbreviateNumber({val: num, fixed = 0 }) {
+        if (num === null) { return null; } // terminate early
+        if (num === 0) { return '0'; } // terminate early
+        fixed = (!fixed || fixed < 0) ? 0 : fixed; // number of decimal places to show
+        var b = (num).toPrecision(2).split("e"), // get power
+            k = b.length === 1 ? 0 : Math.floor(Math.min(b[1].slice(1), 14) / 3), // floor at decimals, ceiling at trillions
+            c = k < 1 ? num.toFixed(0 + fixed) : (num / Math.pow(10, k * 3)).toFixed(0 + fixed), // divide by power
+            d = c < 0 ? c : Math.abs(c), // enforce -0 is 0
+            e = d + ['', 'K', 'M', 'B', 'T'][k]; // append power
+        return e;
+    }
+
+    formatNumberValue({val}) {
+        const formattedVal = this.abbreviateNumber({val});
+        let fontWeight = 400;
+        switch (formattedVal.substr(-1).toLowerCase()) {
+            case 'k':
+                fontWeight = 400;
+                break;
+            case 'm':
+                fontWeight = 600;
+                break;
+            case 'b':
+                fontWeight = 800;
+                break;
+            case 't':
+                fontWeight = 1200;
+                break;
+            default:
+                fontWeight = 200;
+        }
+        return (
+            <Textfit 
+                mode="single"
+                style={{
+                    fontWeight, 
+                }}
+                >
+                {formattedVal}
+            </Textfit>
+        );
     }
 
     render() {
@@ -66,6 +111,7 @@ class Results extends React.Component {
                             textOverflow: 'ellipsis',
                             width: '100%',
                         }}
+                        subtitle={value < 999 ? false : value.toLocaleString(navigator.language, { minimumFractionDigits: 0 })}
                     />
                     {type === 'simple' && (
                         <CardText
@@ -73,8 +119,10 @@ class Results extends React.Component {
                                 fontSize:  value || value === 0 ? '5em' : '1em',
                                 fontWeight: '800',
                                 padding: '4px',
-                                display: 'flex', justifyContent: 'center',
                                 width: '100%',
+                                height: '100%',
+                                display: 'flex', 
+                                justifyContent: 'center',
                             }}
                         >
                             <span
@@ -82,9 +130,10 @@ class Results extends React.Component {
                                     whiteSpace: 'nowrap',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
+                                    padding: '0 .1em',
                                 }}
                                 >
-                                {value || value === 0 ? value : 'Loading...'}
+                                {value || value === 0 ? this.formatNumberValue({val: value}) : 'Loading...'}
                             </span>
                         </CardText>
                     )}

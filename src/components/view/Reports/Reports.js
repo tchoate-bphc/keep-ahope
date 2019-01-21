@@ -49,6 +49,36 @@ class Results extends React.Component {
 
         const { reportsData } = this.props;
 
+        // function getRandomInt(max) {
+        //     return Math.floor(Math.random() * Math.floor(max));
+        // }
+
+        // const getRandomVal = () => getRandomInt( Math.pow(10, getRandomInt(8)) ) * Math.pow(10, getRandomInt(8));
+
+        // const reportsData = {
+        //     contacts: {
+        //         _meta: {
+        //             count: getRandomVal(),
+        //             unfilteredCount: getRandomVal(),
+        //         },
+        //         countryOfBirth: [],
+        //         ethnicity: [],
+        //         hispanic: [],
+        //         ageOfFirstInjection: [],
+        //         genderIdentity: []
+        //     },
+        //     events: {
+        //         _meta: {
+        //             count: getRandomVal(),
+        //             unfilteredCount: getRandomVal(),
+        //         },
+        //         narcanWasOffered: getRandomVal(),
+        //         narcanWasTaken: getRandomVal(),
+        //         syringesGiven: getRandomVal(),
+        //         syringesTaken: getRandomVal(),
+        //     }
+        // };
+
         // For chart KPIs
         // const breakdownKpis = [
         //     'birthCountry',
