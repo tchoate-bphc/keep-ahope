@@ -338,7 +338,7 @@ class IntakeForm extends Component {
 
     render() {
 
-        const { intakeForm: {userState, initialState }, muiTheme: {palette}, CONSENT_VERSION } = this.props;
+        const { intakeForm: {userState, initialState }, muiTheme: {palette}, consentText } = this.props;
 
         const userStateForDisplay = this.addDefaultValuesToIntakeForm({initialState, userState});
 
@@ -384,7 +384,7 @@ class IntakeForm extends Component {
                 onClick={ () => {
                     window.open(
                         'mailto:?cc=ahopeconsent@bphc.com&subject=AHOPE%20Data%20Collection%20Consent%20Form&body=' + 
-                        this.getConsentText({ version: CONSENT_VERSION, format: 'email' })
+                        this.convertConsentText({ format: 'email', text: consentText })
                     )
                 }}
             />,
@@ -410,7 +410,7 @@ class IntakeForm extends Component {
                             onRequestClose={this.handleConsentDialogClose}
                             autoScrollBodyContent={true}
                             >
-                            { this.getConsentText({ version: CONSENT_VERSION }) }
+                            { this.convertConsentText({ text: consentText }) }
                         </Dialog>
 
                         <div className="row">
@@ -582,21 +582,9 @@ class IntakeForm extends Component {
         )
     }
 
-    getConsentText({version, format}) {
+    convertConsentText({format, text}) {
 
-        const paragraphs_0_0_1 = [
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec posuere consectetur velit eget pulvinar. Donec quis dignissim lectus. Vestibulum finibus vehicula est, sed consequat metus fermentum ac. Integer sollicitudin ante id quam volutpat efficitur non sit amet orci. Nam scelerisque odio volutpat, tincidunt nunc eget, mattis nibh. Aliquam erat volutpat. Sed eleifend vehicula erat vitae ornare. Sed sed risus in mi tincidunt maximus. Fusce pretium molestie ex a efficitur. Vestibulum at hendrerit orci. Duis imperdiet tellus felis, vitae porta tortor sodales sit amet. Proin pharetra ornare orci id efficitur.',
-            'Vestibulum pretium porta massa ut iaculis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce eu quam pellentesque, ultrices augue vitae, accumsan ipsum. Vestibulum auctor scelerisque nulla, sit amet pulvinar massa. Pellentesque congue nulla et orci feugiat mattis. Suspendisse placerat auctor ligula a scelerisque. Mauris augue odio, auctor vitae tristique in, porta in nunc. Curabitur viverra sapien sed elit condimentum fringilla. Donec eget tortor nec mauris porttitor semper. Curabitur eu ipsum nec urna efficitur tempor. Maecenas sed turpis sagittis, dictum elit in, vulputate mi. Donec vulputate placerat metus, eget egestas dui pulvinar vitae. Nunc molestie scelerisque efficitur.',
-            'Quisque molestie vulputate varius. Sed pretium vel purus sed molestie. Quisque ultricies aliquet gravida. Ut ac fermentum augue, in rhoncus nulla. Pellentesque vel varius lorem. Phasellus non suscipit nibh, nec convallis purus. Nulla quis mi vel odio cursus elementum. Praesent vitae mattis risus, aliquam vehicula erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed condimentum risus non auctor varius. Proin faucibus, neque quis facilisis pellentesque, metus leo accumsan libero, in viverra quam quam ut turpis. Nunc eu nisi sed turpis efficitur viverra id vel neque. Cras a ante sodales, lobortis tortor id, laoreet lectus. Suspendisse potenti. Vivamus placerat quam ac est eleifend pharetra. Nullam placerat suscipit justo.',
-            'Pellentesque nec sodales est. Nam tempor tortor id malesuada porta. Morbi non placerat purus, a imperdiet nunc. Duis tincidunt purus dolor, id pharetra metus tempor eu. Phasellus accumsan erat eget eleifend venenatis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec scelerisque sollicitudin erat eu facilisis. Donec interdum felis sit amet mollis tempus. Nulla ut venenatis erat.',
-            'Nam vitae pellentesque massa. Vestibulum vehicula ex vitae fringilla laoreet. Ut vulputate purus nulla, eu maximus dolor imperdiet sit amet. Nulla vestibulum mi justo, ultricies luctus ex aliquam eget. Ut pretium, ipsum ut facilisis efficitur, diam orci ornare nibh, nec congue orci justo ac odio. Cras erat nibh, vestibulum sit amet risus at, luctus tincidunt purus. Proin tincidunt bibendum elementum. Maecenas in semper tellus. Nunc consequat ex sit amet lorem consequat, ut placerat velit iaculis. Vivamus et cursus libero. Vivamus in vehicula neque, quis venenatis enim. Nullam condimentum semper semper. Quisque in faucibus neque, in ullamcorper turpis. Maecenas volutpat faucibus lacus.',
-        ];
-
-        const versionMapping = {
-            '0.0.1': paragraphs_0_0_1,
-        };
-
-        const paragraphs = !versionMapping[ version ] ? [] : versionMapping[ version ];
+        const paragraphs = !text || !text.length ? [] : text.split(/(\r\n)+|\r+|\n+/);
 
         if (format === 'email') {
             return paragraphs.join('\r\n %0D%0A %0D%0A \r\n');

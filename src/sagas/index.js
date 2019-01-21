@@ -1,11 +1,12 @@
 import { fork } from 'redux-saga/effects';
 import authentication from './authentication';
 import config from './config';
+import consentText from './consentText';
 import contact from './contact';
 import events from './events';
+import notifications from './notifications';
 import reports from './reports';
 import searchContacts from './searchContacts';
-import notifications from './notifications';
 
 /**
  * use one root saga to yield all other side effect sagas
@@ -14,9 +15,10 @@ function* sagas() {
     yield [
         fork(authentication),
         fork(config),
+        fork(consentText),
         fork(contact),
-        fork(notifications),
         fork(events),
+        fork(notifications),
         fork(reports),
         fork(searchContacts),
     ];

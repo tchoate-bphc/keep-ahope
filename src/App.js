@@ -20,7 +20,7 @@ import Reports from 'components/controller/Reports';
 import Messages from 'components/controller/Messages';
 
 import Navigation from 'components/controller/Navigation';
-import { setCurrentSearchQuery, loginGoogleRequest } from './actions';
+import { setCurrentSearchQuery, loginGoogleRequest, getConsentText } from './actions';
 
 import './app.css';
 
@@ -40,6 +40,8 @@ class App extends Component {
 
         // try to login with google (enables re-login on page refresh)
         window._UI_STORE_.dispatch( loginGoogleRequest() );
+        
+        window._UI_STORE_.dispatch( getConsentText( { consentVersion: '0.0.1' } ) );
 
         window._UI_STORE_.dispatch(setCurrentSearchQuery(''));
     }
