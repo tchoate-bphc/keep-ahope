@@ -12,6 +12,7 @@ import MenuItem from 'material-ui/MenuItem';
 import ArrowDownIcon from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import ContactTypeaheadSearch from 'components/controller/ContactTypeaheadSearch';
 import EventNoteIcon from 'material-ui/svg-icons/notification/event-note';
+import SearchIcon from 'material-ui/svg-icons/action/search';
 import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app';
 import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
 import PersonIcon from 'material-ui/svg-icons/social/person';
@@ -98,6 +99,7 @@ class Navigation extends React.Component {
                             />
                         </div>
                         <MenuItem onTouchTap={() => this.getMenuItemHandler('/contact')} primaryText='Contact' leftIcon={<PersonIcon/>}/>
+                        <MenuItem onTouchTap={() => this.getMenuItemHandler('/search')} primaryText='Search' leftIcon={<SearchIcon/>}/>
                         <MenuItem onTouchTap={() => this.getMenuItemHandler('/reports')} primaryText='Reports' leftIcon={<EventNoteIcon/>}/>
                         <div style={{marginTop: 'auto'}}>
                             <MenuItem

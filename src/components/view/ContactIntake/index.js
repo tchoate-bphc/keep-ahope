@@ -21,8 +21,6 @@ import VisitOrOutreachQuestions from 'components/view/ContactIntake/visitOrOutre
 import DescriptionIcon from 'material-ui/svg-icons/action/description';
 
 import './styles.css';
-import { EditorBorderRight } from 'material-ui/svg-icons';
-
 
 class IntakeForm extends Component {
 

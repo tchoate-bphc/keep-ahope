@@ -31,9 +31,7 @@ class Contact extends Component {
         return (
             <div>
                 {(urlPathUid === undefined || !urlPathAction) && (
-                    <ContactSearchResults
-                        contactUidEntry='hardcoded123'>
-                    </ContactSearchResults>
+                    <ContactSearchResults />
                 )}
                 {urlPathUid !== undefined && !isValidSearchQuery ? (
                     <div style={{

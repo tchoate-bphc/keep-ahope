@@ -6,6 +6,7 @@ import contact from './contact';
 import events from './events';
 import notifications from './notifications';
 import reports from './reports';
+import searchByCriteriaResults from './searchByCriteriaResults';
 import searchContacts from './searchContacts';
 
 /**
@@ -20,6 +21,7 @@ function* sagas() {
         fork(events),
         fork(notifications),
         fork(reports),
+        fork(searchByCriteriaResults),
         fork(searchContacts),
     ];
 }
