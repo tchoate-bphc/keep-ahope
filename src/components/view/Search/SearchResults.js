@@ -18,15 +18,19 @@ import {
     TableRow,
     TableRowColumn,
 } from 'material-ui/Table';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+// import SelectField from 'material-ui/SelectField';
+// import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
 
-const NO_VAL_PROVIDED = '-'
+import Select from 'react-select';
+
+const NO_VAL_PROVIDED = '-';
 
 function dateTranslation ({val}) {
     return val instanceof Date ? Moment(val).format('l') : NO_VAL_PROVIDED;
 }
+
+const nullOption = { value: null, label: '---' };
 
 const columns = [
     // primary
@@ -41,12 +45,14 @@ const columns = [
         key: 'dateOfLastVisit',
         label: 'Date of Last Visit',
         filterOptions: [
-            RANGE_CURRENT_WEEK,
-            RANGE_PREVIOUS_WEEK,
-            RANGE_CURRENT_YEAR,
-            RANGE_PREVIOUS_YEAR,
-            RANGE_ALL_TIME,
+            nullOption,
+            { value: RANGE_CURRENT_WEEK, label: 'Current Week' },
+            { value: RANGE_PREVIOUS_WEEK, label: 'Previous Week' },
+            { value: RANGE_CURRENT_YEAR, label: 'Current Year' },
+            { value: RANGE_PREVIOUS_YEAR, label: 'Previous Year' },
+            { value: RANGE_ALL_TIME, label: 'All Time' },
         ],
+        filterOptionSelected: null,
         displayTranslation: dateTranslation,
         show: true,
     },
@@ -146,9 +152,23 @@ class SearchResults extends Component {
         super(props);
 
         this.state = columns.reduce( (agg, col) => {
-            agg[col.key] = col.show;
+            agg[col.key] = { 
+                filterOption: null,
+                show: col.show,
+            };
             return agg;
         }, {});
+    }
+
+    handleChange = ({key, value}) => {
+        const obj = {}; 
+        obj[key] = {
+            ...this.state[key],
+            filterOption: value,
+        };
+        debugger;
+        this.setState(obj);
+        console.log(`Option selected:`, obj);
     }
 
     render() {
@@ -205,7 +225,7 @@ class SearchResults extends Component {
                             <TableRow>
                                 {columns
                                     .filter( column => {
-                                        return this.state[column.key] === true;
+                                        return this.state[column.key].show === true;
                                     })
                                     .map( column => {
                                         return (
@@ -225,22 +245,11 @@ class SearchResults extends Component {
                                                     />
                                                 )}
                                                 {!column.filterOptions || !column.filterOptions.length ? '' : (
-                                                    <SelectField
-                                                        floatingLabelText="Frequency"
-                                                        value={this.state.value}
-                                                        onChange={this.handleChange}
-                                                        // labelStyle={{ width: '100%' }}
-                                                        menuStyle={{width:'10em'}}
-                                                        // width='100%'
-                                                        autoWidth={true}
-                                                        >
-                                                        <MenuItem value={null} primaryText="" />
-                                                        <MenuItem value={1} primaryText="Auto width" />
-                                                        <MenuItem value={2} primaryText="Every Night" />
-                                                        <MenuItem value={3} primaryText="Weeknights" />
-                                                        <MenuItem value={4} primaryText="Weekends" />
-                                                        <MenuItem value={5} primaryText="Weekly" />
-                                                    </SelectField>
+                                                    <Select
+                                                        value={this.state[column.key].filterOption}
+                                                        onChange={(e) => this.handleChange({key: column.key, value: e.value})}
+                                                        options={column.filterOptions}
+                                                    />
                                                 )}
                                             </TableHeaderColumn>
                                         );
