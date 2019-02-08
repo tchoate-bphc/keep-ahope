@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
-import Moment from 'moment';
+import moment from 'moment';
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker-cssmodules.css'
+import './react-datepicker-override.css'
 
 import {
     RANGE_CURRENT_WEEK,
@@ -13,6 +17,7 @@ import {
 import {
     Table,
     TableBody,
+    TableFooter,
     TableHeader,
     TableHeaderColumn,
     TableRow,
@@ -20,14 +25,14 @@ import {
 } from 'material-ui/Table';
 // import SelectField from 'material-ui/SelectField';
 // import MenuItem from 'material-ui/MenuItem';
-import DatePicker from 'material-ui/DatePicker';
+// import DatePicker from 'material-ui/DatePicker';
 
 import Select from 'react-select';
 
 const NO_VAL_PROVIDED = '-';
 
 function dateTranslation ({val}) {
-    return val instanceof Date ? Moment(val).format('l') : NO_VAL_PROVIDED;
+    return val instanceof Date ? moment(val).format('l') : NO_VAL_PROVIDED;
 }
 
 const nullOption = { value: null, label: '---' };
@@ -52,7 +57,7 @@ const columns = [
             { value: RANGE_PREVIOUS_YEAR, label: 'Previous Year' },
             { value: RANGE_ALL_TIME, label: 'All Time' },
         ],
-        filterOptionSelected: null,
+        defaultFilterOption: RANGE_CURRENT_WEEK,
         displayTranslation: dateTranslation,
         show: true,
     },
@@ -67,13 +72,23 @@ const columns = [
     {
         key: 'hispanic',
         label: 'Hispanic',
-        filterOptions: [],
+        filterOptions: [
+            nullOption,
+            { value: true, label: 'Hispanic' },
+            { value: false, label: 'Not hispanic' },
+        ],
+        defaultFilterOption: null,
         show: false,
     },
     {
         key: 'countryOfBirth',
         label: 'Country of Birth',
-        filterOptions: [],
+        filterOptions: [
+            nullOption,
+            { value: 'US', label: 'US' },
+            { value: 'PR', label: 'PR' },
+            { value: 'Other', label: 'Other' },
+        ],
         show: true,
     },
     {
@@ -92,7 +107,12 @@ const columns = [
     {
         key: 'hasHealthInsurance',
         label: 'Has Health Insurance',
-        filterOptions: [],
+        filterOptions: [
+            nullOption,
+            { value: true, label: 'Has' },
+            { value: false, label: 'Does not have' },
+        ],
+        defaultFilterOption: null,
         show: false,
     },
     {
@@ -111,19 +131,35 @@ const columns = [
     {
         key: 'didOdLastYear',
         label: 'Did Od Last Year',
-        filterOptions: [],
+        filterOptions: [
+            nullOption,
+            { value: true, label: 'Did OD' },
+            { value: false, label: 'Did not OD' },
+        ],
+        defaultFilterOption: null,
         show: false,
     },
     {
         key: 'hivStatus',
         label: 'Hiv Status',
-        filterOptions: [],
+        filterOptions: [
+            nullOption,
+            { value: 'positive', label: 'Positive' },
+            { value: 'negative', label: 'Negative' },
+            { value: 'not-tested', label: 'Not tested' },
+        ],
+        defaultFilterOption: null,
         show: false,
     },
     {
         key: 'isInCareForHiv',
         label: 'Is In Care For Hiv',
-        filterOptions: [],
+        filterOptions: [
+            nullOption,
+            { value: true, label: 'In care' },
+            { value: false, label: 'Not in care' },
+        ],
+        defaultFilterOption: null,
         show: false,
     },
     {
@@ -153,20 +189,19 @@ class SearchResults extends Component {
 
         this.state = columns.reduce( (agg, col) => {
             agg[col.key] = { 
-                filterOption: null,
+                filterByVal: col.defaultFilterOption || null,
                 show: col.show,
             };
             return agg;
         }, {});
     }
 
-    handleChange = ({key, value}) => {
+    handleChange({key, value}) {
         const obj = {}; 
         obj[key] = {
             ...this.state[key],
-            filterOption: value,
+            filterByVal: value,
         };
-        debugger;
         this.setState(obj);
         console.log(`Option selected:`, obj);
     }
@@ -187,11 +222,6 @@ class SearchResults extends Component {
         return (
             <div>
                 {contacts && contacts.length && (
-                    <div>
-                        Showing {indexStart + 1} - {indexEnd + 1} of {totalCount}
-                    </div>
-                )}
-                {contacts && contacts.length && (
                     <Table
                         height='30em'
                         selectable={false}
@@ -205,7 +235,7 @@ class SearchResults extends Component {
                             <TableRow>
                                 {columns
                                     .filter( column => {
-                                        return this.state[column.key] === true;
+                                        return this.state[column.key].show === true;
                                     })
                                     .map( column => {
                                         return (
@@ -236,17 +266,31 @@ class SearchResults extends Component {
                                                 }}
                                                 key={column.key}
                                                 >
-                                                {column.filerByCalendar === true && (
-                                                        <DatePicker
-                                                        hintText="Date"
-                                                        floatingLabelText="Date"
-                                                        onChange={(e, date) => {}}
-                                                        autoOk={true}
+                                                {column.filterByCalendar === true && (
+                                                    // 'datepicker'
+                                                    <DatePicker
+                                                        selected={this.state[column.key].filterByVal ? moment(this.state[column.key].filterByVal) : null}
+                                                        onChange={(date) => this.handleChange({key: column.key, value: date})}
+                                                        peekNextMonth
+                                                        showMonthDropdown
+                                                        showYearDropdown
+                                                        dropdownMode="select"
                                                     />
+                                                    // <DatePicker
+                                                    //     hintText="Date"
+                                                    //     floatingLabelText="Date"
+                                                    //     onChange={(e, date) => this.handleChange({key: column.key, value: date})}
+                                                    //     autoOk={true}
+                                                    //     openToYearSelection={true}
+                                                    //     // defaultValue={moment().subtract(30, 'years').toDate()}
+                                                    //     textFieldStyle={{width: '100%'}}
+                                                    //     value={this.state[column.key].filterByVal}
+                                                    // />  
                                                 )}
                                                 {!column.filterOptions || !column.filterOptions.length ? '' : (
                                                     <Select
-                                                        value={this.state[column.key].filterOption}
+                                                        key={'dropdown-' + column.key}
+                                                        defaultValue={this.state[column.key].filterByVal}
                                                         onChange={(e) => this.handleChange({key: column.key, value: e.value})}
                                                         options={column.filterOptions}
                                                     />
@@ -268,7 +312,7 @@ class SearchResults extends Component {
                                     >
                                     {columns
                                         .filter( column => {
-                                            return this.state[column.key] === true;
+                                            return this.state[column.key].show === true;
                                         })
                                         .map( column => {
                                             let value = contact[column.key] === undefined ? NO_VAL_PROVIDED : contact[column.key];
@@ -288,6 +332,15 @@ class SearchResults extends Component {
                                 </TableRow>
                             ))}
                         </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableRowColumn colSpan="6" style={{textAlign: 'right'}}>
+                                    {contacts && contacts.length && (
+                                        `Showing ${indexStart + 1} - ${indexEnd + 1} of ${totalCount}`
+                                    )}
+                                </TableRowColumn>
+                            </TableRow>
+                        </TableFooter>
                     </Table>
                 )}
             </div>
