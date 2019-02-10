@@ -3,7 +3,7 @@ import {
     UPDATE_SEARCH_BY_CRITERIA_RESULTS,
 } from '../constants';
 
-const defaultState = {
+export const defaultState = {
     lastSearchCriteria: {
         dateOfBirth: null,
         hepCStatus: null,

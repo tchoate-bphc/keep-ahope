@@ -246,10 +246,11 @@ export function updateSearchByCriteriaCriteria({searchCriteria}) {
     };
 }
 
-export function updateSearchByCriteriaResults({searchResults}) {
+export function updateSearchByCriteriaResults({searchResults, searchCriteria}) {
     return {
         type: UPDATE_SEARCH_BY_CRITERIA_RESULTS,
         searchResults,
+        searchCriteria
     };
 }
 

@@ -8,6 +8,8 @@ import {
 
 import { updateSearchByCriteriaResults } from 'actions';
 
+import { getDateBoundsFromRangeKey } from '../utils/dateRangeUtils';
+
 function* requestSearchByCriteria( { searchCriteria } ) {
 
     // const query = {
@@ -28,20 +30,31 @@ function* requestSearchByCriteria( { searchCriteria } ) {
         query.lessThanOrEqualTo('dateOfBirth', Moment(searchCriteria.dateOfBirth).startOf('day').add(1, 'day').toDate());
     } 
     if (searchCriteria.hepCStatus !== undefined && searchCriteria.hepCStatus !== null) {
-        query.equal('hepCStatus', searchCriteria.hepCStatus);
+        query.equalTo('hepCStatus', searchCriteria.hepCStatus);
     } 
     if (searchCriteria.hivStatus !== undefined && searchCriteria.hivStatus !== null) {
-        query.equal('hivStatus', searchCriteria.hivStatus);
+        query.equalTo('hivStatus', searchCriteria.hivStatus);
     } 
     if (searchCriteria.housingStatus !== undefined && searchCriteria.housingStatus !== null) {
-        query.equal('housingStatus', searchCriteria.housingStatus);
+        query.equalTo('housingStatus', searchCriteria.housingStatus);
     } 
-    if (searchCriteria.lastVisitRangeStart !== undefined && searchCriteria.lastVisitRangeStart !== null) {
-        query.greaterThanOrEqualTo('dateOfLastVisit', Moment(searchCriteria.lastVisitRangeStart).startOf('day').toDate());
+    if (searchCriteria.countryOfBirth !== undefined && searchCriteria.countryOfBirth !== null) {
+        query.equalTo('countryOfBirth', searchCriteria.countryOfBirth);
     } 
-    if (searchCriteria.lastVisitRangeEnd !== undefined && searchCriteria.lastVisitRangeEnd !== null) {
-        query.greaterThanOrEqualTo('dateOfLastVisit', Moment(searchCriteria.lastVisitRangeEnd).startOf('day').add(1, 'day').toDate());
+    if (searchCriteria.ethnicity !== undefined && searchCriteria.ethnicity !== null) {
+        query.equalTo('ethnicity', searchCriteria.ethnicity);
     } 
+    if (searchCriteria.genderIdentity !== undefined && searchCriteria.genderIdentity !== null) {
+        query.equalTo('genderIdentity', searchCriteria.genderIdentity);
+    } 
+    if (searchCriteria.dateOfLastVisit !== undefined && searchCriteria.dateOfLastVisit !== null) {
+        const { min, max } = getDateBoundsFromRangeKey({ rangeKey: searchCriteria.dateOfLastVisit });
+        query.greaterThanOrEqualTo('dateOfLastVisit', min);
+        query.lessThanOrEqualTo('dateOfLastVisit', max);
+    } 
+    // if (searchCriteria.lastVisitRangeEnd !== undefined && searchCriteria.lastVisitRangeEnd !== null) {
+    //     query.greaterThanOrEqualTo('dateOfLastVisit', Moment(searchCriteria.lastVisitRangeEnd).startOf('day').add(1, 'day').toDate());
+    // } 
 
     // pagination
     // skip some indexes if indexStart is truthy and a number
@@ -70,6 +83,7 @@ function* requestSearchByCriteria( { searchCriteria } ) {
                 indexEnd: (searchCriteria.indexStart || 0) + (contactsObj.length -1),
                 contacts: contactsObj.map( c => c.attributes)
             };
+            debugger;
             window._UI_STORE_.dispatch( updateSearchByCriteriaResults( { 
                 searchCriteria,
                 searchResults,

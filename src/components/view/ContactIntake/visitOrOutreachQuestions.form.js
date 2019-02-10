@@ -4,6 +4,7 @@ import { FieldWithManualOption } from '../common/FieldWithManualOption';
 
 import { Card, CardTitle } from 'material-ui/Card';
 
+import { referralsSelectOptionsList, enrollmentRadioOptions } from '../../../utils/fieldValueLists';
 
 class VisitOrOutreachQuestions extends Component {
 
@@ -19,16 +20,6 @@ class VisitOrOutreachQuestions extends Component {
 
         const { updateIntakeFormField } = this.props;
 
-        const referralsSelectOptionsList = [
-            {primaryText: 'No Referrals', value: null},
-            {primaryText: 'Medical attention', value: 'Medical attention'},
-            {primaryText: 'Mental health', value: 'Mental health'},
-            {primaryText: 'Other', value: 'other'},
-        ];
-        const enrollmentRadioOptions = [
-            { name: 'enrollment', label: 'Enrollment', value: 'enrolled' },
-            { name: 'refill', label: 'Refill', value: 'refill' },
-        ];
         const numberOfOthersHelpingStepDetails = {
             defaultValue: 0,
             step: 1,
