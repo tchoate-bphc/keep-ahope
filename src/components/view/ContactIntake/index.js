@@ -153,7 +153,7 @@ class IntakeForm extends Component {
         const selectControls = selectOptionsList.map(selectOption => (
             <MenuItem
                 key={name + '-' + selectOption.value}
-                primaryText={selectOption.primaryText}
+                primaryText={selectOption.label}
                 value={selectOption.value}
                 name={name}
             />

@@ -142,9 +142,12 @@ function* createEvent({ eventData, history }) {
         eventData.syringesTaken && event.set('syringesTaken', eventData.syringesTaken);
         eventData.zipCode && event.set('zipCode', eventData.zipCode);
 
-        event.save()
+        return event.save()
             .then( successfulSave => {
-                
+
+                // TODO: Ensure that 200 response with { err: '' } goes to `catch`
+                // To replicate above: try to add a new field
+
                 // clear the old form
                 window._UI_STORE_.dispatch( setIntakeFormToInitialState( ));
 
@@ -165,7 +168,7 @@ function* createEvent({ eventData, history }) {
             } );
     })
     .catch( err => {
-        console.log('err');
+        console.log('error saving', err);
     })
     yield;
 }

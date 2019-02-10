@@ -9,14 +9,14 @@ export const radioButtonGenderList = [
 ];
 
 export const enthnicityOptionsList = [
-    {primaryText: 'American Indian', value: 'AI'},
-    {primaryText: 'Asian', value: 'Asian'},
-    {primaryText: 'Black/African American', value: 'BAA'},
-    {primaryText: 'Hawaiin/Pacific Islander', value: 'HPI'},
-    {primaryText: 'White', value: 'White'},
+    {label: 'American Indian', value: 'AI'},
+    {label: 'Asian', value: 'Asian'},
+    {label: 'Black/African American', value: 'BAA'},
+    {label: 'Hawaiin/Pacific Islander', value: 'HPI'},
+    {label: 'White', value: 'White'},
     // TODO: user needs to be able to click this and enter in their own custom entry
-    {primaryText: 'Other', value: 'Other'},
-    {primaryText: 'Prefer not to say', value: 'Refuse'},
+    {label: 'Other', value: 'Other'},
+    {label: 'Prefer not to say', value: 'Refuse'},
 ];
 
 export const countryOfBirthList = [
@@ -47,43 +47,43 @@ export const hepCOptions = [
 ];
 
 export const insurerOptionsList = [
-    {primaryText: 'Mass Health', value: 'MH'},
-    {primaryText: 'Neighborhood Health Program', value: 'NHP'},
-    {primaryText: 'Blue Cross Blue Shield', value: 'BCBS'},
-    {primaryText: 'Tufts', value: 'TF'},
+    {label: 'Mass Health', value: 'MH'},
+    {label: 'Neighborhood Health Program', value: 'NHP'},
+    {label: 'Blue Cross Blue Shield', value: 'BCBS'},
+    {label: 'Tufts', value: 'TF'},
     // TODO: user needs to be able to click this and enter in their own custom entry
-    {primaryText: 'Other', value: 'other'},
+    {label: 'Other', value: 'other'},
 ];
 
 export const primaryDrugOptionsList = [
-    {primaryText: '-none-', value: null},
-    {primaryText: 'Heroin', value: 'heroin'},
-    {primaryText: 'Methamphetamine', value: 'meth'},
-    {primaryText: 'Cocaine', value: 'cocaine'},
+    {label: '-none-', value: null},
+    {label: 'Heroin', value: 'heroin'},
+    {label: 'Methamphetamine', value: 'meth'},
+    {label: 'Cocaine', value: 'cocaine'},
     // TODO: user needs to be able to click this and enter in their own custom entry
-    {primaryText: 'Other', value: 'other'},
+    {label: 'Other', value: 'other'},
 ];
 
 export const otherDrugOptionsList = [
-    {primaryText: '-none-', value: null},
-    {primaryText: 'Heroin', value: 'heroin'},
-    {primaryText: 'Methamphetamine', value: 'meth'},
-    {primaryText: 'Cocaine', value: 'cocaine'},
-    {primaryText: 'Crack', value: 'crack'},
-    {primaryText: 'Benzos', value: 'benzos'},
-    {primaryText: 'Suboxone (not RX)', value: 'suboxone'},
-    {primaryText: 'Methadone (not RX)', value: 'methadone'},
+    {label: '-none-', value: null},
+    {label: 'Heroin', value: 'heroin'},
+    {label: 'Methamphetamine', value: 'meth'},
+    {label: 'Cocaine', value: 'cocaine'},
+    {label: 'Crack', value: 'crack'},
+    {label: 'Benzos', value: 'benzos'},
+    {label: 'Suboxone (not RX)', value: 'suboxone'},
+    {label: 'Methadone (not RX)', value: 'methadone'},
     // TODO: user needs to be able to click this and enter in their own custom entry
-    {primaryText: 'Other', value: 'other'},
+    {label: 'Other', value: 'other'},
 ];
 
 // Visit or Outreach ------------------------------------------------
 
 export const referralsSelectOptionsList = [
-    {primaryText: 'No Referrals', value: null},
-    {primaryText: 'Medical attention', value: 'Medical attention'},
-    {primaryText: 'Mental health', value: 'Mental health'},
-    {primaryText: 'Other', value: 'other'},
+    {label: 'No Referrals', value: null},
+    {label: 'Medical attention', value: 'Medical attention'},
+    {label: 'Mental health', value: 'Mental health'},
+    {label: 'Other', value: 'other'},
 ];
 export const enrollmentRadioOptions = [
     { name: 'enrollment', label: 'Enrollment', value: 'enrolled' },

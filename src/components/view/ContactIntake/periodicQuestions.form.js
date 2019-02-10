@@ -18,8 +18,8 @@ class PeriodicIntakeForm extends Component {
     };
 
     getUniquePrimaryTextList({collection, realValue}) {
-        const isManualInCollection = collection.find( obj => obj.primaryText === realValue || obj.value === realValue );
-        return isManualInCollection ? collection : [ ...collection, {primaryText: realValue, value: realValue} ];
+        const isManualInCollection = collection.find( obj => obj.label === realValue || obj.value === realValue );
+        return isManualInCollection ? collection : [ ...collection, {label: realValue, value: realValue} ];
     }
 
     render() {
