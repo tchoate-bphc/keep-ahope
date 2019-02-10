@@ -8,6 +8,8 @@ import './react-datepicker-override.css'
 
 import { defaultState as searchByCriteriaResultsDefaultState } from '../../../reducers/searchByCriteriaResults';
 
+import { enthnicityOptionsList, genderOptionsList } from '../../../utils/fieldValueLists';
+
 import {
     RANGE_CURRENT_WEEK,
     RANGE_PREVIOUS_WEEK,
@@ -65,7 +67,6 @@ const columns = [
             { value: RANGE_PREVIOUS_YEAR, label: 'Previous Year' },
             { value: RANGE_ALL_TIME, label: 'All Time' },
         ],
-        defaultFilterOption: RANGE_CURRENT_WEEK,
         displayTranslation: dateTranslation,
         show: true,
     },
@@ -85,7 +86,6 @@ const columns = [
             { value: true, label: 'Hispanic' },
             { value: false, label: 'Not hispanic' },
         ],
-        defaultFilterOption: null,
         show: false,
     },
     {
@@ -100,15 +100,21 @@ const columns = [
         show: true,
     },
     {
-        key: 'ethinicity',
-        label: 'Ethinicity',
-        filterOptions: [],
+        key: 'ethnicity',
+        label: 'Ethnicity',
+        filterOptions: [
+            nullOption,
+            ...enthnicityOptionsList,
+        ],
         show: true,
     },
     {
         key: 'genderIdentity',
         label: 'Gender Identity',
-        filterOptions: [],
+        filterOptions: [
+            nullOption,
+            ...genderOptionsList,
+        ],
         show: true,
     },
     // insurance and housing
@@ -120,7 +126,6 @@ const columns = [
             { value: true, label: 'Has' },
             { value: false, label: 'Does not have' },
         ],
-        defaultFilterOption: null,
         show: false,
     },
     {
@@ -144,7 +149,6 @@ const columns = [
             { value: true, label: 'Did OD' },
             { value: false, label: 'Did not OD' },
         ],
-        defaultFilterOption: null,
         show: false,
     },
     {
@@ -156,7 +160,6 @@ const columns = [
             { value: 'negative', label: 'Negative' },
             { value: 'not-tested', label: 'Not tested' },
         ],
-        defaultFilterOption: null,
         show: false,
     },
     {
@@ -167,7 +170,6 @@ const columns = [
             { value: true, label: 'In care' },
             { value: false, label: 'Not in care' },
         ],
-        defaultFilterOption: null,
         show: false,
     },
     {
@@ -233,8 +235,8 @@ class Search extends Component {
                     <Table
                         height='30em'
                         selectable={false}
-                        style={{minWidth:'700px'}}
-                        bodyStyle={{minWidth:'700px'}}
+                        style={{minWidth:'800px'}}
+                        bodyStyle={{minWidth:'800px'}}
                         >
                         <TableHeader
                             displaySelectAll={false}
@@ -333,7 +335,7 @@ class Search extends Component {
                         </TableBody>
                         <TableFooter>
                             <TableRow>
-                                <TableRowColumn colSpan="6" style={{textAlign: 'right'}}>
+                                <TableRowColumn colSpan="6" style={{textAlign: 'center', verticalAlign: 'middle'}}>
                                     {contacts && contacts.length && (
                                         `Showing ${indexStart + 1} - ${indexEnd + 1} of ${totalCount}`
                                     )}

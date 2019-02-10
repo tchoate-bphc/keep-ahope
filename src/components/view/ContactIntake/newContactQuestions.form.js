@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Card, CardTitle } from 'material-ui/Card';
 import DatePicker from 'material-ui/DatePicker';
 
-import {radioButtonGenderList, enthnicityOptionsList, countryOfBirthList } from '../../../utils/fieldValueLists';
+import {genderOptionsList, enthnicityOptionsList, countryOfBirthList } from '../../../utils/fieldValueLists';
 
 
 class NewContactQuestionsForm extends Component {
@@ -49,7 +49,7 @@ class NewContactQuestionsForm extends Component {
                     {this.buildSlider('contactAgeOfFirstInjection', 'Age of First Injection', this.props.contactAgeOfFirstInjection, this.props.handleSliderChange, options)}
                 </div>
                 <div style={{padding: '2rem'}}>
-                    {this.buildRadio('Gender Identity', radioButtonGenderList, 'contactGenderIdentity', this.props.handleChange)}
+                    {this.buildRadio('Gender Identity', genderOptionsList, 'contactGenderIdentity', this.props.handleChange)}
                 </div>
                 <div style={{padding: '2rem'}}>
                     {this.buildSelectField({title: 'Ethnicity', selectOptionsList: enthnicityOptionsList, name: 'contactEthnicity', val: this.props.contactEthnicity, updateCallback: this.props.handleSelectChange, multiple: false })}

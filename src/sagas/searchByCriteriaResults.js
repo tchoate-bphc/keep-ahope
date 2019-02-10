@@ -83,7 +83,6 @@ function* requestSearchByCriteria( { searchCriteria } ) {
                 indexEnd: (searchCriteria.indexStart || 0) + (contactsObj.length -1),
                 contacts: contactsObj.map( c => c.attributes)
             };
-            debugger;
             window._UI_STORE_.dispatch( updateSearchByCriteriaResults( { 
                 searchCriteria,
                 searchResults,

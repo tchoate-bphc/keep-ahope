@@ -1,6 +1,6 @@
 // New Contact ------------------------------------------------
 
-export const radioButtonGenderList = [
+export const genderOptionsList = [
     {label: 'Male', value: 'male'},
     {label: 'Female', value: 'female'},
     {label: 'MtF', value: 'mtf'},

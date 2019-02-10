@@ -1,27 +1,32 @@
 import {
     UPDATE_SEARCH_BY_CRITERIA_CRITERIA,
     UPDATE_SEARCH_BY_CRITERIA_RESULTS,
+    RANGE_CURRENT_WEEK,
 } from '../constants';
 
+const defaultSearchCriteria = {
+    indexStart: 0,
+
+    dateOfLastVisit: null,
+    dateOfBirth: null,
+    hispanic: null,
+    countryOfBirth: null,
+    ethnicity: null,
+    genderIdentity: null,
+    hasHealthInsurance: null,
+    housingStatus: null,
+    primaryDrug: null,
+    didOdLastYear: null,
+    hivStatus: null,
+    isInCareForHiv: null,
+    hepCStatus: null,
+    isInCareForHepC: null,
+    ageOfFirstInjection: null,
+}
+
 export const defaultState = {
-    lastSearchCriteria: {
-        dateOfBirth: null,
-        hepCStatus: null,
-        hivStatus: null,
-        housingStatus: null,
-        indexStart: 0,
-        lastVisitRangeEnd: null,
-        lastVisitRangeStart: null,
-    },
-    searchCriteria: {
-        dateOfBirth: null,
-        hepCStatus: null,
-        hivStatus: null,
-        housingStatus: null,
-        indexStart: 0,
-        lastVisitRangeEnd: null,
-        lastVisitRangeStart: null,
-    },
+    lastSearchCriteria: { ...defaultSearchCriteria },
+    searchCriteria: { ...defaultSearchCriteria },
     searchResults: []
 };
 
