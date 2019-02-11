@@ -6,6 +6,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
 import './react-datepicker-override.css'
 
+import Toggle from 'material-ui/Toggle';
+
 import { defaultState as searchByCriteriaResultsDefaultState } from '../../../reducers/searchByCriteriaResults';
 
 import { enthnicityOptionsList, genderOptionsList } from '../../../utils/fieldValueLists';
@@ -118,16 +120,16 @@ const columns = [
         show: true,
     },
     // insurance and housing
-    {
-        key: 'hasHealthInsurance',
-        label: 'Has Health Insurance',
-        filterOptions: [
-            nullOption,
-            { value: true, label: 'Has' },
-            { value: false, label: 'Does not have' },
-        ],
-        show: false,
-    },
+    // {
+    //     key: 'hasHealthInsurance',
+    //     label: 'Has Health Insurance',
+    //     filterOptions: [
+    //         nullOption,
+    //         { value: true, label: 'Has' },
+    //         { value: false, label: 'Does not have' },
+    //     ],
+    //     show: false,
+    // },
     {
         key: 'housingStatus',
         label: 'Housing Status',
@@ -141,16 +143,16 @@ const columns = [
         filterOptions: [],
         show: false,
     },
-    {
-        key: 'didOdLastYear',
-        label: 'Did Od Last Year',
-        filterOptions: [
-            nullOption,
-            { value: true, label: 'Did OD' },
-            { value: false, label: 'Did not OD' },
-        ],
-        show: false,
-    },
+    // {
+    //     key: 'didOdLastYear',
+    //     label: 'Did Od Last Year',
+    //     filterOptions: [
+    //         nullOption,
+    //         { value: true, label: 'Did OD' },
+    //         { value: false, label: 'Did not OD' },
+    //     ],
+    //     show: false,
+    // },
     {
         key: 'hivStatus',
         label: 'Hiv Status',
@@ -162,28 +164,28 @@ const columns = [
         ],
         show: false,
     },
-    {
-        key: 'isInCareForHiv',
-        label: 'Is In Care For Hiv',
-        filterOptions: [
-            nullOption,
-            { value: true, label: 'In care' },
-            { value: false, label: 'Not in care' },
-        ],
-        show: false,
-    },
+    // {
+    //     key: 'isInCareForHiv',
+    //     label: 'Is In Care For Hiv',
+    //     filterOptions: [
+    //         nullOption,
+    //         { value: true, label: 'In care' },
+    //         { value: false, label: 'Not in care' },
+    //     ],
+    //     show: false,
+    // },
     {
         key: 'hepCStatus',
         label: 'Hep C Status',
         filterOptions: [],
         show: false,
     },
-    {
-        key: 'isInCareForHepC',
-        label: 'Is In Care For Hep C',
-        filterOptions: [],
-        show: false,
-    },
+    // {
+    //     key: 'isInCareForHepC',
+    //     label: 'Is In Care For Hep C',
+    //     filterOptions: [],
+    //     show: false,
+    // },
     {
         key: 'ageOfFirstInjection',
         label: 'Age of First Injection',
@@ -197,6 +199,8 @@ class Search extends Component {
     constructor(props) {
         super(props);
 
+        this.updateState = this.updateState.bind(this);
+
         this.state = columns.reduce( (agg, col) => {
             agg[col.key] = {
                 show: col.show,
@@ -209,6 +213,12 @@ class Search extends Component {
         const { requestSearchByCriteria,  searchByCriteriaResults: { searchCriteria } } = this.props;
         searchCriteria[key] = value;
         requestSearchByCriteria({searchCriteria});
+    }
+
+    updateState({ key, val }) {
+        this.setState({
+            [key]: { show: val }
+        });
     }
 
     render() {
@@ -229,14 +239,31 @@ class Search extends Component {
             requestSearchByCriteria({ searchCriteria });
         }
 
+        const minWidth = columns.filter( col => {
+            return col.show;
+        }).length*100;
+
         return (
             <section>
+                <aside>
+                    { columns.map( col => {
+                        return <Toggle
+                            key={col.key}
+                            label={col.label}
+                            labelPosition="right"
+                            toggled={this.state[col.key].show}
+                            onToggle={(event, val) => {
+                                this.updateState({ key: col.key, val });
+                            }}
+                        />
+                    }) }
+                </aside>
                 {contacts && (
                     <Table
                         height='30em'
                         selectable={false}
-                        style={{minWidth:'800px'}}
-                        bodyStyle={{minWidth:'800px'}}
+                        style={{minWidth: minWidth + 'px'}}
+                        bodyStyle={{minWidth: minWidth + 'px'}}
                         >
                         <TableHeader
                             displaySelectAll={false}
@@ -315,7 +342,9 @@ class Search extends Component {
                                         })
                                         .map( (column) => {
                                             let value = contact[column.key] === undefined ? NO_VAL_PROVIDED : contact[column.key];
-                                            if (column.key === 'rowNum') {
+                                            if (value === true || value === false) {
+                                                value = value.toString();
+                                            } else if (column.key === 'rowNum') {
                                                 value = indexStart + contactIndex + 1;
                                             } else if ('function' === typeof column.displayTranslation) {
                                                 value = column.displayTranslation({val: value});
@@ -336,7 +365,7 @@ class Search extends Component {
                         <TableFooter>
                             <TableRow>
                                 <TableRowColumn colSpan="6" style={{textAlign: 'center', verticalAlign: 'middle'}}>
-                                    {contacts && contacts.length && (
+                                    {contacts && (
                                         `Showing ${indexStart + 1} - ${indexEnd + 1} of ${totalCount}`
                                     )}
                                 </TableRowColumn>
