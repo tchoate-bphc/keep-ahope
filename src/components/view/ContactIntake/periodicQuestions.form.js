@@ -5,7 +5,7 @@ import { FieldWithManualOption } from '../common/FieldWithManualOption';
 import { Card, CardTitle } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 
-import { housingRadioOptions, hivRadioOptions, hepCOptions, insurerOptionsList, primaryDrugOptionsList, otherDrugOptionsList } from '../../../utils/fieldValueLists';
+import { housingStatusOptionsList, hivRadioOptions, hepCStatusOptionsList, insurerOptionsList, primaryDrugOptionsList, otherDrugOptionsList } from '../../../utils/fieldValueLists';
 
 class PeriodicIntakeForm extends Component {
 
@@ -40,7 +40,7 @@ class PeriodicIntakeForm extends Component {
                 />
 
                 <div style={{padding: '2rem'}}>
-                    {this.buildRadio('Housing Status', housingRadioOptions, 'housingStatus', this.props.handleChange)}
+                    {this.buildRadio('Housing Status', housingStatusOptionsList, 'housingStatus', this.props.handleChange)}
                 </div>
 
                 <div style={{padding: '2rem'}}>
@@ -55,7 +55,7 @@ class PeriodicIntakeForm extends Component {
                 </div>}
 
                 <div style={{padding: '2rem'}}>
-                    {this.buildRadio('Hepatitus C Status', hepCOptions, 'hepCStatus', (evt, val) => {
+                    {this.buildRadio('Hepatitus C Status', hepCStatusOptionsList, 'hepCStatus', (evt, val) => {
                         this.props.handleChange(evt, val);
                         this.props.handleChildToggleChange('isInCareForHepC', val === 'negative' ? false : this.props.isInCareForHepC );
                     })}

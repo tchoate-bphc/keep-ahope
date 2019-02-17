@@ -1,16 +1,26 @@
 import React, { Component } from 'react';
 
+import muiThemeable from 'material-ui/styles/muiThemeable';
+
 import moment from 'moment';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
 import './react-datepicker-override.css'
+import SettingsIcon from 'material-ui/svg-icons/action/settings';
 
+import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
 
 import { defaultState as searchByCriteriaResultsDefaultState } from '../../../reducers/searchByCriteriaResults';
 
-import { enthnicityOptionsList, genderOptionsList } from '../../../utils/fieldValueLists';
+import {
+    enthnicityOptionsList,
+    genderOptionsList,
+    housingStatusOptionsList,
+    primaryDrugOptionsList,
+    hepCStatusOptionsList,
+} from '../../../utils/fieldValueLists';
 
 import {
     RANGE_CURRENT_WEEK,
@@ -34,6 +44,8 @@ import {
 // import DatePicker from 'material-ui/DatePicker';
 
 import Select from 'react-select';
+import { fade } from 'material-ui/utils/colorManipulator';
+import { relative } from 'path';
 
 const NO_VAL_PROVIDED = '-';
 
@@ -55,7 +67,7 @@ const columns = [
         key: 'uid',
         label: 'UID',
         style: { width: '10em', marginRight: 0, paddingRight: 0 },
-        filterOptions: [],
+        // filterOptions: [],
         show: true,
     },
     {
@@ -133,14 +145,20 @@ const columns = [
     {
         key: 'housingStatus',
         label: 'Housing Status',
-        filterOptions: [],
+        filterOptions: [
+            nullOption,
+            ...housingStatusOptionsList,
+        ],
         show: false,
     },
     // drug info
     {
         key: 'primaryDrug',
         label: 'Primary Drug',
-        filterOptions: [],
+        filterOptions: [
+            nullOption,
+            ...primaryDrugOptionsList,
+        ],
         show: false,
     },
     // {
@@ -177,7 +195,10 @@ const columns = [
     {
         key: 'hepCStatus',
         label: 'Hep C Status',
-        filterOptions: [],
+        filterOptions: [
+            nullOption,
+            ...hepCStatusOptionsList,
+        ],
         show: false,
     },
     // {
@@ -186,12 +207,12 @@ const columns = [
     //     filterOptions: [],
     //     show: false,
     // },
-    {
-        key: 'ageOfFirstInjection',
-        label: 'Age of First Injection',
-        filterOptions: [],
-        show: false,
-    },
+    // {
+    //     key: 'ageOfFirstInjection',
+    //     label: 'Age of First Injection',
+    //     filterOptions: [],
+    //     show: false,
+    // },
 ];
 
 class Search extends Component {
@@ -206,7 +227,9 @@ class Search extends Component {
                 show: col.show,
             };
             return agg;
-        }, {});
+        }, {
+            showSettings: false,
+        });
     }
 
     handleChange({key, value}) {
@@ -226,6 +249,7 @@ class Search extends Component {
         const {
             requestSearchByCriteria,
             searchByCriteriaResults: { searchResults, searchCriteria, lastSearchCriteria },
+            muiTheme: {palette},
         } = this.props;
 
         const {
@@ -239,143 +263,227 @@ class Search extends Component {
             requestSearchByCriteria({ searchCriteria });
         }
 
-        const minWidth = columns.filter( col => {
-            return col.show;
-        }).length*100;
+        const colsShownCount = Object.keys(this.state).filter( stateKey => {
+            return this.state[stateKey].show;
+        }).length;
+
+        const minWidth = colsShownCount*10;
 
         return (
-            <section>
-                <aside>
-                    { columns.map( col => {
-                        return <Toggle
-                            key={col.key}
-                            label={col.label}
-                            labelPosition="right"
-                            toggled={this.state[col.key].show}
-                            onToggle={(event, val) => {
-                                this.updateState({ key: col.key, val });
-                            }}
+            <section
+                style={{
+                    position: 'absolute',
+                    width: '100%',
+                    paddingTop: '155px',
+                    marginTop: '-155px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    display: 'flex',
+                    height: 'calc(100% - 155px)',
+                    overflow: 'hidden',
+                    minHeight: '0px', /* IMPORTANT: you need this for non-chrome browsers */
+                }}>
+                <aside 
+                    style={{
+                        padding: '1em 1em 0',
+                        overflow: 'auto',
+                        textAlign: 'right'
+                    }}
+                    >
+                    <FlatButton
+                        label="configure columns"
+                        labelPosition="after"
+                        icon={<SettingsIcon />}
+                        onClick={() => this.setState({ showSettings: !this.state.showSettings })}
                         />
-                    }) }
+                    {this.state.showSettings && <div
+                        style={{
+                            display: 'flex', 
+                            // // flex: 1,
+                            // backgroundColor: '#f00',
+                            flexWrap: 'wrap', 
+                            justifyContent: 'space-between',
+                            paddingTop: '.5em',
+                        }}>
+                        { columns
+                            .filter( col => {
+                                return col.key !== 'rowNum' && col.key !== 'uid';
+                            })
+                            .map( col => {
+                                return <div key={col.key}><Toggle
+                                    labelStyle={{ minWidth: '10em' }} 
+                                    // style={{ display: 'inline-block' }}
+                                    key={col.key}
+                                    label={col.label}
+                                    labelPosition="right"
+                                    toggled={this.state[col.key].show}
+                                    onToggle={(event, val) => {
+                                        this.updateState({ key: col.key, val });
+                                    }}
+                                /></div>
+                        }) }
+                    </div>}
                 </aside>
-                {contacts && (
-                    <Table
-                        height='30em'
-                        selectable={false}
-                        style={{minWidth: minWidth + 'px'}}
-                        bodyStyle={{minWidth: minWidth + 'px'}}
-                        >
-                        <TableHeader
-                            displaySelectAll={false}
-                            adjustForCheckbox={false}
+                <div style={{
+                    display: 'flex',
+                    flex: 3,
+                    margin: '.8em',
+                    border: '.2em solid ' + palette.borderColor,
+                    minHeight: '0', /* IMPORTANT: you need this for non-chrome browsers */
+                }}>
+                    {contacts && (
+                        <Table
+                            selectable={false}
+                            fixedHeader={true}
+                            fixedFooter={true}
+                            wrapperStyle={{
+                                flex: 1,
+                                position: 'relative',
+                                overflow: 'auto',
+                                height: '100%',
+                            }}
+                            style={{ 
+                                minWidth: `${minWidth}em`,
+                            }}
+                            bodyStyle={{
+                                minWidth: `${minWidth}em`,
+                                marginBottom: '-49px',
+                                paddingBottom: '49px',
+                                height: 'calc(100% - 163px)',
+                                paddingTop: '114px',
+                                paddingBottom: '49px',
+                            }}
+                            headerStyle={{
+                                position: 'absolute',
+                                top: 0,
+                            }}
+                            footerStyle={{
+                                position: 'absolute',
+                                bottom: 0,
+                                borderTop: '1px solid ' + palette.primary3Color, 
+                                opacity: 0.74,
+                            }}
                             >
-                            <TableRow>
-                                {columns
-                                    .filter( column => {
-                                        return this.state[column.key].show === true;
-                                    })
-                                    .map( column => {
-                                        return (
-                                            <TableHeaderColumn
-                                                style={{
-                                                    ...column.style,
-                                                    whiteSpace: 'normal'
-                                                }}
-                                                key={column.key}
-                                                >
-                                                {column.label}
-                                            </TableHeaderColumn>
-                                        );
-                                    })
-                                }
-                            </TableRow>
-                            <TableRow>
-                                {columns
-                                    .filter( column => {
-                                        return this.state[column.key].show === true;
-                                    })
-                                    .map( column => {
-                                        return (
-                                            <TableHeaderColumn
-                                                style={{
-                                                    ...column.style,
-                                                    whiteSpace: 'normal'
-                                                }}
-                                                key={column.key}
-                                                >
-                                                {column.filterByCalendar === true && (
-                                                    <DatePicker
-                                                        selected={searchCriteria[column.key] ? moment(searchCriteria[column.key]) : null}
-                                                        onChange={(date) => this.handleChange({key: column.key, value: date})}
-                                                        peekNextMonth
-                                                        showMonthDropdown
-                                                        showYearDropdown
-                                                        dropdownMode="select"
-                                                    />
-                                                )}
-                                                {!column.filterOptions || !column.filterOptions.length ? '' : (
-                                                    <Select
-                                                        key={'dropdown-' + column.key}
-                                                        defaultValue={searchCriteria[column.key]}
-                                                        onChange={(e) => this.handleChange({key: column.key, value: e.value})}
-                                                        options={column.filterOptions}
-                                                    />
-                                                )}
-                                            </TableHeaderColumn>
-                                        );
-                                    })
-                                }
-                            </TableRow>
-                        </TableHeader>
-
-                        <TableBody
-                            showRowHover={true}
-                            displayRowCheckbox={false}
-                            >
-                            {contacts.map( (contact, contactIndex) => (
-                                <TableRow
-                                    key={contact.uid}
-                                    >
+                            <TableHeader
+                                displaySelectAll={false}
+                                adjustForCheckbox={false}
+                                style={{ backgroundColor: fade(palette.borderColor, 0.3) }}
+                                >
+                                <TableRow>
                                     {columns
                                         .filter( column => {
                                             return this.state[column.key].show === true;
                                         })
-                                        .map( (column) => {
-                                            let value = contact[column.key] === undefined ? NO_VAL_PROVIDED : contact[column.key];
-                                            if (value === true || value === false) {
-                                                value = value.toString();
-                                            } else if (column.key === 'rowNum') {
-                                                value = indexStart + contactIndex + 1;
-                                            } else if ('function' === typeof column.displayTranslation) {
-                                                value = column.displayTranslation({val: value});
-                                            }
+                                        .map( column => {
                                             return (
-                                                <TableRowColumn
-                                                    style={column.style || {}}
-                                                    key={contact.uid + '-' +column.key}
+                                                <TableHeaderColumn
+                                                    style={{
+                                                        ...column.style,
+                                                        whiteSpace: 'normal'
+                                                    }}
+                                                    key={column.key}
                                                     >
-                                                    {value}
-                                                </TableRowColumn>
+                                                    {column.label}
+                                                </TableHeaderColumn>
                                             );
                                         })
                                     }
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                        <TableFooter>
-                            <TableRow>
-                                <TableRowColumn colSpan="6" style={{textAlign: 'center', verticalAlign: 'middle'}}>
-                                    {contacts && (
-                                        `Showing ${indexStart + 1} - ${indexEnd + 1} of ${totalCount}`
-                                    )}
-                                </TableRowColumn>
-                            </TableRow>
-                        </TableFooter>
-                    </Table>
-                )}
+                                <TableRow>
+                                    {columns
+                                        .filter( column => {
+                                            return this.state[column.key].show === true;
+                                        })
+                                        .map( column => {
+                                            return (
+                                                <TableHeaderColumn
+                                                    style={{
+                                                        ...column.style,
+                                                        whiteSpace: 'normal'
+                                                    }}
+                                                    key={column.key}
+                                                    >
+                                                    {column.filterByCalendar === true && (
+                                                        <DatePicker
+                                                            selected={searchCriteria[column.key] ? moment(searchCriteria[column.key]) : null}
+                                                            onChange={(date) => this.handleChange({key: column.key, value: date})}
+                                                            peekNextMonth
+                                                            showMonthDropdown
+                                                            showYearDropdown
+                                                            dropdownMode="select"
+                                                        />
+                                                    )}
+                                                    {!column.filterOptions || !column.filterOptions.length ? '' : (
+                                                        <Select
+                                                            key={'dropdown-' + column.key}
+                                                            defaultValue={searchCriteria[column.key]}
+                                                            onChange={(e) => this.handleChange({key: column.key, value: e.value})}
+                                                            options={column.filterOptions}
+                                                        />
+                                                    )}
+                                                </TableHeaderColumn>
+                                            );
+                                        })
+                                    }
+                                </TableRow>
+                            </TableHeader>
+
+                            <TableBody
+                                showRowHover={true}
+                                displayRowCheckbox={false}
+                                style={{ backgroundColor: fade(palette.borderColor, 0.05) }}
+                                >
+                                {contacts.map( (contact, contactIndex) => (
+                                    <TableRow
+                                        striped={true}
+                                        key={contact.uid}
+                                        >
+                                        {columns
+                                            .filter( column => {
+                                                return this.state[column.key].show === true;
+                                            })
+                                            .map( (column) => {
+                                                let value = contact[column.key] === undefined ? NO_VAL_PROVIDED : contact[column.key];
+                                                if (value === true || value === false) {
+                                                    value = value.toString();
+                                                } else if (column.key === 'rowNum') {
+                                                    value = indexStart + contactIndex + 1;
+                                                } else if ('function' === typeof column.displayTranslation) {
+                                                    value = column.displayTranslation({val: value});
+                                                }
+                                                return (
+                                                    <TableRowColumn
+                                                        style={column.style || {}}
+                                                        key={contact.uid + '-' +column.key}
+                                                        >
+                                                        {value}
+                                                    </TableRowColumn>
+                                                );
+                                            })
+                                        }
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                            <TableFooter
+                                adjustForCheckbox={false}
+                                style={{ backgroundColor: fade(palette.borderColor, 0.3) }}>
+                                <TableRow>
+                                    <TableRowColumn
+                                        colSpan={colsShownCount}
+                                        style={{textAlign: 'center', verticalAlign: 'middle'}}
+                                        >
+                                        {contacts && (
+                                            `Showing ${indexStart + 1} - ${indexEnd + 1} of ${totalCount}`
+                                        )}
+                                    </TableRowColumn>
+                                </TableRow>
+                            </TableFooter>
+                        </Table>
+                    )}
+                </div>
             </section>
         );
     }
 }
 
-export default Search;
+export default muiThemeable()(Search);

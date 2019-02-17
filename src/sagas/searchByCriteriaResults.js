@@ -43,7 +43,16 @@ function* requestSearchByCriteria( { searchCriteria } ) {
     } 
     if (searchCriteria.ethnicity !== undefined && searchCriteria.ethnicity !== null) {
         query.equalTo('ethnicity', searchCriteria.ethnicity);
-    } 
+    }
+    if (searchCriteria.hispanic !== undefined && searchCriteria.hispanic !== null) {
+        query.equalTo('hispanic', searchCriteria.hispanic);
+    }
+    if (searchCriteria.housingStatus !== undefined && searchCriteria.housingStatus !== null) {
+        query.equalTo('housingStatus', searchCriteria.housingStatus);
+    }
+    if (searchCriteria.primaryDrug !== undefined && searchCriteria.primaryDrug !== null) {
+        query.equalTo('primaryDrug', searchCriteria.primaryDrug);
+    }
     if (searchCriteria.genderIdentity !== undefined && searchCriteria.genderIdentity !== null) {
         query.equalTo('genderIdentity', searchCriteria.genderIdentity);
     } 

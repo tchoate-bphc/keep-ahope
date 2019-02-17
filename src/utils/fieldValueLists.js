@@ -28,7 +28,7 @@ export const countryOfBirthList = [
 
 // Periodic ------------------------------------------------
 
-export const housingRadioOptions = [
+export const housingStatusOptionsList = [
     { name: 'housed', label: 'Housed', value: 'housed' },
     { name: 'homeless', label: 'Homeless', value: 'homeless' },
     { name: 'unstable', label: 'Unstable Housed', value: 'unstable' },
@@ -40,7 +40,7 @@ export const hivRadioOptions = [
     { name: 'neverTested', label: 'Never Tested', value: 'neverTested' },
 ]
 
-export const hepCOptions = [
+export const hepCStatusOptionsList = [
     { name: 'positive', label: 'Positive', value: 'positive' },
     { name: 'negative', label: 'Negative', value: 'negative' },
     { name: 'neverTested', label: 'Never Tested', value: 'neverTested' },
