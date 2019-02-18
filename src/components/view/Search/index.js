@@ -12,7 +12,7 @@ import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
 
-import { defaultState as searchByCriteriaResultsDefaultState } from '../../../reducers/searchByCriteriaResults';
+import { defaultState as getSearchByCriteriaResultsDefaultState } from '../../../reducers/searchByCriteriaResults';
 
 import {
     enthnicityOptionsList,
@@ -229,16 +229,26 @@ class Search extends Component {
             return agg;
         }, {
             showSettings: false,
+            isFirstTime: true,
         });
+
+        this.searchByCriteriaResultsDefaultState = getSearchByCriteriaResultsDefaultState();
     }
 
-    handleChange({key, value}) {
+    requestUpdateSearchByCriteria({key, value}) {
+        if (this.state.isFirstTime) { this.setState({ isFirstTime: false }); }
         const { requestSearchByCriteria,  searchByCriteriaResults: { searchCriteria } } = this.props;
         searchCriteria[key] = value;
         requestSearchByCriteria({searchCriteria});
     }
 
     updateState({ key, val }) {
+        if ( val === false ) {
+            this.requestUpdateSearchByCriteria({
+                key, 
+                value: this.searchByCriteriaResultsDefaultState.searchCriteria[key]
+            });
+        }
         this.setState({
             [key]: { show: val }
         });
@@ -259,8 +269,11 @@ class Search extends Component {
             contacts = [],
         } = searchResults || {};
 
-        if ( searchResults.length === 0 && searchByCriteriaResultsDefaultState.searchCriteria === searchCriteria ) {
-            requestSearchByCriteria({ searchCriteria });
+        if ( searchCriteria.isFirstRequest ) {
+            requestSearchByCriteria({ searchCriteria: {
+                ...searchCriteria,
+                isFirstRequest: false,
+            }});
         }
 
         const colsShownCount = Object.keys(this.state).filter( stateKey => {
@@ -311,7 +324,10 @@ class Search extends Component {
                             })
                             .map( col => {
                                 return <div key={col.key}><Toggle
-                                    labelStyle={{ minWidth: '10em' }} 
+                                    labelStyle={{ 
+                                        minWidth: '10em', 
+                                        textAlign: 'left',
+                                    }} 
                                     // style={{ display: 'inline-block' }}
                                     key={col.key}
                                     label={col.label}
@@ -406,7 +422,7 @@ class Search extends Component {
                                                     {column.filterByCalendar === true && (
                                                         <DatePicker
                                                             selected={searchCriteria[column.key] ? moment(searchCriteria[column.key]) : null}
-                                                            onChange={(date) => this.handleChange({key: column.key, value: date})}
+                                                            onChange={(date) => this.requestUpdateSearchByCriteria({key: column.key, value: date})}
                                                             peekNextMonth
                                                             showMonthDropdown
                                                             showYearDropdown
@@ -417,7 +433,7 @@ class Search extends Component {
                                                         <Select
                                                             key={'dropdown-' + column.key}
                                                             defaultValue={searchCriteria[column.key]}
-                                                            onChange={(e) => this.handleChange({key: column.key, value: e.value})}
+                                                            onChange={(e) => this.requestUpdateSearchByCriteria({key: column.key, value: e.value})}
                                                             options={column.filterOptions}
                                                         />
                                                     )}
@@ -472,9 +488,10 @@ class Search extends Component {
                                         colSpan={colsShownCount}
                                         style={{textAlign: 'center', verticalAlign: 'middle'}}
                                         >
-                                        {contacts && (
+                                        {contacts && totalCount > 0 && (
                                             `Showing ${indexStart + 1} - ${indexEnd + 1} of ${totalCount}`
                                         )}
+                                        {totalCount === 0 && 'No Results'}
                                     </TableRowColumn>
                                 </TableRow>
                             </TableFooter>

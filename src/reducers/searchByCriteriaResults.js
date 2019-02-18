@@ -4,7 +4,8 @@ import {
     RANGE_CURRENT_WEEK,
 } from '../constants';
 
-const defaultSearchCriteria = {
+const defaultSearchCriteria = () => ({
+    isFirstRequest: true,
     indexStart: 0,
 
     dateOfLastVisit: null,
@@ -22,15 +23,15 @@ const defaultSearchCriteria = {
     hepCStatus: null,
     isInCareForHepC: null,
     ageOfFirstInjection: null,
-}
+});
 
-export const defaultState = {
-    lastSearchCriteria: { ...defaultSearchCriteria },
-    searchCriteria: { ...defaultSearchCriteria },
+export const defaultState = () => ({
+    lastSearchCriteria: { ...defaultSearchCriteria() },
+    searchCriteria: { ...defaultSearchCriteria() },
     searchResults: []
-};
+});
 
-function searchByCriteria(state = defaultState, action) {
+function searchByCriteria(state = { ...defaultState() }, action) {
 
     const {
         searchResults,
