@@ -21,8 +21,6 @@ import VisitOrOutreachQuestions from 'components/view/ContactIntake/visitOrOutre
 import DescriptionIcon from 'material-ui/svg-icons/action/description';
 
 import './styles.css';
-import { EditorBorderRight } from 'material-ui/svg-icons';
-
 
 class IntakeForm extends Component {
 
@@ -155,7 +153,7 @@ class IntakeForm extends Component {
         const selectControls = selectOptionsList.map(selectOption => (
             <MenuItem
                 key={name + '-' + selectOption.value}
-                primaryText={selectOption.primaryText}
+                primaryText={selectOption.label}
                 value={selectOption.value}
                 name={name}
             />

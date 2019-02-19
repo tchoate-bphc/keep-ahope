@@ -39,6 +39,11 @@ import {
     UPDATE_NOTIFICATION_SINGLETON,
     CLOSE_NOTIFICATION,
 
+    // SEARCH
+    REQUEST_SEARCH_BY_CRITERIA,
+    UPDATE_SEARCH_BY_CRITERIA_CRITERIA,
+    UPDATE_SEARCH_BY_CRITERIA_RESULTS,
+
     // CONSENT
     GET_CONSENT_TEXT,
     UPDATE_CONSENT_TEXT,
@@ -222,6 +227,30 @@ export function closeNotification({notificationId}) {
     return {
         type: CLOSE_NOTIFICATION,
         notificationId
+    };
+}
+
+/** SEARCH */
+
+export function requestSearchByCriteria({searchCriteria}) {
+    return {
+        type: REQUEST_SEARCH_BY_CRITERIA,
+        searchCriteria,
+    };
+}
+
+export function updateSearchByCriteriaCriteria({searchCriteria}) {
+    return {
+        type: UPDATE_SEARCH_BY_CRITERIA_CRITERIA,
+        searchCriteria,
+    };
+}
+
+export function updateSearchByCriteriaResults({searchResults, searchCriteria}) {
+    return {
+        type: UPDATE_SEARCH_BY_CRITERIA_RESULTS,
+        searchResults,
+        searchCriteria
     };
 }
 

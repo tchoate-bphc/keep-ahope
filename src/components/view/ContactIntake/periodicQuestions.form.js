@@ -5,6 +5,7 @@ import { FieldWithManualOption } from '../common/FieldWithManualOption';
 import { Card, CardTitle } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 
+import { housingStatusOptionsList, hivRadioOptions, hepCStatusOptionsList, insurerOptionsList, primaryDrugOptionsList, otherDrugOptionsList } from '../../../utils/fieldValueLists';
 
 class PeriodicIntakeForm extends Component {
 
@@ -17,62 +18,13 @@ class PeriodicIntakeForm extends Component {
     };
 
     getUniquePrimaryTextList({collection, realValue}) {
-        const isManualInCollection = collection.find( obj => obj.primaryText === realValue || obj.value === realValue );
-        return isManualInCollection ? collection : [ ...collection, {primaryText: realValue, value: realValue} ];
+        const isManualInCollection = collection.find( obj => obj.label === realValue || obj.value === realValue );
+        return isManualInCollection ? collection : [ ...collection, {label: realValue, value: realValue} ];
     }
 
     render() {
 
         const { updateIntakeFormField } = this.props;
-
-        const housingRadioOptions = [
-            { name: 'housed', label: 'Housed', value: 'housed' },
-            { name: 'homeless', label: 'Homeless', value: 'homeless' },
-            { name: 'unstable', label: 'Unstable Housed', value: 'unstable' },
-        ];
-
-        const hivRadioOptions = [
-            { name: 'positive', label: 'Positive', value: 'positive' },
-            { name: 'negative', label: 'Negative', value: 'negative' },
-            { name: 'neverTested', label: 'Never Tested', value: 'neverTested' },
-        ]
-
-        const hepCOptions = [
-            { name: 'positive', label: 'Positive', value: 'positive' },
-            { name: 'negative', label: 'Negative', value: 'negative' },
-            { name: 'neverTested', label: 'Never Tested', value: 'neverTested' },
-        ];
-
-        const insurerOptionsList = [
-            {primaryText: 'Mass Health', value: 'MH'},
-            {primaryText: 'Neighborhood Health Program', value: 'NHP'},
-            {primaryText: 'Blue Cross Blue Shield', value: 'BCBS'},
-            {primaryText: 'Tufts', value: 'TF'},
-            // TODO: user needs to be able to click this and enter in their own custom entry
-            {primaryText: 'Other', value: 'other'},
-        ];
-
-        const primaryDrugOptionsList = [
-            {primaryText: '-none-', value: null},
-            {primaryText: 'Heroin', value: 'heroin'},
-            {primaryText: 'Methamphetamine', value: 'meth'},
-            {primaryText: 'Cocaine', value: 'cocaine'},
-            // TODO: user needs to be able to click this and enter in their own custom entry
-            {primaryText: 'Other', value: 'other'},
-        ];
-
-        const otherDrugOptionsList = [
-            {primaryText: '-none-', value: null},
-            {primaryText: 'Heroin', value: 'heroin'},
-            {primaryText: 'Methamphetamine', value: 'meth'},
-            {primaryText: 'Cocaine', value: 'cocaine'},
-            {primaryText: 'Crack', value: 'crack'},
-            {primaryText: 'Benzos', value: 'benzos'},
-            {primaryText: 'Suboxone (not RX)', value: 'suboxone'},
-            {primaryText: 'Methadone (not RX)', value: 'methadone'},
-            // TODO: user needs to be able to click this and enter in their own custom entry
-            {primaryText: 'Other', value: 'other'},
-        ]
 
         // rest of the stuff for this form
         return (
@@ -88,7 +40,7 @@ class PeriodicIntakeForm extends Component {
                 />
 
                 <div style={{padding: '2rem'}}>
-                    {this.buildRadio('Housing Status', housingRadioOptions, 'housingStatus', this.props.handleChange)}
+                    {this.buildRadio('Housing Status', housingStatusOptionsList, 'housingStatus', this.props.handleChange)}
                 </div>
 
                 <div style={{padding: '2rem'}}>
@@ -103,7 +55,7 @@ class PeriodicIntakeForm extends Component {
                 </div>}
 
                 <div style={{padding: '2rem'}}>
-                    {this.buildRadio('Hepatitus C Status', hepCOptions, 'hepCStatus', (evt, val) => {
+                    {this.buildRadio('Hepatitus C Status', hepCStatusOptionsList, 'hepCStatus', (evt, val) => {
                         this.props.handleChange(evt, val);
                         this.props.handleChildToggleChange('isInCareForHepC', val === 'negative' ? false : this.props.isInCareForHepC );
                     })}

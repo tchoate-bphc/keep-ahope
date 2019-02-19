@@ -17,6 +17,7 @@ import AuthorizedNav from 'components/controller/AuthorizedNav';
 
 import Contact from 'components/controller/Contact';
 import Reports from 'components/controller/Reports';
+import Search from 'components/controller/Search';
 import Messages from 'components/controller/Messages';
 
 import Navigation from 'components/controller/Navigation';
@@ -91,6 +92,7 @@ class App extends Component {
                                 <AuthorizedNav exact path="/" component={Navigation} />
                                 <AuthorizedNav exact path="/contact" component={Navigation} />
                                 <AuthorizedNav exact path="/reports" component={Navigation} />
+                                <AuthorizedNav exact path="/search" component={Navigation} />
                                 <AuthorizedNav path="/:context/:uid/:action/" component={Navigation} />
                             </Switch>
                             <Messages />
@@ -98,6 +100,7 @@ class App extends Component {
                                 <AuthorizedRoute exact path="/contact/" component={Contact} />
                                 <AuthorizedRoute path="/contact/:uid/:action" component={Contact} />
                                 <AuthorizedRoute exact path="/reports" component={Reports} />
+                                <AuthorizedRoute exact path="/search" component={Search} />
                                 <AuthorizedRoute path="/" component={Contact} />
                             </Switch>
                         </div>

@@ -5,6 +5,7 @@ import contacts from './contacts';
 import intakeForm from './intakeForm';
 import notificationSingleton from './notificationSingleton';
 import reportsData from './reportsData';
+import searchByCriteriaResults from './searchByCriteriaResults';
 import user from './user';
 
 function isLoggedIn(state = false) {
@@ -20,6 +21,7 @@ const reducers = {
     isLoggedIn,
     notificationSingleton,
     reportsData,
+    searchByCriteriaResults,
     user,
 };
 
