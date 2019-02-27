@@ -1,4 +1,5 @@
 import { takeEvery } from 'redux-saga/effects';
+import { OFFLINE_MODE } from '../constants'
 
 import {
     LOGIN_GOOGLE_REQUEST,
@@ -6,6 +7,19 @@ import {
 } from '../constants';
 
 import { setCurrentUser, showLoginSpinner, logoutUserRequest as logoutUserRequestAction } from 'actions';
+
+import stubUserJson from '../endpointStubs/users.json'
+
+function* stubLoginGoogleRequest() {
+    window._UI_STORE_.dispatch(showLoginSpinner(false));
+    window._UI_STORE_.dispatch(setCurrentUser({
+        permissions: { basic: true, googleAuth: true },
+        email: stubUserJson.email,
+        name: stubUserJson.fullName,
+        uid: 'aaaa236889aaa',
+    }));
+    yield;
+}
 
 function* loginGoogleRequest( ) {
 
@@ -149,8 +163,17 @@ function* logoutUserRequest() {
 }
 
 export default function* () {
-    yield [
-        takeEvery(LOGIN_GOOGLE_REQUEST, loginGoogleRequest),
-        takeEvery(LOGOUT_USER_REQUEST, logoutUserRequest)
-    ];
+    if (OFFLINE_MODE) {
+        yield [
+            takeEvery(LOGIN_GOOGLE_REQUEST, stubLoginGoogleRequest),
+            // same for both
+            takeEvery(LOGOUT_USER_REQUEST, logoutUserRequest)
+        ];
+    } else {
+        yield [
+            takeEvery(LOGIN_GOOGLE_REQUEST, loginGoogleRequest),
+            // same for both
+            takeEvery(LOGOUT_USER_REQUEST, logoutUserRequest)
+        ];
+    }
 }

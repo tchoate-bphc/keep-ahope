@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import moment from 'moment';
+
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
 import TextField from 'material-ui/TextField'
@@ -21,6 +23,7 @@ import VisitOrOutreachQuestions from 'components/view/ContactIntake/visitOrOutre
 import DescriptionIcon from 'material-ui/svg-icons/action/description';
 
 import './styles.css';
+import { white } from 'material-ui/styles/colors';
 
 class IntakeForm extends Component {
 
@@ -291,6 +294,7 @@ class IntakeForm extends Component {
             contactGivesDataConsent: userState !== null ? userState.contactGivesDataConsent : false,
         
             // periodic
+            dateOfLastVisit: userState.dateOfLastVisit !== null ? userState.dateOfLastVisit : null,
             zipCode: userState.zipCode !== null ? userState.zipCode : '',
             didOdLastYear: userState.didOdLastYear !== null ? userState.didOdLastYear : false,
             didSeeOdLastYear: userState.didSeeOdLastYear !== null ? userState.didSeeOdLastYear : false,
@@ -393,6 +397,9 @@ class IntakeForm extends Component {
             />,
           ];
 
+        const contactDateOfBirthConverted = !userStateForDisplay.contactDateOfBirth ? null : moment(userStateForDisplay.contactDateOfBirth.iso.replace(/T.*/,'')).startOf('day').toDate();
+        const dateOfLastVisitConverted = !userStateForDisplay.dateOfLastVisit ? null : moment(userStateForDisplay.dateOfLastVisit.iso.replace(/T.*/,'')).startOf('day').toDate();
+
         return (
             <form className="form">
 
@@ -452,11 +459,35 @@ class IntakeForm extends Component {
                     </div>
                     <div
                         className="row"
-                        style={{padding: '2rem'}}
+                        style={{ ...fieldsStyle, paddingTop: 0 }}
                         >
+                        <div 
+                            style={{ 
+                                padding: '0.5em',
+                                marginBottom: '1em',
+                                background: palette.successColor,
+                                color: 'white',
+                            }}
+                            >
+                            {userStateForDisplay.dateOfLastVisit ? (
+                                <DatePicker
+                                    style={{
+                                        padding: '1em',
+                                        background: palette.successColor,
+                                        color: palette.canvasColor,
+                                    }}
+                                    className="col-xs-6 col-sm-6 col-md-3"
+                                    hintText="Date of Last Visit"
+                                    disabled
+                                    floatingLabelText="Date of Last Visit"
+                                    value={dateOfLastVisitConverted}
+                                />)
+                                : 'First Visit for ${userStateForDisplay.uid}'
+                            }
+                        </div>
                         {formCheckboxOptionsArray.map(option => (
                             <Checkbox
-                                className="col-xs-12 col-sm-6 col-md-3"
+                                className="col-xs-6 col-sm-6 col-md-3"
                                 key={option.key}
                                 labelStyle={option.labelStyle}
                                 style={option.style}
@@ -465,8 +496,8 @@ class IntakeForm extends Component {
                                 // defaultChecked={option.defaultChecked}
                                 disabled={option.disabled}
                                 onCheck={option.onCheckCallback}
-                            />
-                        ))}
+                                />
+                            ))}
                     </div>
                 </Card>
 
@@ -507,7 +538,7 @@ class IntakeForm extends Component {
                     buildSlider={this.buildSlider}
                     palette={palette}
                     // form data
-                    contactDateOfBirth={userStateForDisplay.contactDateOfBirth}
+                    contactDateOfBirth={contactDateOfBirthConverted}
                     contactGenderIdentity={userStateForDisplay.contactGenderIdentity}
                     contactEthnicity={userStateForDisplay.contactEthnicity}
                     contactIsHispanic={userStateForDisplay.contactIsHispanic}
