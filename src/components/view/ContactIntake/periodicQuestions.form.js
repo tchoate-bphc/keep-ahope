@@ -19,7 +19,16 @@ class PeriodicIntakeForm extends Component {
 
     getUniquePrimaryTextList({collection, realValue}) {
         const isManualInCollection = collection.find( obj => obj.label === realValue || obj.value === realValue );
-        return isManualInCollection ? collection : [ ...collection, {label: realValue, value: realValue} ];
+        const collectionCopy = collection.map(item => ({ 
+            label: item.label, 
+            value: item.value
+        }));
+        if (!isManualInCollection) {
+            // deep clone the collection
+            const indexOfItemOther = collectionCopy.findIndex(item => item.value === 'other');
+            collectionCopy[indexOfItemOther] = {label: 'Other', value: realValue};
+        }
+        return collectionCopy;
     }
 
     render() {
@@ -98,7 +107,7 @@ class PeriodicIntakeForm extends Component {
                             val: this.props.primaryDrug,
                             validOptionsList: primaryDrugOptionsList.map( obj => obj.value ),
                         }}
-                        defaultFieldEl={this.buildSelectField({ 
+                        defaultFieldEl={this.buildSelectField({
                             title: 'Primary Drug', 
                             selectOptionsList: this.getUniquePrimaryTextList({
                                 collection: primaryDrugOptionsList, 
