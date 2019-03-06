@@ -57,7 +57,7 @@ class VisitOrOutreachQuestions extends Component {
                     {this.buildSlider('syringesGiven', 'Syringes Given', this.props.syringesGiven, this.props.handleSliderChange)}
                 </div>
                 <div style={{padding: '2rem 2rem 0rem 2rem'}}>
-                    {this.buildSlider('syringesTaken', 'Syringes Taken', this.props.syringesTaken, this.props.handleSliderChange)}
+                    {this.buildSlider('syringesTaken', 'Syringes Collected', this.props.syringesTaken, this.props.handleSliderChange)}
                 </div>
                 <div style={{padding: '2rem'}}>
                     {this.buildToggle('Narcan was offered', 'narcanWasOffered', this.props.handleChildToggleChange)}
