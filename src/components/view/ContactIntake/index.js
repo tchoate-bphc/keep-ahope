@@ -409,7 +409,7 @@ class IntakeForm extends Component {
 
                 <Card>
                     <CardTitle title='Form Questions' titleColor={palette.primary1Color}/>
-                    <div style={{...fieldsStyle, padding: '2rem'}}>
+                    <div style={ fieldsStyle }>
 
                         <Dialog
                             title="Data Collection Consent"
@@ -452,10 +452,10 @@ class IntakeForm extends Component {
                         </div>
                     </div>
 
-                    <div style={fieldsStyle}>
+                    <div style={{ ...fieldsStyle, paddingTop: 0 }}>
                         <DatePicker
                             hintText="Date"
-                            floatingLabelText="Date"
+                            floatingLabelText="Date of Interaction"
                             value={userStateForDisplay.eventDate}
                             onChange={(e, date) => this.updateIntakeFormField({key: 'eventDate', val: date})}
                             autoOk={true}
@@ -465,28 +465,6 @@ class IntakeForm extends Component {
                         className="row"
                         style={{ ...fieldsStyle, paddingTop: 0 }}
                         >
-                        {/* <div 
-                            style={{ 
-                                padding: '0.5em',
-                                marginBottom: '1em',
-                                background: palette.successColor,
-                                color: 'white',
-                            }}
-                            >
-                            {userStateForDisplay.dateOfLastVisit ? (
-                                <DatePicker
-                                    style={{
-                                        padding: '1em',
-                                    }}
-                                    className="col-xs-6 col-sm-6 col-md-3"
-                                    hintText="Date of Last Visit"
-                                    disabled
-                                    floatingLabelText="Date of Last Visit"
-                                    value={dateOfLastVisitConverted}
-                                />)
-                                : 'First Visit for ${userStateForDisplay.uid}'
-                            }
-                        </div> */}
                         {formCheckboxOptionsArray.map(option => (
                             <Checkbox
                                 className="col-xs-6 col-sm-6 col-md-3"
@@ -500,6 +478,25 @@ class IntakeForm extends Component {
                                 onCheck={option.onCheckCallback}
                                 />
                             ))}
+                    </div>
+                </Card>
+
+                <Card>
+                    <CardTitle 
+                        title='Contact Profile Notes' 
+                        subtitle='Notes about this individual, visible for future interactions'
+                        titleColor={palette.primary1Color} 
+                        />
+                    <div className="textAreaContainer">
+                        <TextField
+                            multiLine={true}
+                            rows={5}
+                            fullWidth={true}
+                            id="profileNotes"
+                            // floatingLabelText="Notes about this individual"
+                            value={userStateForDisplay.profileNotes}
+                            onChange={(e, value) => this.updateIntakeFormField({key: 'profileNotes', val: value})}
+                        />
                     </div>
                 </Card>
 
@@ -574,30 +571,21 @@ class IntakeForm extends Component {
                     />}
 
                 <Card>
-                    <div className="textAreaContainer">
-                    <TextField
-                        multiLine={true}
-                        rows={5}
-                        fullWidth={true}
-                        id="eventNotes"
-                        floatingLabelText="Event Notes"
-                        value={userStateForDisplay.eventNotes}
-                        onChange={(e, value) => this.updateIntakeFormField({key: 'eventNotes', val: value})}
+                    <CardTitle 
+                        title='Event Notes' 
+                        subtitle='Notes about this specific event'
+                        titleColor={palette.primary1Color} 
                         />
-                    </div>
-                </Card>
-
-                <Card>
                     <div className="textAreaContainer">
-                    <TextField
-                        multiLine={true}
-                        rows={5}
-                        fullWidth={true}
-                        id="profileNotes"
-                        floatingLabelText="Profile Notes"
-                        value={userStateForDisplay.profileNotes}
-                        onChange={(e, value) => this.updateIntakeFormField({key: 'profileNotes', val: value})}
-                    />
+                        <TextField
+                            multiLine={true}
+                            rows={5}
+                            fullWidth={true}
+                            id="eventNotes"
+                            // floatingLabelText="Event Notes"
+                            value={userStateForDisplay.eventNotes}
+                            onChange={(e, value) => this.updateIntakeFormField({key: 'eventNotes', val: value})}
+                            />
                     </div>
                 </Card>
 
