@@ -20,7 +20,7 @@ class NewContactQuestionsForm extends Component {
 
     render() {
 
-        const { palette, updateIntakeFormField } = this.props;
+        const { palette, updateIntakeFormField, fieldStyles } = this.props;
 
         const options = {
             defaultValue: 0,
@@ -31,10 +31,10 @@ class NewContactQuestionsForm extends Component {
 
         // rest of the stuff for this form
         return (
-            <Card>
+            <Card style={{ paddingBottom: '1rem' }}>
                 <CardTitle title='First Contact' titleColor={palette.primary1Color}/>
 
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     <DatePicker
                         hintText="Date of Birth"
                         floatingLabelText="Date of Birth"
@@ -45,19 +45,19 @@ class NewContactQuestionsForm extends Component {
                     />
                 </div>
 
-                <div style={{padding: '2rem 2rem 0rem 2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildSlider('contactAgeOfFirstInjection', 'Age of First Injection', this.props.contactAgeOfFirstInjection, this.props.handleSliderChange, options)}
                 </div>
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildRadio('Gender Identity', genderOptionsList, 'contactGenderIdentity', this.props.handleChange)}
                 </div>
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildSelectField({title: 'Ethnicity', selectOptionsList: enthnicityOptionsList, name: 'contactEthnicity', val: this.props.contactEthnicity, updateCallback: this.props.handleSelectChange, multiple: false })}
                 </div>
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildRadio('Country of Birth', countryOfBirthList, 'contactCountryOfBirth', this.props.handleChange)}
                 </div>
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildToggle('Hispanic?', 'contactIsHispanic', this.props.handleChildToggleChange)}
                 </div>
             </Card>

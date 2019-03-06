@@ -121,7 +121,7 @@ class IntakeForm extends Component {
 
         let labelStyle = {
             color: this.props.palette.accent3Color,
-            margin: '2rem 0 1rem 0'
+            margin: '0 0 0.5rem 0'
         };
 
         return (
@@ -164,7 +164,6 @@ class IntakeForm extends Component {
 
         const labelStyle = {
             color: this.props.palette.accent3Color,
-            margin: '2rem 0 1rem 0'
         };
 
         return (
@@ -189,7 +188,7 @@ class IntakeForm extends Component {
     buildSlider(sliderName, labelText, sliderValue, updateCallback, overrides = {}) {
         let labelStyle = {
             color: this.props.palette.accent3Color,
-            margin: '2rem 0 1rem 0'
+            // margin: '2rem 0 1rem 0'
         };
         
         const options = {
@@ -348,8 +347,8 @@ class IntakeForm extends Component {
             color: palette.errorColor
         }
 
-        const fieldsStyle = {
-            padding: '2rem',
+        const fieldStyles = {
+            padding: '1rem 2rem',
         };
 
         const contactDateOfBirthConverted = !userStateForDisplay.contactDateOfBirth ? null : moment(userStateForDisplay.contactDateOfBirth.iso.replace(/T.*/,'')).startOf('day').toDate();
@@ -409,7 +408,7 @@ class IntakeForm extends Component {
 
                 <Card>
                     <CardTitle title='Form Questions' titleColor={palette.primary1Color}/>
-                    <div style={ fieldsStyle }>
+                    <div style={ fieldStyles }>
 
                         <Dialog
                             title="Data Collection Consent"
@@ -452,7 +451,7 @@ class IntakeForm extends Component {
                         </div>
                     </div>
 
-                    <div style={{ ...fieldsStyle, paddingTop: 0 }}>
+                    <div style={{ ...fieldStyles, paddingTop: 0 }}>
                         <DatePicker
                             hintText="Date"
                             floatingLabelText="Date of Interaction"
@@ -463,7 +462,7 @@ class IntakeForm extends Component {
                     </div>
                     <div
                         className="row"
-                        style={{ ...fieldsStyle, paddingTop: 0 }}
+                        style={{ ...fieldStyles, paddingTop: 0 }}
                         >
                         {formCheckboxOptionsArray.map(option => (
                             <Checkbox
@@ -503,16 +502,17 @@ class IntakeForm extends Component {
 
                 <VisitOrOutreachQuestions
                     // helpers
-                    updateIntakeFormField={this.updateIntakeFormField}
-                    palette={palette}
-                    handleSelectChange={this.handleChildSelectChange.bind(this)}
+                    buildRadio={this.buildRadio}
+                    buildSelectField={this.buildSelectField}
+                    buildSlider={this.buildSlider}
+                    buildToggle={this.buildToggle}
+                    fieldStyles={fieldStyles}
                     handleChange={this.handleChildInputChange.bind(this)}
                     handleChildToggleChange={this.handleChildToggleChange.bind(this)}
+                    handleSelectChange={this.handleChildSelectChange.bind(this)}
                     handleSliderChange={this.handleSliderChange.bind(this)}
-                    buildSelectField={this.buildSelectField}
-                    buildToggle={this.buildToggle}
-                    buildRadio={this.buildRadio}
-                    buildSlider={this.buildSlider}
+                    palette={palette}
+                    updateIntakeFormField={this.updateIntakeFormField}
                     // form data
                     isOutreach={userStateForDisplay.isOutreach}
                     referrals={userStateForDisplay.referrals}
@@ -526,16 +526,17 @@ class IntakeForm extends Component {
 
                 {(initialState.newContact === true || userStateForDisplay.showNewContactQuestions) && <NewContactQuestionsForm
                     // helpers
-                    updateIntakeFormField={this.updateIntakeFormField}
-                    handleChange={this.handleChildInputChange.bind(this)}
-                    handleSelectChange={this.handleChildSelectChange.bind(this)}
-                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
-                    handleSliderChange={this.handleSliderChange.bind(this)}
-                    buildToggle={this.buildToggle}
-                    buildSelectField={this.buildSelectField}
                     buildRadio={this.buildRadio}
+                    buildSelectField={this.buildSelectField}
                     buildSlider={this.buildSlider}
+                    buildToggle={this.buildToggle}
+                    fieldStyles={fieldStyles}
+                    handleChange={this.handleChildInputChange.bind(this)}
+                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
+                    handleSelectChange={this.handleChildSelectChange.bind(this)}
+                    handleSliderChange={this.handleSliderChange.bind(this)}
                     palette={palette}
+                    updateIntakeFormField={this.updateIntakeFormField}
                     // form data
                     contactDateOfBirth={contactDateOfBirthConverted}
                     contactGenderIdentity={userStateForDisplay.contactGenderIdentity}
@@ -547,14 +548,15 @@ class IntakeForm extends Component {
 
                 {userStateForDisplay.showPeriodic && <PeriodicQuestionsForm
                     // helpers
-                    updateIntakeFormField={this.updateIntakeFormField}
-                    handleChange={this.handleChildInputChange.bind(this)}
-                    handleSelectChange={this.handleChildSelectChange.bind(this)}
-                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
-                    buildToggle={this.buildToggle}
-                    buildSelectField={this.buildSelectField}
                     buildRadio={this.buildRadio}
+                    buildSelectField={this.buildSelectField}
+                    buildToggle={this.buildToggle}
+                    fieldStyles={fieldStyles}
+                    handleChange={this.handleChildInputChange.bind(this)}
+                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
+                    handleSelectChange={this.handleChildSelectChange.bind(this)}
                     palette={palette}
+                    updateIntakeFormField={this.updateIntakeFormField}
                     // form data
                     zipCode={userStateForDisplay.zipCode}
                     housingStatus={userStateForDisplay.housingStatus}
