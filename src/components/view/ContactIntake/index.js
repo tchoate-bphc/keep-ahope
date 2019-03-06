@@ -352,6 +352,9 @@ class IntakeForm extends Component {
             padding: '2rem',
         };
 
+        const contactDateOfBirthConverted = !userStateForDisplay.contactDateOfBirth ? null : moment(userStateForDisplay.contactDateOfBirth.iso.replace(/T.*/,'')).startOf('day').toDate();
+        const dateOfLastVisitConverted = !userStateForDisplay.dateOfLastVisit ? null : moment(userStateForDisplay.dateOfLastVisit.iso.replace(/T.*/,'')).startOf('day').toDate();
+
         // checkboxes to select which forms to show
         const formCheckboxOptionsArray = [
             {
@@ -370,7 +373,11 @@ class IntakeForm extends Component {
                 onCheckCallback: () => this.updateIntakeFormField({key: 'showNewContactQuestions', val: !userStateForDisplay.showNewContactQuestions})
             },
             {
-                label: 'Periodic',
+                label: (<div>Periodic {dateOfLastVisitConverted && (
+                    <span style={{ color: palette.disabledColor, whiteSpace: 'nowrap' }}>
+                        (last visit: {moment(dateOfLastVisitConverted).format('ddd, MMM DD, YYYY')})
+                    </span>
+                )}</div>),
                 key: 'showPeriodic',
                 defaultChecked: true, 
                 disabled: false, 
@@ -396,9 +403,6 @@ class IntakeForm extends Component {
               onClick={this.handleConsentDialogClose}
             />,
           ];
-
-        const contactDateOfBirthConverted = !userStateForDisplay.contactDateOfBirth ? null : moment(userStateForDisplay.contactDateOfBirth.iso.replace(/T.*/,'')).startOf('day').toDate();
-        const dateOfLastVisitConverted = !userStateForDisplay.dateOfLastVisit ? null : moment(userStateForDisplay.dateOfLastVisit.iso.replace(/T.*/,'')).startOf('day').toDate();
 
         return (
             <form className="form">
@@ -461,7 +465,7 @@ class IntakeForm extends Component {
                         className="row"
                         style={{ ...fieldsStyle, paddingTop: 0 }}
                         >
-                        <div 
+                        {/* <div 
                             style={{ 
                                 padding: '0.5em',
                                 marginBottom: '1em',
@@ -473,8 +477,6 @@ class IntakeForm extends Component {
                                 <DatePicker
                                     style={{
                                         padding: '1em',
-                                        background: palette.successColor,
-                                        color: palette.canvasColor,
                                     }}
                                     className="col-xs-6 col-sm-6 col-md-3"
                                     hintText="Date of Last Visit"
@@ -484,7 +486,7 @@ class IntakeForm extends Component {
                                 />)
                                 : 'First Visit for ${userStateForDisplay.uid}'
                             }
-                        </div>
+                        </div> */}
                         {formCheckboxOptionsArray.map(option => (
                             <Checkbox
                                 className="col-xs-6 col-sm-6 col-md-3"
