@@ -99,7 +99,6 @@ class NewContactQuestionsForm extends Component {
                     />
                 </div>
                 <div style={{...fieldStyles}}>
-                    {this.props.contactEthnicity}
                     <FieldWithManualOption
                         showManual={this.props.contactEthnicity && ( this.props.contactEthnicity === 'other' || enthnicityOptionsList.findIndex( ddObj => ddObj.value === this.props.contactEthnicity ) < 0 ) }
                         onManualChange={({manualVal, defaultFieldVal}) => {
@@ -127,7 +126,39 @@ class NewContactQuestionsForm extends Component {
                     />
                 </div>
                 <div style={{...fieldStyles}}>
-                    {this.buildRadio('Country of Birth', countryOfBirthList, 'contactCountryOfBirth', this.props.handleChange)}
+                    <FieldWithManualOption
+                        showManual={this.props.contactCountryOfBirth && ( this.props.contactCountryOfBirth === 'other' || countryOfBirthList.findIndex( ddObj => ddObj.value === this.props.contactCountryOfBirth ) < 0 ) }
+                        onManualChange={({manualVal, defaultFieldVal}) => {
+                            updateIntakeFormField({
+                                key: 'contactCountryOfBirth', 
+                                val: manualVal
+                            })
+                        }}
+                        defaultFieldProps={{
+                            title: 'Country of Birth',
+                            val: this.props.contactCountryOfBirth,
+                            validOptionsList: [ 
+                                    ...countryOfBirthList, 
+                                    { label: this.props.contactCountryOfBirth, value: this.props.contactCountryOfBirth }
+                                ]
+                                .filter( obj => obj.value.length > 0 )
+                                .map( obj => obj.value ),
+                        }}
+                        defaultFieldEl={
+                            this.buildRadio(
+                                'Country of Birth', 
+                                this.props.contactCountryOfBirth === 'other' || countryOfBirthList.findIndex( valid => valid.value === this.props.contactCountryOfBirth) > -1 ?
+                                    countryOfBirthList : [ 
+                                        ...countryOfBirthList, 
+                                        { label: this.props.contactCountryOfBirth, value: this.props.contactCountryOfBirth }
+                                    ]
+                                    .filter( obj => obj.value.length > 0 )
+                                , 
+                                'contactCountryOfBirth', 
+                                this.props.handleChange
+                            )
+                        }
+                    />
                 </div>
                 <div style={{...fieldStyles}}>
                     {this.buildToggle('Hispanic?', 'contactIsHispanic', this.props.handleChildToggleChange)}

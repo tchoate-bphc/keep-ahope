@@ -23,7 +23,7 @@ export const countryOfBirthList = [
     {label: 'US', value: 'US'},
     {label: 'Puerto Rico', value: 'PR'},
     // TODO: user needs to be able to click this and enter in their own custom entry
-    {label: 'Other', value: 'Other'},
+    {label: 'Other', value: 'other'},
 ];
 
 // Periodic ------------------------------------------------

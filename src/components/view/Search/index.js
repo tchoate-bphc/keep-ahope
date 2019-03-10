@@ -109,7 +109,7 @@ const columns = [
             nullOption,
             { value: 'US', label: 'US' },
             { value: 'PR', label: 'PR' },
-            { value: 'Other', label: 'Other' },
+            { value: 'Other', label: 'other' },
         ],
         show: true,
     },
