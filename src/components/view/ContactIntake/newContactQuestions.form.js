@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { FieldWithManualOption } from '../common/FieldWithManualOption';
+
 import { Card, CardTitle } from 'material-ui/Card';
 import DatePicker from 'material-ui/DatePicker';
 
@@ -17,6 +19,19 @@ class NewContactQuestionsForm extends Component {
         this.buildSlider = this.props.buildSlider.bind(this);
     };
 
+    getUniquePrimaryTextList({collection, realValue}) {
+        const isManualInCollection = collection.find( obj => obj.label === realValue || obj.value === realValue );
+        const collectionCopy = collection.map(item => ({ 
+            label: item.label, 
+            value: item.value
+        }));
+        if (!isManualInCollection) {
+            // deep clone the collection
+            const indexOfItemOther = collectionCopy.findIndex(item => item.value === 'other');
+            collectionCopy[indexOfItemOther] = {label: 'Other', value: realValue};
+        }
+        return collectionCopy;
+    }
 
     render() {
 
@@ -49,10 +64,67 @@ class NewContactQuestionsForm extends Component {
                     {this.buildSlider('contactAgeOfFirstInjection', 'Age of First Injection', this.props.contactAgeOfFirstInjection, this.props.handleSliderChange, options)}
                 </div>
                 <div style={{...fieldStyles}}>
-                    {this.buildRadio('Gender Identity', genderOptionsList, 'contactGenderIdentity', this.props.handleChange)}
+                    <FieldWithManualOption
+                        showManual={this.props.contactGenderIdentity && ( this.props.contactGenderIdentity === 'other' || genderOptionsList.findIndex( ddObj => ddObj.value === this.props.contactGenderIdentity ) < 0 ) }
+                        onManualChange={({manualVal, defaultFieldVal}) => {
+                            updateIntakeFormField({
+                                key: 'contactGenderIdentity', 
+                                val: manualVal
+                            })
+                        }}
+                        defaultFieldProps={{
+                            title: 'Gender Identity',
+                            val: this.props.contactGenderIdentity,
+                            validOptionsList: [ 
+                                    ...genderOptionsList, 
+                                    { label: this.props.contactGenderIdentity, value: this.props.contactGenderIdentity }
+                                ]
+                                .filter( obj => obj.value.length > 0 )
+                                .map( obj => obj.value ),
+                        }}
+                        defaultFieldEl={
+                            this.buildRadio(
+                                'Gender Identity', 
+                                this.props.contactGenderIdentity === 'other' || genderOptionsList.findIndex( valid => valid.value === this.props.contactGenderIdentity) > -1 ?
+                                    genderOptionsList : [ 
+                                        ...genderOptionsList, 
+                                        { label: this.props.contactGenderIdentity, value: this.props.contactGenderIdentity }
+                                    ]
+                                    .filter( obj => obj.value.length > 0 )
+                                , 
+                                'contactGenderIdentity', 
+                                this.props.handleChange
+                            )
+                        }
+                    />
                 </div>
                 <div style={{...fieldStyles}}>
-                    {this.buildSelectField({title: 'Ethnicity', selectOptionsList: enthnicityOptionsList, name: 'contactEthnicity', val: this.props.contactEthnicity, updateCallback: this.props.handleSelectChange, multiple: false })}
+                    {this.props.contactEthnicity}
+                    <FieldWithManualOption
+                        showManual={this.props.contactEthnicity && ( this.props.contactEthnicity === 'other' || enthnicityOptionsList.findIndex( ddObj => ddObj.value === this.props.contactEthnicity ) < 0 ) }
+                        onManualChange={({manualVal, defaultFieldVal}) => {
+                            updateIntakeFormField({
+                                key: 'contactEthnicity', 
+                                val: manualVal
+                            })
+                        }}
+                        defaultFieldProps={{
+                            title: 'Ethnicity',
+                            val: this.props.contactEthnicity,
+                            validOptionsList: enthnicityOptionsList.map( obj => obj.value ),
+                        }}
+                        defaultFieldEl={this.buildSelectField({
+                            title: 'Ethnicity', 
+                            selectOptionsList: this.getUniquePrimaryTextList({
+                                collection: enthnicityOptionsList, 
+                                realValue: this.props.contactEthnicity,
+                            }),
+                            name: 'contactEthnicity', 
+                            val: this.props.contactEthnicity, 
+                            updateCallback: this.props.handleSelectChange, 
+                            multiple: false 
+                        })}
+                    />
                 </div>
                 <div style={{...fieldStyles}}>
                     {this.buildRadio('Country of Birth', countryOfBirthList, 'contactCountryOfBirth', this.props.handleChange)}

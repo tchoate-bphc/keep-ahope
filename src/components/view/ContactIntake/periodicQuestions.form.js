@@ -118,7 +118,7 @@ class PeriodicIntakeForm extends Component {
                             updateCallback: this.props.handleSelectChange, 
                             multiple: false 
                         })}
-                    /> 
+                    />
                 </div>
 
                 <div style={{...fieldStyles}}>
