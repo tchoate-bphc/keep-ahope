@@ -95,7 +95,7 @@ class PeriodicIntakeForm extends Component {
 
                 <div style={{...fieldStyles}}>
                     <FieldWithManualOption
-                        showManual={this.props.primaryDrug && ( this.props.primaryDrug === 'other' || primaryDrugOptionsList.findIndex( ddObj => ddObj.value === this.props.primaryDrug ) < 0 ) }
+                        showManual={this.props.primaryDrug != null && ( this.props.primaryDrug === 'other' || primaryDrugOptionsList.findIndex( ddObj => ddObj.value === this.props.primaryDrug ) < 0 ) }
                         onManualChange={({manualVal, defaultFieldVal}) => {
                             updateIntakeFormField({
                                 key: 'primaryDrug', 
@@ -123,7 +123,7 @@ class PeriodicIntakeForm extends Component {
 
                 <div style={{...fieldStyles}}>
                     <FieldWithManualOption
-                        showManual={this.props.otherDrugs && this.props.otherDrugs.indexOf('other') > -1 }
+                        showManual={this.props.otherDrugs != null && this.props.otherDrugs.indexOf('other') > -1 }
                         onManualChange={({manualVal, defaultFieldVal}) => {
                             const validDropdownOptions = otherDrugOptionsList.map( obj => obj.value );
                             updateIntakeFormField({

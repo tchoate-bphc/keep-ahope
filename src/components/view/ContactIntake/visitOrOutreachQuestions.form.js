@@ -34,7 +34,7 @@ class VisitOrOutreachQuestions extends Component {
                 </div>
                 <div style={{...fieldStyles}}>
                     <FieldWithManualOption
-                        showManual={this.props.referrals && this.props.referrals.indexOf('other') > -1}
+                        showManual={this.props.referrals != null && this.props.referrals.indexOf('other') > -1}
                         onManualChange={({manualVal, defaultFieldVal}) => {
                             const validDropdownOptions = referralsSelectOptionsList.map( obj => obj.value );
                             updateIntakeFormField({

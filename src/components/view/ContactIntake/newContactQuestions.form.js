@@ -65,7 +65,7 @@ class NewContactQuestionsForm extends Component {
                 </div>
                 <div style={{...fieldStyles}}>
                     <FieldWithManualOption
-                        showManual={this.props.contactGenderIdentity && ( this.props.contactGenderIdentity === 'other' || genderOptionsList.findIndex( ddObj => ddObj.value === this.props.contactGenderIdentity ) < 0 ) }
+                        showManual={this.props.contactGenderIdentity != null && ( this.props.contactGenderIdentity === 'other' || genderOptionsList.findIndex( ddObj => ddObj.value === this.props.contactGenderIdentity ) < 0 ) }
                         onManualChange={({manualVal, defaultFieldVal}) => {
                             updateIntakeFormField({
                                 key: 'contactGenderIdentity', 
@@ -77,7 +77,7 @@ class NewContactQuestionsForm extends Component {
                             val: this.props.contactGenderIdentity,
                             validOptionsList: [ 
                                     ...genderOptionsList, 
-                                    { label: this.props.contactGenderIdentity, value: this.props.contactGenderIdentity }
+                                    { label: this.props.contactGenderIdentity || 'Enter custom text', value: this.props.contactGenderIdentity || 'Enter custom text' }
                                 ]
                                 .filter( obj => obj.value.length > 0 )
                                 .map( obj => obj.value ),
@@ -88,7 +88,7 @@ class NewContactQuestionsForm extends Component {
                                 this.props.contactGenderIdentity === 'other' || genderOptionsList.findIndex( valid => valid.value === this.props.contactGenderIdentity) > -1 ?
                                     genderOptionsList : [ 
                                         ...genderOptionsList, 
-                                        { label: this.props.contactGenderIdentity, value: this.props.contactGenderIdentity }
+                                        { label: this.props.contactGenderIdentity || 'Enter custom text', value: this.props.contactGenderIdentity || 'Enter custom text' }
                                     ]
                                     .filter( obj => obj.value.length > 0 )
                                 , 
@@ -100,7 +100,7 @@ class NewContactQuestionsForm extends Component {
                 </div>
                 <div style={{...fieldStyles}}>
                     <FieldWithManualOption
-                        showManual={this.props.contactEthnicity && ( this.props.contactEthnicity === 'other' || enthnicityOptionsList.findIndex( ddObj => ddObj.value === this.props.contactEthnicity ) < 0 ) }
+                        showManual={this.props.contactEthnicity != null && ( this.props.contactEthnicity === 'other' || enthnicityOptionsList.findIndex( ddObj => ddObj.value === this.props.contactEthnicity ) < 0 ) }
                         onManualChange={({manualVal, defaultFieldVal}) => {
                             updateIntakeFormField({
                                 key: 'contactEthnicity', 
@@ -127,7 +127,7 @@ class NewContactQuestionsForm extends Component {
                 </div>
                 <div style={{...fieldStyles}}>
                     <FieldWithManualOption
-                        showManual={this.props.contactCountryOfBirth && ( this.props.contactCountryOfBirth === 'other' || countryOfBirthList.findIndex( ddObj => ddObj.value === this.props.contactCountryOfBirth ) < 0 ) }
+                        showManual={this.props.contactCountryOfBirth != null && ( this.props.contactCountryOfBirth === 'other' || countryOfBirthList.findIndex( ddObj => ddObj.value === this.props.contactCountryOfBirth ) < 0 ) }
                         onManualChange={({manualVal, defaultFieldVal}) => {
                             updateIntakeFormField({
                                 key: 'contactCountryOfBirth', 
@@ -139,7 +139,7 @@ class NewContactQuestionsForm extends Component {
                             val: this.props.contactCountryOfBirth,
                             validOptionsList: [ 
                                     ...countryOfBirthList, 
-                                    { label: this.props.contactCountryOfBirth, value: this.props.contactCountryOfBirth }
+                                    { label: this.props.contactCountryOfBirth|| 'Enter custom text', value: this.props.contactCountryOfBirth|| 'Enter custom text' }
                                 ]
                                 .filter( obj => obj.value.length > 0 )
                                 .map( obj => obj.value ),
@@ -150,7 +150,7 @@ class NewContactQuestionsForm extends Component {
                                 this.props.contactCountryOfBirth === 'other' || countryOfBirthList.findIndex( valid => valid.value === this.props.contactCountryOfBirth) > -1 ?
                                     countryOfBirthList : [ 
                                         ...countryOfBirthList, 
-                                        { label: this.props.contactCountryOfBirth, value: this.props.contactCountryOfBirth }
+                                        { label: this.props.contactCountryOfBirth|| 'Enter custom text', value: this.props.contactCountryOfBirth|| 'Enter custom text' }
                                     ]
                                     .filter( obj => obj.value.length > 0 )
                                 , 
