@@ -351,8 +351,8 @@ class IntakeForm extends Component {
             padding: '1rem 2rem',
         };
 
-        const contactDateOfBirthConverted = !userStateForDisplay.contactDateOfBirth ? null : moment(userStateForDisplay.contactDateOfBirth.iso.replace(/T.*/,'')).startOf('day').toDate();
-        const dateOfLastVisitConverted = !userStateForDisplay.dateOfLastVisit ? null : moment(userStateForDisplay.dateOfLastVisit.iso.replace(/T.*/,'')).startOf('day').toDate();
+        const contactDateOfBirthConverted = !userStateForDisplay.contactDateOfBirth ? null : moment(userStateForDisplay.contactDateOfBirth).startOf('day').toDate();
+        const dateOfLastVisitConverted = !userStateForDisplay.dateOfLastVisit ? null : moment(userStateForDisplay.dateOfLastVisit).startOf('day').toDate();
 
         // checkboxes to select which forms to show
         const formCheckboxOptionsArray = [
