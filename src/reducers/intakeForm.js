@@ -9,6 +9,7 @@ const INITIAL_FORM_STATE = {
     visitOrOutreach: null, // true
     showPeriodic: null, // false,
     showNewContactQuestions: null, // false,
+    dateOfLastVisit: null, // null
     
     // form
     contactGivesDataConsent: null, 
@@ -113,10 +114,13 @@ function getStateWithContactInfo({contact, initialState, userState}) {
     let initialStateWithContactInfo = {}, 
         userStateWithContactInfo = {};
 
+    console.log('userState.dateOfLastVisit', userState)
+
     const initialStateFieldToContactFieldMapping = {
         uid: 'uid',
         profileNotes: 'profileNotes',
         contactGivesDataConsent: 'contactGivesDataConsent',
+        dateOfLastVisit: 'dateOfLastVisit',
 
         // new contact
         newContactDate: 'createdAt',

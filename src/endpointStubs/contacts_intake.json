@@ -1,0 +1,40 @@
+{
+    "results": [
+        {
+            "objectId": "BiRCZ7YBmk",
+            "createdAt": "2018-10-10T03:56:51.036Z",
+            "updatedAt": "2019-02-10T20:20:22.369Z",
+            "ethnicity": "HPI",
+            "genderIdentity": "female",
+            "uid": "aaaa236889aaa",
+            "dateOfBirth": {
+                "__type": "Date",
+                "iso": "2017-10-08T03:56:50.757Z"
+            },
+            "hispanic": false,
+            "dateOfLastVisit": {
+                "__type": "Date",
+                "iso": "2019-02-11T03:20:20.678Z"
+            },
+            "ageOfFirstInjection": 50,
+            "countryOfBirth": "PR",
+            "primaryDrug": "new drug",
+            "hivStatus": "negative",
+            "hepCStatus": "negative",
+            "housingStatus": "homeless",
+            "otherDrugsAggregate": [
+                "other",
+                "another,using,commas and spaces",
+                "new drug",
+                "crack",
+                "meth"
+            ],
+            "profileNotes": "Prof notes",
+            "otherDrugs": [
+                "other",
+                "another,using,commas and spaces"
+            ],
+            "contactGivesDataConsent": true
+        }
+    ]
+}

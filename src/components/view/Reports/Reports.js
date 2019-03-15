@@ -149,7 +149,7 @@ class Results extends React.Component {
                         <ReportsCard
                             type='simple'
                             hSize={1}
-                            label='Syringes Taken'
+                            label='Syringes Collected'
                             path='events.syringesTaken'
                             data={reportsData}
                             />
