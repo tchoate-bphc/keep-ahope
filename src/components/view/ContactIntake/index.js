@@ -4,17 +4,18 @@ import moment from 'moment';
 
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
-import TextField from 'material-ui/TextField'
-import FlatButton from 'material-ui/FlatButton'
-import Checkbox from 'material-ui/Checkbox';
-import Toggle from 'material-ui/Toggle';
-import Slider from 'material-ui/Slider';
 import { Card, CardTitle } from 'material-ui/Card';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 import { RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import Checkbox from 'material-ui/Checkbox';
 import DatePicker from 'material-ui/DatePicker';
 import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton'
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
+import SelectField from 'material-ui/SelectField';
+import Slider from 'material-ui/Slider';
+import TextField from 'material-ui/TextField'
+import Toggle from 'material-ui/Toggle';
 
 import PeriodicQuestionsForm from 'components/view/ContactIntake/periodicQuestions.form';
 import NewContactQuestionsForm from 'components/view/ContactIntake/newContactQuestions.form';
@@ -23,7 +24,6 @@ import VisitOrOutreachQuestions from 'components/view/ContactIntake/visitOrOutre
 import DescriptionIcon from 'material-ui/svg-icons/action/description';
 
 import './styles.css';
-import { white } from 'material-ui/styles/colors';
 
 class IntakeForm extends Component {
 
@@ -408,46 +408,55 @@ class IntakeForm extends Component {
 
                 <Card>
                     <CardTitle title='Form Questions' titleColor={palette.primary1Color}/>
+                    
+                    <Dialog
+                        title="Data Collection Consent"
+                        actions={consentDialogActions}
+                        modal={false}
+                        open={this.state.consentDialogOpen}
+                        onRequestClose={this.handleConsentDialogClose}
+                        autoScrollBodyContent={true}
+                        >
+                        { this.convertConsentText({ text: consentText }) }
+                    </Dialog>
                     <div style={ fieldStyles }>
-
-                        <Dialog
-                            title="Data Collection Consent"
-                            actions={consentDialogActions}
-                            modal={false}
-                            open={this.state.consentDialogOpen}
-                            onRequestClose={this.handleConsentDialogClose}
-                            autoScrollBodyContent={true}
-                            >
-                            { this.convertConsentText({ text: consentText }) }
-                        </Dialog>
-
                         <div className="row">
                             <Toggle
-                                className="col-xs-9 col-sm-10 col-md-11"
-                                label='Contact gives consent to record this interaction and understands their data rights'
+                                className="col-xs-9 col-sm-10 col-lg-11"
+                                label={(
+                                    <span>
+                                        Contact gives consent to record this interaction and understands their data rights
+                                        <span style={{ paddingLeft: '1em', color: palette.warningColor}}>(required)</span>
+                                    </span>
+                                )}
                                 labelPosition="right"
-                                // toggled={userStateForDisplay.contactGivesDataConsent}
                                 value={!!userStateForDisplay.contactGivesDataConsent}
                                 onToggle={(event, isInputChecked) => {
                                     this.handleChildToggleChange('contactGivesDataConsent', isInputChecked);
                                 }}
                             />
-                            <FlatButton 
-                                className="col-xs-3 col-sm-2 col-md-1"
-                                labelStyle={{
-                                    fontSize: 36
-                                }}
-                                label={<DescriptionIcon 
-                                        style={{
-                                            fill: palette.tertiaryTextColor,
-                                            width: 36,
-                                            height: 36,
-                                        }}
-                                        hoverColor={palette.primary1Color}
-                                     />
-                                }
-                                onClick={this.handleConsentDialogOpen}
-                                />
+                            <div 
+                                className="col-xs-3 col-sm-2 col-lg-1"
+                                >
+                                <RaisedButton 
+                                    // labelStyle={{
+                                    //     fontSize: 36
+                                    // }}
+                                    style={{ width: '100%', height: '2.5em' }}
+                                    // primary={true}
+                                    icon={<DescriptionIcon 
+                                            style={{
+                                                fill: palette.tertiaryTextColor,
+                                                width: 36,
+                                                height: 36,
+                                                margin: '.125em'
+                                            }}
+                                            hoverColor={palette.primary1Color}
+                                        />
+                                    }
+                                    onClick={this.handleConsentDialogOpen}
+                                    />
+                            </div>
                         </div>
                     </div>
 
