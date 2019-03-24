@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
 
+import moment from 'moment';
+
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
-import TextField from 'material-ui/TextField'
-import FlatButton from 'material-ui/FlatButton'
-import Checkbox from 'material-ui/Checkbox';
-import Toggle from 'material-ui/Toggle';
-import Slider from 'material-ui/Slider';
 import { Card, CardTitle } from 'material-ui/Card';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 import { RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import Checkbox from 'material-ui/Checkbox';
 import DatePicker from 'material-ui/DatePicker';
 import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton'
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
+import SelectField from 'material-ui/SelectField';
+import Slider from 'material-ui/Slider';
+import TextField from 'material-ui/TextField'
+import Toggle from 'material-ui/Toggle';
 
 import PeriodicQuestionsForm from 'components/view/ContactIntake/periodicQuestions.form';
 import NewContactQuestionsForm from 'components/view/ContactIntake/newContactQuestions.form';
@@ -118,7 +121,7 @@ class IntakeForm extends Component {
 
         let labelStyle = {
             color: this.props.palette.accent3Color,
-            margin: '2rem 0 1rem 0'
+            margin: '0 0 0.5rem 0'
         };
 
         return (
@@ -161,7 +164,6 @@ class IntakeForm extends Component {
 
         const labelStyle = {
             color: this.props.palette.accent3Color,
-            margin: '2rem 0 1rem 0'
         };
 
         return (
@@ -186,7 +188,7 @@ class IntakeForm extends Component {
     buildSlider(sliderName, labelText, sliderValue, updateCallback, overrides = {}) {
         let labelStyle = {
             color: this.props.palette.accent3Color,
-            margin: '2rem 0 1rem 0'
+            // margin: '2rem 0 1rem 0'
         };
         
         const options = {
@@ -291,6 +293,7 @@ class IntakeForm extends Component {
             contactGivesDataConsent: userState !== null ? userState.contactGivesDataConsent : false,
         
             // periodic
+            dateOfLastVisit: userState.dateOfLastVisit !== null ? userState.dateOfLastVisit : null,
             zipCode: userState.zipCode !== null ? userState.zipCode : '',
             didOdLastYear: userState.didOdLastYear !== null ? userState.didOdLastYear : false,
             didSeeOdLastYear: userState.didSeeOdLastYear !== null ? userState.didSeeOdLastYear : false,
@@ -344,9 +347,12 @@ class IntakeForm extends Component {
             color: palette.errorColor
         }
 
-        const fieldsStyle = {
-            padding: '2rem',
+        const fieldStyles = {
+            padding: '1rem 2rem',
         };
+
+        const contactDateOfBirthConverted = !userStateForDisplay.contactDateOfBirth ? null : moment(userStateForDisplay.contactDateOfBirth).startOf('day').toDate();
+        const dateOfLastVisitConverted = !userStateForDisplay.dateOfLastVisit ? null : moment(userStateForDisplay.dateOfLastVisit).startOf('day').toDate();
 
         // checkboxes to select which forms to show
         const formCheckboxOptionsArray = [
@@ -366,7 +372,11 @@ class IntakeForm extends Component {
                 onCheckCallback: () => this.updateIntakeFormField({key: 'showNewContactQuestions', val: !userStateForDisplay.showNewContactQuestions})
             },
             {
-                label: 'Periodic',
+                label: (<div>Periodic {dateOfLastVisitConverted && (
+                    <span style={{ color: palette.disabledColor, whiteSpace: 'nowrap' }}>
+                        (last visit: {moment(dateOfLastVisitConverted).format('ddd, MMM DD, YYYY')})
+                    </span>
+                )}</div>),
                 key: 'showPeriodic',
                 defaultChecked: true, 
                 disabled: false, 
@@ -398,53 +408,62 @@ class IntakeForm extends Component {
 
                 <Card>
                     <CardTitle title='Form Questions' titleColor={palette.primary1Color}/>
-                    <div style={{...fieldsStyle, padding: '2rem'}}>
-
-                        <Dialog
-                            title="Data Collection Consent"
-                            actions={consentDialogActions}
-                            modal={false}
-                            open={this.state.consentDialogOpen}
-                            onRequestClose={this.handleConsentDialogClose}
-                            autoScrollBodyContent={true}
-                            >
-                            { this.convertConsentText({ text: consentText }) }
-                        </Dialog>
-
+                    
+                    <Dialog
+                        title="Data Collection Consent"
+                        actions={consentDialogActions}
+                        modal={false}
+                        open={this.state.consentDialogOpen}
+                        onRequestClose={this.handleConsentDialogClose}
+                        autoScrollBodyContent={true}
+                        >
+                        { this.convertConsentText({ text: consentText }) }
+                    </Dialog>
+                    <div style={ fieldStyles }>
                         <div className="row">
                             <Toggle
-                                className="col-xs-9 col-sm-10 col-md-11"
-                                label='Contact gives consent to record this interaction and understands their data rights'
+                                className="col-xs-9 col-sm-10 col-lg-11"
+                                label={(
+                                    <span>
+                                        Contact gives consent to record this interaction and understands their data rights
+                                        <span style={{ paddingLeft: '1em', color: palette.warningColor}}>(required)</span>
+                                    </span>
+                                )}
                                 labelPosition="right"
-                                // toggled={userStateForDisplay.contactGivesDataConsent}
                                 value={!!userStateForDisplay.contactGivesDataConsent}
                                 onToggle={(event, isInputChecked) => {
                                     this.handleChildToggleChange('contactGivesDataConsent', isInputChecked);
                                 }}
                             />
-                            <FlatButton 
-                                className="col-xs-3 col-sm-2 col-md-1"
-                                labelStyle={{
-                                    fontSize: 36
-                                }}
-                                label={<DescriptionIcon 
-                                        style={{
-                                            fill: palette.tertiaryTextColor,
-                                            width: 36,
-                                            height: 36,
-                                        }}
-                                        hoverColor={palette.primary1Color}
-                                     />
-                                }
-                                onClick={this.handleConsentDialogOpen}
-                                />
+                            <div 
+                                className="col-xs-3 col-sm-2 col-lg-1"
+                                >
+                                <RaisedButton 
+                                    // labelStyle={{
+                                    //     fontSize: 36
+                                    // }}
+                                    style={{ width: '100%', height: '2.5em' }}
+                                    // primary={true}
+                                    icon={<DescriptionIcon 
+                                            style={{
+                                                fill: palette.tertiaryTextColor,
+                                                width: 36,
+                                                height: 36,
+                                                margin: '.125em'
+                                            }}
+                                            hoverColor={palette.primary1Color}
+                                        />
+                                    }
+                                    onClick={this.handleConsentDialogOpen}
+                                    />
+                            </div>
                         </div>
                     </div>
 
-                    <div style={fieldsStyle}>
+                    <div style={{ ...fieldStyles, paddingTop: 0 }}>
                         <DatePicker
                             hintText="Date"
-                            floatingLabelText="Date"
+                            floatingLabelText="Date of Interaction"
                             value={userStateForDisplay.eventDate}
                             onChange={(e, date) => this.updateIntakeFormField({key: 'eventDate', val: date})}
                             autoOk={true}
@@ -452,11 +471,11 @@ class IntakeForm extends Component {
                     </div>
                     <div
                         className="row"
-                        style={{padding: '2rem'}}
+                        style={{ ...fieldStyles, paddingTop: 0 }}
                         >
                         {formCheckboxOptionsArray.map(option => (
                             <Checkbox
-                                className="col-xs-12 col-sm-6 col-md-3"
+                                className="col-xs-6 col-sm-6 col-md-3"
                                 key={option.key}
                                 labelStyle={option.labelStyle}
                                 style={option.style}
@@ -465,24 +484,44 @@ class IntakeForm extends Component {
                                 // defaultChecked={option.defaultChecked}
                                 disabled={option.disabled}
                                 onCheck={option.onCheckCallback}
-                            />
-                        ))}
+                                />
+                            ))}
+                    </div>
+                </Card>
+
+                <Card>
+                    <CardTitle 
+                        title='Contact Profile Notes' 
+                        subtitle='Notes about this individual, visible for future interactions'
+                        titleColor={palette.primary1Color} 
+                        />
+                    <div className="textAreaContainer">
+                        <TextField
+                            multiLine={true}
+                            rows={5}
+                            fullWidth={true}
+                            id="profileNotes"
+                            // floatingLabelText="Notes about this individual"
+                            value={userStateForDisplay.profileNotes}
+                            onChange={(e, value) => this.updateIntakeFormField({key: 'profileNotes', val: value})}
+                        />
                     </div>
                 </Card>
 
 
                 <VisitOrOutreachQuestions
                     // helpers
-                    updateIntakeFormField={this.updateIntakeFormField}
-                    palette={palette}
-                    handleSelectChange={this.handleChildSelectChange.bind(this)}
+                    buildRadio={this.buildRadio}
+                    buildSelectField={this.buildSelectField}
+                    buildSlider={this.buildSlider}
+                    buildToggle={this.buildToggle}
+                    fieldStyles={fieldStyles}
                     handleChange={this.handleChildInputChange.bind(this)}
                     handleChildToggleChange={this.handleChildToggleChange.bind(this)}
+                    handleSelectChange={this.handleChildSelectChange.bind(this)}
                     handleSliderChange={this.handleSliderChange.bind(this)}
-                    buildSelectField={this.buildSelectField}
-                    buildToggle={this.buildToggle}
-                    buildRadio={this.buildRadio}
-                    buildSlider={this.buildSlider}
+                    palette={palette}
+                    updateIntakeFormField={this.updateIntakeFormField}
                     // form data
                     isOutreach={userStateForDisplay.isOutreach}
                     referrals={userStateForDisplay.referrals}
@@ -496,18 +535,19 @@ class IntakeForm extends Component {
 
                 {(initialState.newContact === true || userStateForDisplay.showNewContactQuestions) && <NewContactQuestionsForm
                     // helpers
-                    updateIntakeFormField={this.updateIntakeFormField}
-                    handleChange={this.handleChildInputChange.bind(this)}
-                    handleSelectChange={this.handleChildSelectChange.bind(this)}
-                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
-                    handleSliderChange={this.handleSliderChange.bind(this)}
-                    buildToggle={this.buildToggle}
-                    buildSelectField={this.buildSelectField}
                     buildRadio={this.buildRadio}
+                    buildSelectField={this.buildSelectField}
                     buildSlider={this.buildSlider}
+                    buildToggle={this.buildToggle}
+                    fieldStyles={fieldStyles}
+                    handleChange={this.handleChildInputChange.bind(this)}
+                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
+                    handleSelectChange={this.handleChildSelectChange.bind(this)}
+                    handleSliderChange={this.handleSliderChange.bind(this)}
                     palette={palette}
+                    updateIntakeFormField={this.updateIntakeFormField}
                     // form data
-                    contactDateOfBirth={userStateForDisplay.contactDateOfBirth}
+                    contactDateOfBirth={contactDateOfBirthConverted}
                     contactGenderIdentity={userStateForDisplay.contactGenderIdentity}
                     contactEthnicity={userStateForDisplay.contactEthnicity}
                     contactIsHispanic={userStateForDisplay.contactIsHispanic}
@@ -517,14 +557,15 @@ class IntakeForm extends Component {
 
                 {userStateForDisplay.showPeriodic && <PeriodicQuestionsForm
                     // helpers
-                    updateIntakeFormField={this.updateIntakeFormField}
-                    handleChange={this.handleChildInputChange.bind(this)}
-                    handleSelectChange={this.handleChildSelectChange.bind(this)}
-                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
-                    buildToggle={this.buildToggle}
-                    buildSelectField={this.buildSelectField}
                     buildRadio={this.buildRadio}
+                    buildSelectField={this.buildSelectField}
+                    buildToggle={this.buildToggle}
+                    fieldStyles={fieldStyles}
+                    handleChange={this.handleChildInputChange.bind(this)}
+                    handleChildToggleChange={this.handleChildToggleChange.bind(this)}
+                    handleSelectChange={this.handleChildSelectChange.bind(this)}
                     palette={palette}
+                    updateIntakeFormField={this.updateIntakeFormField}
                     // form data
                     zipCode={userStateForDisplay.zipCode}
                     housingStatus={userStateForDisplay.housingStatus}
@@ -541,30 +582,21 @@ class IntakeForm extends Component {
                     />}
 
                 <Card>
-                    <div className="textAreaContainer">
-                    <TextField
-                        multiLine={true}
-                        rows={5}
-                        fullWidth={true}
-                        id="eventNotes"
-                        floatingLabelText="Event Notes"
-                        value={userStateForDisplay.eventNotes}
-                        onChange={(e, value) => this.updateIntakeFormField({key: 'eventNotes', val: value})}
+                    <CardTitle 
+                        title='Event Notes' 
+                        subtitle='Notes about this specific event'
+                        titleColor={palette.primary1Color} 
                         />
-                    </div>
-                </Card>
-
-                <Card>
                     <div className="textAreaContainer">
-                    <TextField
-                        multiLine={true}
-                        rows={5}
-                        fullWidth={true}
-                        id="profileNotes"
-                        floatingLabelText="Profile Notes"
-                        value={userStateForDisplay.profileNotes}
-                        onChange={(e, value) => this.updateIntakeFormField({key: 'profileNotes', val: value})}
-                    />
+                        <TextField
+                            multiLine={true}
+                            rows={5}
+                            fullWidth={true}
+                            id="eventNotes"
+                            // floatingLabelText="Event Notes"
+                            value={userStateForDisplay.eventNotes}
+                            onChange={(e, value) => this.updateIntakeFormField({key: 'eventNotes', val: value})}
+                            />
                     </div>
                 </Card>
 

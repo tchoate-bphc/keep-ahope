@@ -18,7 +18,7 @@ class VisitOrOutreachQuestions extends Component {
 
     render() {
 
-        const { updateIntakeFormField } = this.props;
+        const { updateIntakeFormField, fieldStyles } = this.props;
 
         const numberOfOthersHelpingStepDetails = {
             defaultValue: 0,
@@ -27,14 +27,14 @@ class VisitOrOutreachQuestions extends Component {
             max: 12,
         }
         return (
-            <Card>
+            <Card style={{ paddingBottom: '1rem' }}>
                 <CardTitle title='Visit or Outreach' titleColor={this.props.palette.primary1Color}/>
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildToggle('Outreach', 'isOutreach', this.props.handleChildToggleChange)}
                 </div>
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     <FieldWithManualOption
-                        showManual={this.props.referrals && this.props.referrals.indexOf('other') > -1}
+                        showManual={this.props.referrals != null && this.props.referrals.indexOf('other') > -1}
                         onManualChange={({manualVal, defaultFieldVal}) => {
                             const validDropdownOptions = referralsSelectOptionsList.map( obj => obj.value );
                             updateIntakeFormField({
@@ -53,22 +53,22 @@ class VisitOrOutreachQuestions extends Component {
                         defaultFieldEl={ this.buildSelectField({ title: 'Referrals', selectOptionsList: referralsSelectOptionsList, name: 'referrals', val: this.props.referrals, updateCallback: this.props.handleSelectChange, multiple: true }) }
                     />  
                 </div>
-                <div style={{padding: '2rem 2rem 0rem 2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildSlider('syringesGiven', 'Syringes Given', this.props.syringesGiven, this.props.handleSliderChange)}
                 </div>
-                <div style={{padding: '2rem 2rem 0rem 2rem'}}>
-                    {this.buildSlider('syringesTaken', 'Syringes Taken', this.props.syringesTaken, this.props.handleSliderChange)}
+                <div style={{...fieldStyles}}>
+                    {this.buildSlider('syringesTaken', 'Syringes Collected', this.props.syringesTaken, this.props.handleSliderChange)}
                 </div>
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildToggle('Narcan was offered', 'narcanWasOffered', this.props.handleChildToggleChange)}
                 </div>
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildToggle('Narcan was given', 'narcanWasTaken', this.props.handleChildToggleChange)}
                 </div>
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildRadio('Enrollment', enrollmentRadioOptions, 'enrollment', this.props.handleChange)}
                 </div>
-                <div style={{padding: '2rem'}}>
+                <div style={{...fieldStyles}}>
                     {this.buildSlider('numberOfOthersHelping', 'Number of others helping', this.props.numberOfOthersHelping, this.props.handleSliderChange, numberOfOthersHelpingStepDetails)}
                 </div>
             </Card>

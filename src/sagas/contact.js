@@ -1,4 +1,5 @@
 import { takeEvery } from 'redux-saga/effects';
+import { OFFLINE_MODE } from '../constants'
 
 import {
     GET_CONTACT,
@@ -6,6 +7,22 @@ import {
 } from '../constants';
 
 import { updateCurrentContact, updateCurrentContactWithEvents, getEventsForContact as getEventsForContactAction, updateIntakeFormWithContact } from 'actions';
+
+import stubbedContactJson from '../endpointStubs/contacts_intake.json';
+import stubbedEventJson from '../endpointStubs/event.json';
+function* stubbedGetContact() {
+    const stubbedContactJsonWithUid = {
+        ...stubbedContactJson.results[0],
+        uid: 'aaaa236889aaa',
+    };
+    window._UI_STORE_.dispatch( updateCurrentContact( stubbedContactJsonWithUid ) );
+    window._UI_STORE_.dispatch( updateIntakeFormWithContact( {contact: stubbedContactJsonWithUid}) );
+    yield;
+}
+function* stubbedGetEventsForContact() {
+    window._UI_STORE_.dispatch( updateCurrentContactWithEvents( { eventsForContact: stubbedEventJson.results } ) );
+    yield;
+}
 
 function* getContact( { uid } ) {
 
@@ -84,8 +101,15 @@ function* getEventsForContact({ uid }) {
 }
 
 export default function* () {
-    yield [
-        takeEvery(GET_CONTACT, getContact),
-        takeEvery(GET_EVENTS_FOR_CONTACT, getEventsForContact),
-    ];
+    if (OFFLINE_MODE) {
+        yield [
+            takeEvery(GET_CONTACT, stubbedGetContact),
+            takeEvery(GET_EVENTS_FOR_CONTACT, stubbedGetEventsForContact),
+        ];
+    } else {
+        yield [
+            takeEvery(GET_CONTACT, getContact),
+            takeEvery(GET_EVENTS_FOR_CONTACT, getEventsForContact),
+        ];
+    }
 }

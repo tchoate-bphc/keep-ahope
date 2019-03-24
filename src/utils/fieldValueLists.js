@@ -6,6 +6,7 @@ export const genderOptionsList = [
     {label: 'MtF', value: 'mtf'},
     {label: 'FtM', value: 'ftm'},
     {label: 'Refused', value: 'refused'},
+    {label: 'Custom', value: 'other'},
 ];
 
 export const enthnicityOptionsList = [
@@ -14,16 +15,15 @@ export const enthnicityOptionsList = [
     {label: 'Black/African American', value: 'BAA'},
     {label: 'Hawaiin/Pacific Islander', value: 'HPI'},
     {label: 'White', value: 'White'},
-    // TODO: user needs to be able to click this and enter in their own custom entry
-    {label: 'Other', value: 'Other'},
     {label: 'Prefer not to say', value: 'Refuse'},
+    {label: 'Other', value: 'other'},
 ];
 
 export const countryOfBirthList = [
     {label: 'US', value: 'US'},
     {label: 'Puerto Rico', value: 'PR'},
     // TODO: user needs to be able to click this and enter in their own custom entry
-    {label: 'Other', value: 'Other'},
+    {label: 'Other', value: 'other'},
 ];
 
 // Periodic ------------------------------------------------
