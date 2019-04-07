@@ -6,10 +6,12 @@ import moment from 'moment';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
-import './react-datepicker-override.css'
+import '../common/react-datepicker-override.css'
 import SettingsIcon from 'material-ui/svg-icons/action/settings';
+import OpenInNewIcon from 'material-ui/svg-icons/action/open-in-new';
 
 import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 
 import { defaultState as getSearchByCriteriaResultsDefaultState } from '../../../reducers/searchByCriteriaResults';
@@ -39,13 +41,9 @@ import {
     TableRow,
     TableRowColumn,
 } from 'material-ui/Table';
-// import SelectField from 'material-ui/SelectField';
-// import MenuItem from 'material-ui/MenuItem';
-// import DatePicker from 'material-ui/DatePicker';
 
 import Select from 'react-select';
 import { fade } from 'material-ui/utils/colorManipulator';
-import { relative } from 'path';
 
 const NO_VAL_PROVIDED = '-';
 
@@ -66,8 +64,18 @@ const columns = [
     {
         key: 'uid',
         label: 'UID',
-        style: { width: '10em', marginRight: 0, paddingRight: 0 },
+        style: { width: '12em', marginRight: 0, paddingRight: 0 },
         // filterOptions: [],
+        show: true,
+    },
+    {
+        key: 'mothersFirstThree',
+        label: `Mother's First Three`,
+        style: { width: '10em', marginRight: 0, paddingRight: 0 },
+        filterByText: {
+            minLength: 3,
+            maxLength: 3,
+        },
         show: true,
     },
     {
@@ -236,7 +244,9 @@ class Search extends Component {
     }
 
     requestUpdateSearchByCriteria({key, value}) {
-        if (this.state.isFirstTime) { this.setState({ isFirstTime: false }); }
+        if (this.state.isFirstTime) {
+            this.setState({ isFirstTime: false });
+        }
         const { requestSearchByCriteria,  searchByCriteriaResults: { searchCriteria } } = this.props;
         searchCriteria[key] = value;
         requestSearchByCriteria({searchCriteria});
@@ -291,7 +301,6 @@ class Search extends Component {
                     marginTop: '-155px',
                     display: 'flex',
                     flexDirection: 'column',
-                    display: 'flex',
                     height: 'calc(100% - 155px)',
                     overflow: 'hidden',
                     minHeight: '0px', /* IMPORTANT: you need this for non-chrome browsers */
@@ -419,6 +428,19 @@ class Search extends Component {
                                                     }}
                                                     key={column.key}
                                                     >
+                                                    {column.filterByText !== undefined && (
+                                                        <TextField
+                                                            hintText='abc'
+                                                            fullWidth={true}
+                                                            inputStyle={{ background: palette.canvasColor }}
+                                                            defaultValue={searchCriteria[column.key]}
+                                                            errorText={searchCriteria[column.key] && 
+                                                                ( searchCriteria[column.key].length > column.filterByText.maxLength || 
+                                                                    searchCriteria[column.key].length < column.filterByText.minLength ) ?
+                                                                'Enter three letters' : false }
+                                                            onChange={(e, value) => this.requestUpdateSearchByCriteria({key: column.key, value})}
+                                                            />
+                                                    )}
                                                     {column.filterByCalendar === true && (
                                                         <DatePicker
                                                             selected={searchCriteria[column.key] ? moment(searchCriteria[column.key]) : null}
@@ -429,7 +451,7 @@ class Search extends Component {
                                                             dropdownMode="select"
                                                         />
                                                     )}
-                                                    {!column.filterOptions || !column.filterOptions.length ? '' : (
+                                                    {column.filterOptions && column.filterOptions.length && (
                                                         <Select
                                                             key={'dropdown-' + column.key}
                                                             defaultValue={searchCriteria[column.key]}
@@ -465,14 +487,39 @@ class Search extends Component {
                                                 } else if (column.key === 'rowNum') {
                                                     value = indexStart + contactIndex + 1;
                                                 } else if ('function' === typeof column.displayTranslation) {
-                                                    value = column.displayTranslation({val: value});
+                                                    value = column.displayTranslation({ val: value });
                                                 }
                                                 return (
                                                     <TableRowColumn
                                                         style={column.style || {}}
                                                         key={contact.uid + '-' +column.key}
                                                         >
-                                                        {value}
+                                                        {column.key === 'uid' ? (
+                                                            <FlatButton
+                                                                key={column.key + value}
+                                                                style={{ width:'100%', position: 'static' }}
+                                                                label={value}
+                                                                labelPosition='before'
+                                                                labelStyle={{ 
+                                                                    fontFamily: 'monospace', 
+                                                                    position: 'static',
+                                                                    textTransform: 'uppercase',
+                                                                }}
+                                                                icon={<OpenInNewIcon 
+                                                                    style={{
+                                                                        width: 12,
+                                                                        height: 12,
+                                                                    }}
+                                                                    />}
+                                                                onClick={() => {
+                                                                    this.props.getContact(value);
+                                                                    this.props.setCurrentSearchQuery(value || '');
+                                                                    this.props.history.push(`/contact/${value}/info`)
+                                                                }}
+                                                                />
+                                                        ) : (
+                                                            <span>{value}</span>
+                                                        )}
                                                     </TableRowColumn>
                                                 );
                                             })

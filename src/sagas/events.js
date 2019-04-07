@@ -14,7 +14,7 @@ function* createEvent({ eventData, history }) {
 
     const Contact = window._Parse_.Object.extend("contacts")
     const query = new window._Parse_.Query(Contact);
-    query.equalTo('uid', eventData.contactUid)
+    query.matches('uid', new RegExp(eventData.contactUid, 'i'));
     query.first().then( parseContact => {
 
         const regex = new RegExp(/\w{4}\d{6}\w{3}/);
@@ -27,7 +27,7 @@ function* createEvent({ eventData, history }) {
         // if contact doesn't yet exist, create it
         if (!parseContact) {
             parseContact = new Contact();
-            parseContact.set('uid', eventData.contactUid);
+            parseContact.set('uid', eventData.contactUid.toUpperCase());
         }
 
         // event data with most fields filled out
@@ -88,7 +88,7 @@ function* createEvent({ eventData, history }) {
         // conditional fields
         eventData.contactAgeOfFirstInjection && parseContact.set('ageOfFirstInjection', eventData.contactAgeOfFirstInjection); // TODO: on server check if this changes to a LATER date
         eventData.contactCountryOfBirth && parseContact.set('countryOfBirth', eventData.contactCountryOfBirth); // TODO: on server check if this changes (once no longer null) then flag to user
-        eventData.contactDateOfBirth && parseContact.set('dateOfBirth', eventData.contactDateOfBirth); // TODO: on server check if this changes (once no longer null) then flag to user
+        eventData.contactDateOfBirth && parseContact.set('dateOfBirth', eventData.contactDateOfBirth.toDate()); // TODO: on server check if this changes (once no longer null) then flag to user
         eventData.contactEthnicity && parseContact.set('ethnicity', eventData.contactEthnicity); // TODO: on server check if this changes (once no longer null) then flag to user
         eventData.contactGenderIdentity && parseContact.set('genderIdentity', eventData.contactGenderIdentity); 
         eventData.contactGivesDataConsent && parseContact.set('contactGivesDataConsent', eventData.contactGivesDataConsent);
@@ -116,7 +116,7 @@ function* createEvent({ eventData, history }) {
         eventData.contactGivesDataConsent && event.set('contactGivesDataConsent', eventData.contactGivesDataConsent);
         eventData.contactAgeOfFirstInjection && event.set('ageOfFirstInjection', eventData.contactAgeOfFirstInjection);
         eventData.contactCountryOfBirth && event.set('countryOfBirth', eventData.contactCountryOfBirth);
-        eventData.contactDateOfBirth && event.set('dateOfBirth', eventData.contactDateOfBirth);
+        eventData.contactDateOfBirth && event.set('dateOfBirth', eventData.contactDateOfBirth.toDate());
         eventData.contactEthnicity && event.set('ethnicity', eventData.contactEthnicity);
         eventData.contactGenderIdentity && event.set('genderIdentity', eventData.contactGenderIdentity);
         eventData.contactIsHispanic && event.set('hispanic', eventData.contactIsHispanic);
@@ -141,6 +141,8 @@ function* createEvent({ eventData, history }) {
         eventData.syringesGiven && event.set('syringesGiven', eventData.syringesGiven);
         eventData.syringesTaken && event.set('syringesTaken', eventData.syringesTaken);
         eventData.zipCode && event.set('zipCode', eventData.zipCode);
+
+        debugger;
 
         return event.save()
             .then( successfulSave => {
