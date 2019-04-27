@@ -54,6 +54,7 @@ class App extends Component {
             palette: {
                 primary1Color: '#1DAFEC', // override
                 fadedPrimary1Color: '#4FDFFF', // additional
+                softPrimaryColor: '#8DC3DB',
                 primary2Color: '#47B4E0', // overrides the default
                 tertiaryTextColor: '#8DC3DB', // additional
                 accent1Color: '#8EC449', // override
