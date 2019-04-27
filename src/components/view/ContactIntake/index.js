@@ -12,9 +12,12 @@ import FlatButton from 'material-ui/FlatButton'
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
-import Slider from 'material-ui/Slider';
+// import Slider from 'material-ui/Slider';
 import TextField from 'material-ui/TextField'
 import Toggle from 'material-ui/Toggle';
+
+import RemoveCircleIcon from 'material-ui/svg-icons/content/remove-circle';
+import AddBoxIcon from 'material-ui/svg-icons/content/add-box';
 
 import PeriodicQuestionsForm from 'components/view/ContactIntake/periodicQuestions.form';
 import NewContactQuestionsForm from 'components/view/ContactIntake/newContactQuestions.form';
@@ -42,7 +45,6 @@ class IntakeForm extends Component {
             consentDialogOpen: false,
         };
     }
-
 
     // i'm sure we'll want to change names on the db in the future at some time
     // or locally within state. so I'm abstracting this call to make it clear what data
@@ -201,24 +203,36 @@ class IntakeForm extends Component {
             min: overrides.min || 0,
             max: overrides.max || 50,
         }
+
+        const value = !this.props[sliderName] || this.props[sliderName] < 0 ? 0 : this.props[sliderName];
+
         return (
             <div id={sliderName}>
                 <div style={labelStyle}>
                     {labelText}
-                    <span style={{paddingLeft: '.5rem'}}>
-                        (<span style={{fontWeight: 'bold', color: this.props.palette.primary1Color, letterSpacing: '1px'}}>{sliderValue}</span>
-                        <span>/{options.max}</span>)
-                    </span>
                 </div>
-                <Slider
-                    name={sliderName}
-                    defaultValue={options.defaultValue}
-                    step={options.step}
-                    min={options.min}
-                    max={options.max}
-                    value={this.props[sliderName]}
-                    onChange={(e, value) => updateCallback(sliderName, value)}
-                />
+                <FlatButton
+                    style={{ minWidth: '3em' }}
+                    onClick={() => updateCallback(sliderName, value === 0 ? 0 : value - 10 )}
+                    icon={<RemoveCircleIcon style={{ fill: this.props.palette.softPrimaryColor}} />}
+                    >
+                </FlatButton>
+                <div style={{
+                    fontWeight: 'bold', 
+                    color: this.props.palette.primary1Color, 
+                    letterSpacing: '1px', 
+                    width: '3em',
+                    display: 'inline-block',
+                    textAlign: 'center',
+                }}>
+                    {sliderValue}
+                </div>
+                <FlatButton
+                    style={{ minWidth: '3em' }}
+                    icon={<AddBoxIcon style={{ fill: this.props.palette.softPrimaryColor}} />}
+                    onClick={() => updateCallback(sliderName, value + 10)}
+                    >
+                </FlatButton>
             </div>
         )
     }
