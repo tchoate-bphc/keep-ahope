@@ -7,6 +7,7 @@ import {
 const defaultSearchCriteria = () => ({
     isFirstRequest: true,
     indexStart: 0,
+    pageSize: 20,
 
     ageOfFirstInjection: null,
     countryOfBirth: null,
