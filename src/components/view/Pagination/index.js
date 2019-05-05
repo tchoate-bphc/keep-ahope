@@ -28,19 +28,17 @@ export default (props) => {
 
     const requestPreviousPage = () => {
         const requestedIndex = indexStart - pageSize;
-        const indexStart = requestedIndex >= 0 ? requestedIndex : 0;
-        requestSearchByCriteriaIndexStart({ indexStart })
+        const updatedIndexStart = requestedIndex >= 0 ? requestedIndex : 0;
+        requestSearchByCriteriaIndexStart({ indexStart: updatedIndexStart })
     };
     const requestNextPage = () => {
         const requestedIndex = indexStart + pageSize;
-        const indexStart = requestedIndex < totalCount ? requestedIndex : totalCount;
-        requestSearchByCriteriaIndexStart({ indexStart })
+        const updatedIndexStart = requestedIndex < totalCount ? requestedIndex : totalCount;
+        requestSearchByCriteriaIndexStart({ indexStart: updatedIndexStart })
     };
     const requestPageSizeChange = (e) => {
         requestSearchByCriteriaPageSize({ pageSize: e.value });
     };
-
-    console.log('pageSize', pageSize);
 
     return (
         <div
