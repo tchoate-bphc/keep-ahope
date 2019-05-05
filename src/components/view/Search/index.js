@@ -14,6 +14,8 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 
+import Pagination from '../Pagination'
+
 import { defaultState as getSearchByCriteriaResultsDefaultState } from '../../../reducers/searchByCriteriaResults';
 
 import {
@@ -241,6 +243,7 @@ class Search extends Component {
         });
 
         this.searchByCriteriaResultsDefaultState = getSearchByCriteriaResultsDefaultState();
+        this.requestSearchByCriteriaIndexStart = this.requestSearchByCriteriaIndexStart.bind(this);
     }
 
     requestUpdateSearchByCriteria({key, value}) {
@@ -264,6 +267,10 @@ class Search extends Component {
         });
     }
 
+    requestSearchByCriteriaIndexStart({ indexStart }) {
+        this.requestUpdateSearchByCriteria({ key: 'indexStart', value: indexStart });
+    }
+
     render() {
 
         const {
@@ -273,9 +280,12 @@ class Search extends Component {
         } = this.props;
 
         const {
+            pageSize,
+        } = searchCriteria;
+
+        const {
             totalCount = 0,
             indexStart = 0,
-            indexEnd = 0,
             contacts = [],
         } = searchResults || {};
 
@@ -386,7 +396,7 @@ class Search extends Component {
                                 position: 'absolute',
                                 bottom: 0,
                                 borderTop: '1px solid ' + palette.primary3Color, 
-                                opacity: 0.74,
+                                opacity: 0.84,
                             }}
                             >
                             <TableHeader
@@ -533,18 +543,31 @@ class Search extends Component {
                                 <TableRow>
                                     <TableRowColumn
                                         colSpan={colsShownCount}
-                                        style={{textAlign: 'center', verticalAlign: 'middle'}}
+                                        style={{textAlign: 'left', verticalAlign: 'middle'}}
                                         >
+                                        {/* <FlatButton
+                                            label='<'
+                                            />
                                         {contacts && totalCount > 0 && (
                                             `Showing ${indexStart + 1} - ${indexEnd + 1} of ${totalCount}`
                                         )}
                                         {totalCount === 0 && 'No Results'}
+                                        <FlatButton
+                                            label='>'
+                                            /> */}
                                     </TableRowColumn>
                                 </TableRow>
                             </TableFooter>
                         </Table>
                     )}
                 </div>
+                <Pagination
+                    requestSearchByCriteriaIndexStart={this.requestSearchByCriteriaIndexStart}
+                    contacts={contacts}
+                    totalCount={totalCount}
+                    indexStart={indexStart}
+                    pageSize={pageSize}
+                    />
             </section>
         );
     }
