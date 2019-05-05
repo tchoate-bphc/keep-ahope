@@ -24,17 +24,6 @@ function* requestSearchByCriteria( { searchCriteria } ) {
 
     const contact = window._Parse_.Object.extend('contacts')
     const query = new window._Parse_.Query(contact);
-
-
-    // pagination
-    // skip some indexes if indexStart is truthy and a number
-    if (searchCriteria.indexStart && typeof searchCriteria.indexStart === 'number') {
-        query.skip( searchCriteria.indexStart );
-    } 
-    
-    const pageSize = (searchCriteria.pageSize && typeof searchCriteria.pageSize === 'number') ? searchCriteria.pageSize : 20;
-
-    // search criteria
     
     if (searchCriteria.mothersFirstThree !== undefined && searchCriteria.mothersFirstThree !== null && searchCriteria.mothersFirstThree !== '' && searchCriteria.mothersFirstThree.length === 3) {
         query.matches('uid', searchCriteria.mothersFirstThree + '$');
@@ -78,10 +67,16 @@ function* requestSearchByCriteria( { searchCriteria } ) {
     // if (searchCriteria.lastVisitRangeEnd !== undefined && searchCriteria.lastVisitRangeEnd !== null) {
     //     query.greaterThanOrEqualTo('dateOfLastVisit', Moment(searchCriteria.lastVisitRangeEnd).startOf('day').add(1, 'day').toDate());
     // } 
+
+    // pagination
+    // skip some indexes if indexStart is truthy and a number
+    if (searchCriteria.indexStart && typeof searchCriteria.indexStart === 'number') {
+        query.skip( searchCriteria.indexStart );
+    } 
     
     const getTotalCount = query.count();
 
-    query.limit(pageSize)
+    query.limit(20)
     query.descending('dateOfLastVisit')
 
     const getResults = query.find();
@@ -97,7 +92,7 @@ function* requestSearchByCriteria( { searchCriteria } ) {
             const searchResults = { 
                 totalCount: totalCount,
                 indexStart: searchCriteria.indexStart || 0,
-                pageSize: searchCriteria.pageSize,
+                indexEnd: (searchCriteria.indexStart || 0) + (contactsObj.length -1),
                 contacts: contactsObj.map( c => c.attributes)
             };
             window._UI_STORE_.dispatch( updateSearchByCriteriaResults( { 
