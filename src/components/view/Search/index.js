@@ -295,11 +295,11 @@ class Search extends Component {
 
         const {
             pageSize,
+            indexStart = 0,
         } = searchCriteria;
 
         const {
             totalCount = 0,
-            indexStart = 0,
             contacts = [],
         } = searchResults || {};
 
@@ -315,6 +315,8 @@ class Search extends Component {
         }).length;
 
         const minWidth = colsShownCount*10;
+
+        console.log('search indexStart', indexStart);
 
         return (
             <section
@@ -553,6 +555,7 @@ class Search extends Component {
                                 ))}
                             </TableBody>
                             <TableFooter
+                                // Create space for pagination
                                 adjustForCheckbox={false}
                                 style={{ backgroundColor: fade(palette.borderColor, 0.3) }}>
                                 <TableRow>
@@ -560,16 +563,6 @@ class Search extends Component {
                                         colSpan={colsShownCount}
                                         style={{textAlign: 'left', verticalAlign: 'middle'}}
                                         >
-                                        {/* <FlatButton
-                                            label='<'
-                                            />
-                                        {contacts && totalCount > 0 && (
-                                            `Showing ${indexStart + 1} - ${indexEnd + 1} of ${totalCount}`
-                                        )}
-                                        {totalCount === 0 && 'No Results'}
-                                        <FlatButton
-                                            label='>'
-                                            /> */}
                                     </TableRowColumn>
                                 </TableRow>
                             </TableFooter>
