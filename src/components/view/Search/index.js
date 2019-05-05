@@ -62,6 +62,16 @@ const columns = [
         style: {width: '2em'},
         show: true,
     },
+    {
+        key: 'pageSize',
+        label: 'Page Size',
+        show: false,
+        filterOptions: [
+            { value: 10, label: 10 },
+            { value: 20, label: 20 },
+            { value: 30, label: 30 },
+        ],
+    },
     // primary
     {
         key: 'uid',
@@ -244,6 +254,7 @@ class Search extends Component {
 
         this.searchByCriteriaResultsDefaultState = getSearchByCriteriaResultsDefaultState();
         this.requestSearchByCriteriaIndexStart = this.requestSearchByCriteriaIndexStart.bind(this);
+        this.requestSearchByCriteriaPageSize = this.requestSearchByCriteriaPageSize.bind(this);
     }
 
     requestUpdateSearchByCriteria({key, value}) {
@@ -270,12 +281,15 @@ class Search extends Component {
     requestSearchByCriteriaIndexStart({ indexStart }) {
         this.requestUpdateSearchByCriteria({ key: 'indexStart', value: indexStart });
     }
+    requestSearchByCriteriaPageSize({ pageSize }) {
+        this.requestUpdateSearchByCriteria({ key: 'pageSize', value: pageSize });
+    }
 
     render() {
 
         const {
             requestSearchByCriteria,
-            searchByCriteriaResults: { searchResults, searchCriteria, lastSearchCriteria },
+            searchByCriteriaResults: { searchResults, searchCriteria },
             muiTheme: {palette},
         } = this.props;
 
@@ -522,6 +536,7 @@ class Search extends Component {
                                                                     }}
                                                                     />}
                                                                 onClick={() => {
+                                                                    // TODO: refactor this.props out of here
                                                                     this.props.getContact(value);
                                                                     this.props.setCurrentSearchQuery(value || '');
                                                                     this.props.history.push(`/contact/${value}/info`)
@@ -563,6 +578,8 @@ class Search extends Component {
                 </div>
                 <Pagination
                     requestSearchByCriteriaIndexStart={this.requestSearchByCriteriaIndexStart}
+                    requestSearchByCriteriaPageSize={this.requestSearchByCriteriaPageSize}
+                    pageSizeOptions={columns.find(col => col.key === 'pageSize').filterOptions}
                     contacts={contacts}
                     totalCount={totalCount}
                     indexStart={indexStart}
