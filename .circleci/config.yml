@@ -1,10 +1,6 @@
 version: 2
 jobs:
   release_ahope_ui:
-    branches:
-      only:
-        - master
-        - develop
     docker:
       - image: circleci/node:10
     steps:
@@ -14,4 +10,6 @@ workflows:
   version: 2
   ship_ahope_ui:
     jobs:
-      - release_ahope_ui
+      - release_ahope_ui:
+        filters:
+          only: master
