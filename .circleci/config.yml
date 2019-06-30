@@ -10,7 +10,7 @@ workflows:
   version: 2
   ship_it:
     jobs:
-      - release
+      - release:
         filters:
           branches:
             only:
