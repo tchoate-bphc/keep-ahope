@@ -1,10 +1,6 @@
 version: 2
 jobs:
   release:
-    branches:
-      only:
-        - master
-        - develop
     docker:
       - image: circleci/node:10
     steps:
@@ -13,5 +9,9 @@ jobs:
 workflows:
   version: 2
   ship_it:
+    branches:
+      only:
+        - master
+        - develop
     jobs:
       - release
