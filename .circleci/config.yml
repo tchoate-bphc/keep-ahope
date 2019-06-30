@@ -1,8 +1,19 @@
+version: 2
 machine:
   node:
     version: 10.0.0
   environment:
       PROJECT_NAME: keep-ahope
+jobs:
+  release:
+    steps:
+      - checkout
+      - run: npx semantic-release
+workflows:
+  version: 2
+  ship_it:
+    jobs:
+      - release
 # dependencies:
 #   pre:
 #     - go get github.com/aktau/github-release
