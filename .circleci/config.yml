@@ -9,9 +9,10 @@ jobs:
 workflows:
   version: 2
   ship_it:
-    branches:
-      only:
-        - master
-        - develop
     jobs:
       - release
+        filters:
+          branches:
+            only:
+              - master
+              - develop
