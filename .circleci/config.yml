@@ -1,6 +1,17 @@
 version: 2
 jobs:
+  test_release:
+    branches:
+      only:
+        - develop
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
   release:
+    branches:
+      only:
+        - master
     docker:
       - image: circleci/node:10
     steps:
@@ -10,16 +21,6 @@ workflows:
   version: 2
   ship_it:
     jobs:
-      - release
-# dependencies:
-#   pre:
-#     - go get github.com/aktau/github-release
-#     - npm install github-release-notes -g
-# deployment:
-#   release:
-#     tag: /v[0-9]+(\.[0-9]+)*/
-#     commands:
-#       - zip -r $CIRCLE_ARTIFACTS/$PROJECT_NAME-$CIRCLE_TAG.zip dist/*
-#       - git config user.name $CIRCLE_PROJECT_USERNAME
-#       - gren --override --data-source=commits
-#       - github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $CIRCLE_TAG --name $CIRCLE_PROJECT_REPONAME"."$CIRCLE_TAG"-build-"$CIRCLE_BUILD_NUM".zip" --file $CIRCLE_ARTIFACTS/$PROJECT_NAME-$CIRCLE_TAG.zip
+      - release:
+        requires: 
+          - test_release
