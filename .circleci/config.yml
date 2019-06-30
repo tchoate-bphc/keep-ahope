@@ -6,6 +6,8 @@ machine:
       PROJECT_NAME: keep-ahope
 jobs:
   release:
+    machine:
+      - node
     steps:
       - checkout
       - run: npx semantic-release
