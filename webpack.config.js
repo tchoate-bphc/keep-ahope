@@ -18,7 +18,7 @@ const babelSettings = {
     ]
 };
 
-process.env.NODE_ENV = 'production'
+process.env.NODE_ENV = 'production';
 
 const basePlugins = [
   new webpack.DefinePlugin({
@@ -30,7 +30,7 @@ const basePlugins = [
         }
     }
   })
-]
+];
 
 const plugins = basePlugins
 

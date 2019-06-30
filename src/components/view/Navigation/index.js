@@ -8,6 +8,7 @@ import AppBar from 'material-ui/AppBar';
 import Avatar from 'material-ui/Avatar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
+import Divider from 'material-ui/Divider';
 
 import ArrowDownIcon from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import ContactTypeaheadSearch from 'components/controller/ContactTypeaheadSearch';
@@ -17,7 +18,26 @@ import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app';
 import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
 import PersonIcon from 'material-ui/svg-icons/social/person';
 
+import preval from 'preval.macro'
+
 import './styles.css';
+
+function renderAppInfo () {
+    return (
+        <table style={{ lineHeight: '2em', marginBottom: '1.5em', fontFamily: 'monospace' }}>
+            <tbody>
+                <tr>
+                    <td style={{paddingRight: '1em'}}>Version:</td>
+                    <td>{process.env.REACT_APP_VERSION}</td>
+                </tr>
+                <tr>
+                    <td>Updated:</td>
+                    <td>{preval`module.exports = new Date().toLocaleString();`}</td>
+                </tr>
+            </tbody>
+        </table>
+    );
+}
 
 class Navigation extends React.Component {
 
@@ -88,7 +108,12 @@ class Navigation extends React.Component {
                         height: 'auto' //override
                     }}
                 />
-                <Drawer docked={false} width={drawerWidth} open={this.state.drawerOpen} onRequestChange={() => this.setState({drawerOpen : false})}>
+                <Drawer
+                    docked={false}
+                    width={drawerWidth}
+                    open={this.state.drawerOpen}
+                    onRequestChange={() => this.setState({drawerOpen : false})}
+                    >
                     <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
                         <div style={{backgroundColor: muiTheme.palette.primary1Color, padding: paddingSize }}>
                             <Avatar size={avatarSize} icon={<PersonOutlineIcon/>}/>
@@ -102,6 +127,10 @@ class Navigation extends React.Component {
                         <MenuItem onTouchTap={() => this.getMenuItemHandler('/search')} primaryText='Search' leftIcon={<SearchIcon/>}/>
                         <MenuItem onTouchTap={() => this.getMenuItemHandler('/reports')} primaryText='Reports' leftIcon={<EventNoteIcon/>}/>
                         <div style={{marginTop: 'auto'}}>
+                            <MenuItem disabled>
+                                {renderAppInfo()}
+                            </MenuItem>
+                            <Divider />
                             <MenuItem
                                 onTouchTap={this.handleLogout}
                                 primaryText='Logout'

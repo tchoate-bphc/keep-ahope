@@ -1,6 +1,6 @@
 {
   "name": "ahope",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@google-cloud/storage": "^1.6.0",
@@ -11,6 +11,7 @@
     "moment": "^2.22.1",
     "moment-range": "^4.0.1",
     "parse": "^2.1.0",
+    "preval.macro": "^3.0.0",
     "react": "^15.6.1",
     "react-datepicker": "1.4.1",
     "react-dom": "^15.6.1",
