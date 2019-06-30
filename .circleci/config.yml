@@ -1,17 +1,18 @@
-machine:
-  node:
-    version: 10.0.0
-  environment:
-      PROJECT_NAME: keep-ahope
-dependencies:
-  pre:
-    - go get github.com/aktau/github-release
-    - npm install github-release-notes -g
-deployment:
-  release:
-    tag: /v[0-9]+(\.[0-9]+)*/
-    commands:
-      - zip -r $CIRCLE_ARTIFACTS/$PROJECT_NAME-$CIRCLE_TAG.zip dist/*
-      - git config user.name $CIRCLE_PROJECT_USERNAME
-      - gren --override --data-source=commits
-      - github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $CIRCLE_TAG --name $CIRCLE_PROJECT_REPONAME"."$CIRCLE_TAG"-build-"$CIRCLE_BUILD_NUM".zip" --file $CIRCLE_ARTIFACTS/$PROJECT_NAME-$CIRCLE_TAG.zip
+version: 2
+jobs:
+  release_ahope_ui:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: npx semantic-release
+workflows:
+  version: 2
+  ship_ahope_ui:
+    jobs:
+      - release_ahope_ui:
+          filters:
+            branches: 
+              only: 
+                - master
+                - develop
