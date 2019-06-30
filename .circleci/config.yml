@@ -12,4 +12,5 @@ workflows:
     jobs:
       - release_ahope_ui:
         filters:
-          only: master
+          branches: 
+            only: master
