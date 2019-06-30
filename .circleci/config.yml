@@ -13,4 +13,6 @@ workflows:
       - release_ahope_ui:
           filters:
             branches: 
-              only: master
+              only: 
+                - master
+                - develop
