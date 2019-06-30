@@ -1,6 +1,10 @@
 version: 2
 jobs:
-  release:
+  release_ahope_ui:
+    branches:
+      only:
+        - master
+        - develop
     docker:
       - image: circleci/node:10
     steps:
@@ -8,11 +12,6 @@ jobs:
       - run: npx semantic-release
 workflows:
   version: 2
-  ship_it:
+  ship_ahope_ui
     jobs:
-      - release:
-        filters:
-          branches:
-            only:
-              - master
-              - develop
+      - release_ahope_ui
