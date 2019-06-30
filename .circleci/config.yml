@@ -11,6 +11,6 @@ workflows:
   ship_ahope_ui:
     jobs:
       - release_ahope_ui:
-        filters:
-          branches: 
-            only: master
+          filters:
+            branches: 
+              only: master
