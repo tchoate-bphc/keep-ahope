@@ -32,7 +32,9 @@ function renderAppInfo () {
                 </tr>
                 <tr>
                     <td>Updated:</td>
-                    <td>{preval`module.exports = new Date().toLocaleString();`}</td>
+                    <td>
+                        {(new Date(preval`module.exports = new Date();`)).toLocaleString('default', {timeZoneName: 'short'})}
+                    </td>
                 </tr>
             </tbody>
         </table>

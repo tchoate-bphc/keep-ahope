@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - 2017-06-20
 ### Major Changes (breaking changes)
 
 ### Minor Changes (adding features)
 
 ### Patch Changes (fixing bugs)
+
+## [Released]
+
+## [0.0.1] - 2019-06-30
+First officially versioned app pre-release
