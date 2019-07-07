@@ -1,12 +1,20 @@
 import { takeEvery } from 'redux-saga/effects';
 
 import {
+    OFFLINE_MODE,
     FETCH_REPORTS_DATA,
 } from '../constants';
 
 import { getDateBoundsFromRangeKey } from '../utils/dateRangeUtils';
 
 import { updateReportsData } from '../actions';
+
+import {
+    stubContactsAllQueryCountResults,
+    stubEventsAllQueryCountResults,
+    stubEventsFilteredQueryFindResults,
+    stubContactsFilteredQueryFindResults,
+} from '../endpointStubs/reports_data';
 
 function* fetchReportsData({ dateRange }) {
 
@@ -109,10 +117,40 @@ function* fetchReportsData({ dateRange }) {
     yield;
 }
 
+function* stubFetchReportsData() {
+    const eventAggregations = getEventAggregations(stubEventsFilteredQueryFindResults);
+    const contactBreakdownData = getContactBreakdownData(stubContactsFilteredQueryFindResults);
+    window._UI_STORE_.dispatch(updateReportsData({ 
+        reportsData: {
+            events: {
+                _meta: {
+                    count: stubEventsFilteredQueryFindResults.length,
+                    unfilteredCount: stubEventsAllQueryCountResults,
+                },
+                ...eventAggregations,
+            },
+            contacts: {
+                _meta: {
+                    count: stubContactsFilteredQueryFindResults.length,
+                    unfilteredCount: stubContactsAllQueryCountResults,
+                },
+                ...contactBreakdownData,
+            },
+        } 
+    }));
+    yield;
+}
+
 export default function* () {
-    yield [
-        takeEvery(FETCH_REPORTS_DATA, fetchReportsData),
-    ];
+    if (OFFLINE_MODE) {
+        yield [
+            takeEvery(FETCH_REPORTS_DATA, stubFetchReportsData),
+        ];
+    } else {
+        yield [
+            takeEvery(FETCH_REPORTS_DATA, fetchReportsData),
+        ];
+    }
 }
 
 function getEventAggregations ( events ) {
