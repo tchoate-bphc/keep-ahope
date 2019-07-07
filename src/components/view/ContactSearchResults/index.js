@@ -102,13 +102,22 @@ class ContactSearchResults extends Component {
                     <div>
                         <List>
                             <Subheader>Results (Top 10)</Subheader>
-                            {searchResults.map((result) => {
+                            {searchResults.map((contact) => {
+                                const age = !contact.dateOfBirth ? '' : moment(contact.dateOfBirth.iso).toNow(true);
+                                const genderIdentity = !contact.genderIdentity ? '' : contact.genderIdentity.match('refused') ? 'gender:refused' : contact.genderIdentity;
+                                const identifiers = [
+                                    `${age} (${contact.dateOfBirth && moment(contact.dateOfBirth.iso).format('YYYY-MMM-DD')})`,
+                                    `${genderIdentity}`,
+                                ]
+                                    .filter(val => !val.match('undefined') && val.length)
+                                    .map((str, i) => <span key={i} style={{paddingRight: '1em'}} >{str}</span>);
                                 return (
                                     <ListItem
-                                        key={result}
-                                        primaryText={result}
+                                        key={contact.uid}
+                                        primaryText={contact.uid.toUpperCase()}
                                         leftIcon={<PersonIcon />}
-                                        onClick={() => this.handleNavigationToContact(result)}
+                                        onClick={() => this.handleNavigationToContact(contact.uid)}
+                                        secondaryText={<span>{identifiers}</span>}
                                     />
                                 )
                             })}
