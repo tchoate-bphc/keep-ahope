@@ -111,7 +111,7 @@ class Results extends React.Component {
                             textOverflow: 'ellipsis',
                             width: '100%',
                         }}
-                        subtitle={value < 999 ? false : value.toLocaleString(navigator.language, { minimumFractionDigits: 0 })}
+                        subtitle={value < 999 || Array.isArray(value) ? false : value.toLocaleString(navigator.language, { minimumFractionDigits: 0 })}
                     />
                     {type === 'simple' && (
                         <CardText
