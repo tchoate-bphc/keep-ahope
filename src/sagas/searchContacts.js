@@ -19,7 +19,7 @@ function* searchContacts({ searchStringUid }) {
     contactQuery.limit(10)
     contactQuery.descending()
     contactQuery.find().then(results => {
-        const contactsWithMatchingUid = results;
+        const contactsWithMatchingUid = results.map(parseObj => parseObj.attributes);
         window._UI_STORE_.dispatch(setContactSearchResults(contactsWithMatchingUid))
     })
     yield;
