@@ -36,7 +36,7 @@ class App extends Component {
         
         Parse.initialize("AHOPEPARSESERVER");
 
-        Parse.serverURL = 'https://keep-ahope.appspot.com/parse'
+        Parse.serverURL = 'https://brs-ahope-dev.appspot.com/parse'
         window._Parse_ = Parse;
 
         // try to login with google (enables re-login on page refresh)
