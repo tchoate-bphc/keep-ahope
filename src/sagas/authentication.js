@@ -27,7 +27,7 @@ function* loginGoogleRequest( ) {
     
     window.gapi.load('auth2', function() {
         window.gapi.auth2.init({
-            client_id: "888227269181-14qpprrki7r8l9b6gaknd9fle8gkas9k.apps.googleusercontent.com",
+            client_id: "224779111920-tausvu4e2d84ldt8pbvhuv4637tk0rd3.apps.googleusercontent.com",
             scope: "profile email" // this isn't required, I think?
         })
         .then(function(auth2) {
